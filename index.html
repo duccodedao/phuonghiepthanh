@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HongDuc Dev</title>
 
-    <meta name="description" content="Cổng thông tin nhân sự. Tra cứu và cập nhật thông tin hồ sơ.">
+    <meta name="description" content="Cổng thông tin nhân sự.">
     <link rel="icon" type="image/png" href="https://hdd.io.vn/img/bmassloadings.png">
     <link rel="apple-touch-icon" href="https://hdd.io.vn/img/bmassloadings.png">
 
@@ -123,6 +123,14 @@
         .history-item { border-left: 3px solid #6c5ce7; transition: all 0.2s; }
         .history-item:hover { transform: translateX(5px); background: white !important; }
 
+        /* Style cho nút Switch */
+        .form-switch .form-check-input {
+            width: 3em; height: 1.5em; cursor: pointer;
+        }
+        .form-switch .form-check-input:checked {
+            background-color: #6c5ce7; border-color: #6c5ce7;
+        }
+
         @media (min-width: 992px) {
             .sidebar.desktop-visible { transform: translateX(0); }
             .content-area.desktop-shifted { margin-left: var(--sidebar-width); }
@@ -171,6 +179,14 @@
                 <button class="btn btn-light text-start py-3" onclick="closeSidebarMobile(); exportExcel()">
                     <i class="fas fa-file-export me-3"></i>Xuất báo cáo
                 </button>
+                
+                <!-- NEW FEATURE: SETTING SWITCH -->
+                <div id="adminSettingsArea" class="bg-light p-3 rounded-3 mt-2 d-none">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="toggleEditPermission">
+                        <label class="form-check-label fw-bold small text-muted" for="toggleEditPermission">Cho phép sửa hồ sơ</label>
+                    </div>
+                </div>
 
                 <div class="border-top my-2"></div>
                 <button class="btn btn-outline-secondary text-start py-2" onclick="switchViewMode('user')">
@@ -217,16 +233,17 @@
                                         <input type="text" class="form-control" id="inpName" placeholder="Tên" disabled>
                                         <label>Họ và Tên</label>
                                     </div>
-                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
+                                    <!-- Added Class: edit-btn-group -->
+                                    <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
                                 </div>
 
-                                <!-- BHXH Field -->
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="inpBhxh" placeholder="BHXH" disabled>
                                         <label>Mã BHXH</label>
                                     </div>
-                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpBhxh')"></i></div>
+                                    <!-- Added Class: edit-btn-group -->
+                                    <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpBhxh')"></i></div>
                                 </div>
                                 
                                 <div class="col-12">
@@ -234,7 +251,8 @@
                                         <input type="text" class="form-control" id="inpDob" placeholder="Dob" disabled>
                                         <label>Ngày sinh</label>
                                     </div>
-                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpDob')"></i></div>
+                                    <!-- Added Class: edit-btn-group -->
+                                    <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpDob')"></i></div>
                                 </div>
 
                                 <div class="col-12">
@@ -245,7 +263,8 @@
                                         </select>
                                         <label>Giới tính</label>
                                     </div>
-                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpGender')"></i></div>
+                                    <!-- Added Class: edit-btn-group -->
+                                    <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpGender')"></i></div>
                                 </div>
 
                                 <div class="col-12">
@@ -253,7 +272,8 @@
                                         <input type="number" class="form-control" id="inpCccd" placeholder="CCCD" disabled>
                                         <label>CCCD</label>
                                     </div>
-                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpCccd')"></i></div>
+                                    <!-- Added Class: edit-btn-group -->
+                                    <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpCccd')"></i></div>
                                 </div>
                             </div>
 
@@ -424,11 +444,13 @@
         const provider = new GoogleAuthProvider();
         const COLL_DATA = "personnel_data";
         const COLL_LOGS = "audit_logs";
+        const COLL_SETTINGS = "system_settings"; // New Collection for Settings
 
         let allUsers = [];
         let currentUser = null;
         let currentData = null;
         let bankLogoAgri = "", bankLogoVcb = "";
+        let isEditAllowed = false; // Global permission flag
 
         // UI References
         const sidebar = document.getElementById('sidebar');
@@ -439,11 +461,12 @@
         const adminView = document.getElementById('adminView');
         const btnLoginUser = document.getElementById('btnLoginUser');
         const btnToAdmin = document.getElementById('btnToAdmin');
+        const toggleEditPermission = document.getElementById('toggleEditPermission');
+        const adminSettingsArea = document.getElementById('adminSettingsArea');
 
         // --- HELPER FUNCTION: MASK STRING ---
         function maskString(str) {
             if (!str || str.length < 6) return str; 
-            // Giữ 3 ký tự đầu, 3 ký tự cuối, che ở giữa
             return str.substring(0, 3) + "***" + str.substring(str.length - 3);
         }
 
@@ -503,12 +526,62 @@
             }
         };
 
+        // --- LISTEN FOR SETTINGS CHANGE ---
+        onSnapshot(doc(db, COLL_SETTINGS, "general_config"), (docSn) => {
+            if (docSn.exists()) {
+                isEditAllowed = docSn.data().allow_edit_info || false;
+            } else {
+                isEditAllowed = false; // Default
+            }
+            
+            // Sync Toggle UI for Admin
+            if(currentUser) toggleEditPermission.checked = isEditAllowed;
+            
+            // Update User Interface (Hide/Show Pencils)
+            updateUserEditUI();
+        });
+
+        function updateUserEditUI() {
+            const editBtns = document.querySelectorAll('.edit-btn-group');
+            editBtns.forEach(btn => {
+                if(isEditAllowed) {
+                    btn.style.display = 'block';
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+            
+            // Re-run select logic to ensure fields are disabled if permission revoked
+            const currentVal = document.getElementById('userSelect').value;
+            if(currentVal && !isEditAllowed) {
+                 ['inpName', 'inpBhxh', 'inpDob', 'inpGender', 'inpCccd'].forEach(id => {
+                     document.getElementById(id).disabled = true;
+                 });
+            }
+        }
+
+        // --- ADMIN TOGGLE SETTING ---
+        toggleEditPermission.addEventListener('change', async function() {
+            if(!currentUser) return;
+            try {
+                await setDoc(doc(db, COLL_SETTINGS, "general_config"), {
+                    allow_edit_info: this.checked
+                }, {merge: true});
+                showToast(this.checked ? 'Đã bật quyền sửa' : 'Đã khóa quyền sửa');
+            } catch(e) {
+                console.error(e);
+                showToast('Lỗi lưu cài đặt', 'error');
+                this.checked = !this.checked; // Revert on error
+            }
+        });
+
         onAuthStateChanged(auth, (user) => {
             if (user && ALLOWED_ADMINS.includes(user.uid)) {
                 currentUser = user;
                 document.getElementById('adminNameDisplay').textContent = user.displayName;
                 btnLoginUser.style.display = 'none';
                 btnToAdmin.style.display = 'block'; 
+                adminSettingsArea.classList.remove('d-none'); // Show setting for admin
                 switchViewMode('admin');
             } else if (user) {
                 currentUser = null;
@@ -516,11 +589,13 @@
                 showToast('Bạn không có quyền Admin.', 'warning');
                 btnLoginUser.style.display = 'block';
                 btnToAdmin.style.display = 'none';
+                adminSettingsArea.classList.add('d-none');
                 switchViewMode('user');
             } else {
                 currentUser = null;
                 btnLoginUser.style.display = 'block';
                 btnToAdmin.style.display = 'none';
+                adminSettingsArea.classList.add('d-none');
                 switchViewMode('user');
             }
         });
@@ -562,7 +637,6 @@
                     const el = document.getElementById('inp'+k);
                     let val = currentData[mapping[k]] || "";
 
-                    // Nếu là BHXH thì CHE SỐ (Masking)
                     if(k === 'Bhxh') {
                         el.value = maskString(val);
                     } else {
@@ -571,25 +645,31 @@
                     
                     // Logic khóa/mở input
                     if(k === 'Agri' || k === 'Vcb') {
+                        // BANK ACCOUNTS: ALWAYS EDITABLE
                         el.disabled = false;
                     } else {
+                        // INFO FIELDS: Locked initially
                         el.disabled = true; 
                     }
                 }
                 
                 document.getElementById('inpGender').value = currentData.gender || 'Nam';
                 document.getElementById('inpGender').disabled = true;
+                
+                updateUserEditUI(); // Apply Hide/Show logic for Pencils
             }
         };
 
         // --- TOGGLE EDIT (Click bút chì) ---
         window.toggleEdit = (id) => {
+            // Check permission again just in case
+            if(!isEditAllowed) return; 
+
             let el = document.getElementById(id);
             el.disabled = !el.disabled; 
             
             if(!el.disabled) {
                 el.focus();
-                // Nếu đang mở khóa ô BHXH, HIỆN LẠI MÃ GỐC để sửa
                 if(id === 'inpBhxh' && currentData) {
                     el.value = currentData.bhxh || "";
                 }
@@ -602,9 +682,7 @@
             const newCccd = document.getElementById('inpCccd').value.trim();
             const oldCccd = currentData.cccd;
             
-            // Lấy giá trị BHXH từ input
             let inputBhxh = document.getElementById('inpBhxh').value;
-            // Nếu input vẫn chứa dấu *** thì tức là người dùng KHÔNG sửa, giữ nguyên giá trị gốc
             if(inputBhxh.includes('***') && currentData) {
                 inputBhxh = currentData.bhxh;
             }
@@ -612,7 +690,7 @@
             const data = {
                 cccd: newCccd,
                 name: document.getElementById('inpName').value,
-                bhxh: inputBhxh, // Sử dụng giá trị đã xử lý
+                bhxh: inputBhxh,
                 dob: document.getElementById('inpDob').value,
                 gender: document.getElementById('inpGender').value,
                 agribank: document.getElementById('inpAgri').value,
@@ -670,7 +748,7 @@
             finally { showLoading(false); }
         }
 
-        // --- ADMIN RENDER (Vẫn hiện Full BHXH) ---
+        // --- ADMIN RENDER ---
         function renderAdminTable() {
             const tbody = document.getElementById('adminTableBody');
             const term = document.getElementById('adminSearch').value.toLowerCase();
@@ -686,7 +764,6 @@
                 const agri = u.agribank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoAgri}" height="12"> ${u.agribank}</span>` : '<span class="text-muted small">-</span>';
                 const vcb = u.vietcombank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoVcb}" height="12"> ${u.vietcombank}</span>` : '<span class="text-muted small">-</span>';
                 
-                // Ở Admin View: u.bhxh là dữ liệu gốc, hiển thị đầy đủ
                 const bhxhDisplay = u.bhxh ? `<div class="small"><i class="fas fa-id-card text-muted me-1"></i>BHXH: ${u.bhxh}</div>` : '';
 
                 tr.innerHTML = `
