@@ -108,7 +108,7 @@
             overflow-x: auto !important; -webkit-overflow-scrolling: touch;
             border-radius: 16px; background: white; box-shadow: var(--shadow-soft);
         }
-        .custom-table { min-width: 800px; margin-bottom: 0; }
+        .custom-table { min-width: 900px; margin-bottom: 0; }
         .custom-table th {
             background: #f8f9fa; color: #636e72; font-weight: 600;
             font-size: 0.8rem; padding: 15px; border: none; white-space: nowrap;
@@ -220,7 +220,9 @@
 
                         <div id="formContent" style="opacity:0.5; pointer-events:none; transition:0.3s">
                             
+                            <!-- DATA FIELDS: NAME -> BHXH -> DOB -> GENDER -> CCCD -->
                             <div class="row g-3 mb-4">
+                                <!-- 1. Họ và Tên -->
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="inpName" placeholder="Tên" disabled>
@@ -228,16 +230,17 @@
                                     </div>
                                     <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
                                 </div>
-                                
-                                <!-- EDIT: CCCD đã được mở để chỉnh sửa -->
+
+                                <!-- 2. Mã BHXH -->
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="number" class="form-control" id="inpCccd" placeholder="CCCD" disabled>
-                                        <label>CCCD</label>
+                                        <input type="text" class="form-control" id="inpBhxh" placeholder="BHXH" disabled>
+                                        <label>Mã BHXH</label>
                                     </div>
-                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpCccd')"></i></div>
+                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpBhxh')"></i></div>
                                 </div>
                                 
+                                <!-- 3. Ngày sinh -->
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="inpDob" placeholder="Dob" disabled>
@@ -245,6 +248,8 @@
                                     </div>
                                     <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpDob')"></i></div>
                                 </div>
+
+                                <!-- 4. Giới tính -->
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <select class="form-select" id="inpGender" disabled>
@@ -255,10 +260,19 @@
                                     </div>
                                     <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpGender')"></i></div>
                                 </div>
+
+                                <!-- 5. CCCD (Cho phép chỉnh sửa để đổi ID) -->
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="inpCccd" placeholder="CCCD" disabled>
+                                        <label>CCCD</label>
+                                    </div>
+                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpCccd')"></i></div>
+                                </div>
                             </div>
 
                             <div class="bg-white p-3 rounded-4 shadow-sm mb-4">
-                                <h6 class="fw-bold text-primary mb-3 small text-uppercase">Tài khoản nhận lương</h6>
+                                <h6 class="fw-bold text-primary mb-3 small text-uppercase">Tài khoản ngân hàng</h6>
                                 <div class="mb-3">
                                     <label class="small fw-bold">Agribank <span class="text-danger">*</span></label>
                                     <div class="input-group">
@@ -317,7 +331,7 @@
                         <thead>
                             <tr>
                                 <th>Nhân viên</th>
-                                <th>Thông tin</th>
+                                <th>Thông tin (BHXH, CCCD, NS)</th>
                                 <th>TK Agribank</th>
                                 <th>TK Vietcombank</th>
                                 <th class="text-end">Hành động</th>
@@ -341,28 +355,33 @@
                 <div class="modal-body p-4">
                     <form id="adminForm" class="row g-3">
                         <input type="hidden" id="editMode" value="add">
-                        <!-- Trường ẩn để lưu CCCD gốc khi edit trong Admin -->
                         <input type="hidden" id="originalCccdAdmin"> 
                         
+                        <!-- Admin fields order: Name, BHXH, DOB, Gender, CCCD -->
                         <div class="col-12">
                             <label class="small fw-bold">Họ và Tên</label>
                             <input type="text" id="admName" class="form-control" required>
                         </div>
                         <div class="col-6">
-                            <label class="small fw-bold">CCCD</label>
-                            <input type="text" id="admCccd" class="form-control" required>
+                            <label class="small fw-bold">Mã BHXH</label>
+                            <input type="text" id="admBhxh" class="form-control">
                         </div>
                         <div class="col-6">
                             <label class="small fw-bold">Ngày sinh</label>
                             <input type="text" id="admDob" class="form-control" placeholder="DD/MM/YYYY">
                         </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <label class="small fw-bold">Giới tính</label>
                             <select id="admGender" class="form-select">
                                 <option value="Nam">Nam</option>
                                 <option value="Nữ">Nữ</option>
                             </select>
                         </div>
+                         <div class="col-6">
+                            <label class="small fw-bold">CCCD</label>
+                            <input type="text" id="admCccd" class="form-control" required>
+                        </div>
+
                         <div class="col-12 bg-light p-3 rounded-3 mt-2">
                             <label class="small fw-bold text-muted mb-2 d-block">Nhập hộ ngân hàng</label>
                             <div class="d-grid gap-2">
@@ -413,7 +432,7 @@
 
         const ALLOWED_ADMINS = [
             "VYIs9XHLR9RMStwtcdwMrOIo33w1", 
-            // Thêm các UID admin khác tại đây
+            // Thêm UID Admin khác ở đây
         ];
 
         const app = initializeApp(firebaseConfig);
@@ -500,7 +519,7 @@
 
         // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
-            if(user) console.log("User UID:", user.uid);
+            if(user) console.log("UID:", user.uid);
             if (user && ALLOWED_ADMINS.includes(user.uid)) {
                 currentUser = user;
                 document.getElementById('adminNameDisplay').textContent = user.displayName;
@@ -510,7 +529,7 @@
             } else if (user) {
                 currentUser = null;
                 signOut(auth);
-                showToast('Bạn không có quyền Admin. Đang ở chế độ khách.', 'warning');
+                showToast('Bạn không có quyền Admin.', 'warning');
                 btnLoginUser.style.display = 'block';
                 btnToAdmin.style.display = 'none';
                 switchViewMode('user');
@@ -532,7 +551,6 @@
             allUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
             
             const select = document.getElementById('userSelect');
-            // Giữ lại giá trị đang chọn nếu có
             const currentVal = select.value;
             select.innerHTML = '<option value="" selected disabled>-- Tìm hồ sơ của bạn --</option>';
             allUsers.forEach(u => {
@@ -551,11 +569,18 @@
             if(currentData) {
                 const form = document.getElementById('formContent');
                 form.style.opacity="1"; form.style.pointerEvents="auto";
-                ['Name','Cccd','Dob','Agri','Vcb'].forEach(k => {
-                    let f = k.toLowerCase(); if(k=='Vcb') f='vietcombank'; if(k=='Agri') f='agribank';
-                    document.getElementById('inp'+k).value = currentData[f] || "";
-                    document.getElementById('inp'+k).disabled = true; // Mặc định disable hết
-                });
+                
+                // Fields mapping
+                const mapping = {
+                    'Name': 'name', 'Cccd': 'cccd', 'Dob': 'dob', 'Bhxh': 'bhxh',
+                    'Agri': 'agribank', 'Vcb': 'vietcombank'
+                };
+                
+                for(let k in mapping) {
+                    document.getElementById('inp'+k).value = currentData[mapping[k]] || "";
+                    document.getElementById('inp'+k).disabled = true; 
+                }
+                
                 document.getElementById('inpGender').value = currentData.gender || 'Nam';
                 document.getElementById('inpGender').disabled = true;
             }
@@ -568,13 +593,13 @@
         // --- SAVE DATA WITH ID MIGRATION ---
         document.getElementById('userForm').onsubmit = async(e) => {
             e.preventDefault();
-            // Lấy CCCD mới từ input (có thể đã bị sửa)
             const newCccd = document.getElementById('inpCccd').value.trim();
-            const oldCccd = currentData.cccd; // CCCD cũ (ID hiện tại của doc)
+            const oldCccd = currentData.cccd;
             
             const data = {
-                cccd: newCccd, // Lưu CCCD mới vào data object
+                cccd: newCccd,
                 name: document.getElementById('inpName').value,
+                bhxh: document.getElementById('inpBhxh').value, // Thêm BHXH
                 dob: document.getElementById('inpDob').value,
                 gender: document.getElementById('inpGender').value,
                 agribank: document.getElementById('inpAgri').value,
@@ -590,7 +615,7 @@
             const changes = [];
             const editor = currentUser ? `Admin: ${currentUser.displayName}` : "Khách";
             const fieldMap = {
-                'name': 'Họ tên', 'dob': 'Ngày sinh', 'gender': 'Giới tính',
+                'name': 'Họ tên', 'bhxh': 'Mã BHXH', 'dob': 'Ngày sinh', 'gender': 'Giới tính',
                 'agribank': 'TK Agribank', 'vietcombank': 'TK Vietcombank', 'cccd': 'CCCD'
             };
 
@@ -605,37 +630,20 @@
             }
 
             try {
-                // TRƯỜNG HỢP 1: CCCD bị thay đổi -> Phải di chuyển dữ liệu sang Doc mới
                 if (oldCccd !== newCccd) {
-                    // Kiểm tra xem CCCD mới đã có chưa
                     const snap = await getDoc(doc(db, COLL_DATA, newCccd));
-                    if(snap.exists()) {
-                        throw new Error(`CCCD mới (${newCccd}) đã tồn tại trong hệ thống!`);
-                    }
+                    if(snap.exists()) throw new Error(`CCCD mới (${newCccd}) đã tồn tại!`);
 
-                    // 1. Tạo doc mới
                     await setDoc(doc(db, COLL_DATA, newCccd), {...newData, last_updated:new Date().toISOString()});
-                    
-                    // 2. Ghi log (Gắn log vào doc mới)
                     if(changes.length>0) {
                         await addDoc(collection(db, COLL_LOGS), {
                             cccd_ref: newCccd, editor: editor, time: new Date().toISOString(), details: changes
                         });
                     }
-
-                    // 3. Xóa doc cũ
                     if(oldCccd) await deleteDoc(doc(db, COLL_DATA, oldCccd));
-                    
-                    // 4. Cập nhật UI nếu đang ở user view
-                    if(!currentUser) {
-                         // Cập nhật currentData để trỏ tới cái mới, tránh lỗi khi user sửa tiếp
-                         currentData = {...newData};
-                         document.getElementById('userSelect').value = newCccd; 
-                    }
+                    if(!currentUser) { currentData = {...newData}; document.getElementById('userSelect').value = newCccd; }
 
-                } 
-                // TRƯỜNG HỢP 2: CCCD giữ nguyên -> Update bình thường
-                else {
+                } else {
                     await setDoc(doc(db, COLL_DATA, oldCccd), {...newData, last_updated:new Date().toISOString()}, {merge:true});
                     if(changes.length>0) {
                         await addDoc(collection(db, COLL_LOGS), {
@@ -643,14 +651,10 @@
                         });
                     }
                 }
-
                 showToast('Lưu thành công!');
                 bootstrap.Modal.getInstance(document.getElementById('adminModal'))?.hide();
-            } catch(e) { 
-                showToast(e.message, 'error'); 
-            } finally { 
-                showLoading(false); 
-            }
+            } catch(e) { showToast(e.message, 'error'); } 
+            finally { showLoading(false); }
         }
 
         // --- ADMIN ---
@@ -669,6 +673,9 @@
                 const agri = u.agribank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoAgri}" height="12"> ${u.agribank}</span>` : '<span class="text-muted small">-</span>';
                 const vcb = u.vietcombank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoVcb}" height="12"> ${u.vietcombank}</span>` : '<span class="text-muted small">-</span>';
                 
+                // Hiển thị BHXH trong cột thông tin
+                const bhxhDisplay = u.bhxh ? `<div class="small"><i class="fas fa-id-card text-muted me-1"></i>BHXH: ${u.bhxh}</div>` : '';
+
                 tr.innerHTML = `
                     <td>
                         <div class="d-flex align-items-center">
@@ -679,7 +686,11 @@
                             </div>
                         </div>
                     </td>
-                    <td><div class="fw-bold text-dark">${u.cccd}</div><small class="text-muted">${u.dob}</small></td>
+                    <td>
+                        <div class="fw-bold text-dark"><i class="far fa-id-badge text-muted me-1"></i>${u.cccd}</div>
+                        ${bhxhDisplay}
+                        <div class="small text-muted"><i class="fas fa-birthday-cake text-muted me-1"></i>${u.dob}</div>
+                    </td>
                     <td>${agri}</td>
                     <td>${vcb}</td>
                     <td class="text-end">
@@ -704,13 +715,11 @@
         window.editUser = (cccd) => {
             const u = allUsers.find(x=>x.cccd==cccd);
             document.getElementById('editMode').value='update';
-            // Lưu CCCD gốc để so sánh khi Admin sửa
             document.getElementById('originalCccdAdmin').value = u.cccd; 
             
             document.getElementById('admCccd').value=u.cccd; 
-            document.getElementById('admCccd').readOnly=false; // Admin cũng có thể sửa CCCD
-            
             document.getElementById('admName').value=u.name;
+            document.getElementById('admBhxh').value=u.bhxh || ""; // Load BHXH
             document.getElementById('admDob').value=u.dob;
             document.getElementById('admGender').value=u.gender||'Nam';
             document.getElementById('admAgri').value=u.agribank||"";
@@ -722,21 +731,17 @@
             e.preventDefault();
             const newCccd = document.getElementById('admCccd').value.trim();
             const oldCccd = document.getElementById('editMode').value === 'add' ? null : document.getElementById('originalCccdAdmin').value;
-
-            // Nếu là thêm mới, oldCccd là null. Nếu là sửa, oldCccd là giá trị ban đầu.
             const oldData = oldCccd ? (allUsers.find(u=>u.cccd==oldCccd) || {}) : {};
 
             const data = {
                 cccd: newCccd,
                 name: document.getElementById('admName').value,
+                bhxh: document.getElementById('admBhxh').value, // Save BHXH
                 dob: document.getElementById('admDob').value,
                 gender: document.getElementById('admGender').value,
                 agribank: document.getElementById('admAgri').value,
                 vietcombank: document.getElementById('admVcb').value
             };
-            
-            // Nếu add mới: logic saveData sẽ thấy oldCccd=null != newCccd -> Tạo mới
-            // Nếu update: logic saveData sẽ xử lý đổi ID nếu cần
             await saveData(oldCccd, data, oldData);
         };
 
@@ -761,9 +766,13 @@
                         cccd=String(cccd);
                         let dob = row['Ngày sinh']||row['DOB']||"";
                         if(typeof dob==='number') dob=excelDateToJS(dob);
+                        
                         await setDoc(doc(db, COLL_DATA, cccd), {
-                            cccd, name: row['Họ tên']||row['Name'],
-                            dob: dob, gender: row['Giới tính']||'Nam'
+                            cccd, 
+                            name: row['Họ tên']||row['Name'],
+                            bhxh: row['Mã BHXH']||row['BHXH']||"", // Import BHXH
+                            dob: dob, 
+                            gender: row['Giới tính']||'Nam'
                         }, {merge:true});
                     }
                 }
@@ -774,7 +783,7 @@
         
         window.exportExcel = () => {
             const d = allUsers.map(u=>({
-                "Họ tên":u.name, "CCCD":u.cccd, "Ngày sinh":u.dob, "Giới tính":u.gender,
+                "Họ tên":u.name, "Mã BHXH":u.bhxh, "Ngày sinh":u.dob, "Giới tính":u.gender, "CCCD":u.cccd,
                 "Agribank":u.agribank, "Vietcombank":u.vietcombank
             }));
             const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(d), "Data");
