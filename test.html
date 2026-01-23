@@ -3,163 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trạm Y tế Phường Hiệp Thành - Cổng Thông Tin Điện Tử</title>
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" type="image/x-icon">
+    <title>Trạm Y tế Phường Hiệp Thành - Trực thuộc UBND Phường</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Logo_Bo_Y_Te_%28Viet_Nam%29.svg/1200px-Logo_Bo_Y_Te_%28Viet_Nam%29.svg.png">
     
     <!-- CSS Libs -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    
+
     <style>
         :root {
-            --primary: #00695c; /* Xanh y tế đậm, sang trọng */
-            --primary-light: #4db6ac;
-            --accent: #d32f2f; /* Màu đỏ cho cấp cứu */
-            --text-dark: #263238;
-            --text-light: #546e7a;
-            --bg-light: #f5f7fa;
-            --white: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --primary: #00695c; /* Xanh đậm hành chính công */
+            --secondary: #b71c1c; /* Đỏ đô uy nghiêm */
+            --bg-light: #f5f5f5;
+            --text-main: #333;
+            --white: #fff;
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; scroll-behavior: smooth; }
-        body { background: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background: var(--bg-light); color: var(--text-main); line-height: 1.6; }
         ul { list-style: none; }
-        
-        /* --- UTILITIES --- */
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* HEADER */
+        header { background: var(--white); border-bottom: 3px solid var(--primary); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .top-bar { background: var(--primary); color: white; padding: 5px 0; font-size: 0.9rem; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-        .btn { display: inline-block; padding: 10px 25px; border-radius: 5px; font-weight: 500; cursor: pointer; border: none; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: #004d40; }
-        .btn-outline { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
-        .btn-outline:hover { background: var(--primary); color: white; }
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 2.2rem; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .section-title span { width: 60px; height: 3px; background: var(--accent); display: block; margin: 0 auto; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- HEADER --- */
-        header { background: var(--white); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000; }
-        .top-header { background: var(--primary); color: white; padding: 8px 0; font-size: 0.9rem; }
-        .top-content { display: flex; justify-content: space-between; align-items: center; }
+        .branding { display: flex; align-items: center; gap: 15px; padding: 15px 0; }
+        .branding img { height: 60px; }
+        .site-title h1 { font-size: 1.4rem; text-transform: uppercase; color: var(--secondary); font-weight: 900; line-height: 1.2; }
+        .site-title p { font-size: 1rem; color: var(--primary); font-weight: 700; text-transform: uppercase; }
+
+        /* NAV */
+        nav ul { display: flex; gap: 20px; font-weight: 500; text-transform: uppercase; font-size: 0.95rem; }
+        nav ul li a:hover { color: var(--secondary); }
         
-        nav { padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 12px; }
-        .logo img { height: 40px; }
+        /* HERO */
+        .hero { background: linear-gradient(rgba(0, 105, 92, 0.9), rgba(0, 105, 92, 0.7)), url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Bac_Lieu_City_Hall.jpg'); background-size: cover; color: white; padding: 80px 0; text-align: center; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; opacity: 0.9; }
+
+        /* SECTIONS */
+        section { padding: 60px 0; background: var(--white); margin-bottom: 10px; }
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .section-title h3 { font-size: 2rem; color: var(--primary); text-transform: uppercase; }
+        .section-title hr { width: 60px; height: 4px; background: var(--secondary); border: none; margin: 10px auto; }
+
+        /* LEGAL BASIS (INFO BOX) */
+        .legal-box { background: #e0f2f1; padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); margin-bottom: 30px; }
+        .legal-box h4 { color: var(--secondary); margin-bottom: 10px; font-size: 1.1rem; }
+
+        /* TASKS GRID */
+        .tasks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .task-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; transition: 0.3s; }
+        .task-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: translateY(-5px); }
+        .task-header { background: var(--primary); color: white; padding: 15px; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .task-body { padding: 20px; }
+        .task-body ul li { margin-bottom: 8px; position: relative; padding-left: 20px; font-size: 0.95rem; text-align: justify; }
+        .task-body ul li::before { content: "•"; color: var(--secondary); font-weight: bold; position: absolute; left: 0; font-size: 1.2rem; line-height: 1; }
+
+        /* ORGANIZATION CHART (NEW) */
+        .org-chart { text-align: center; }
+        .org-box { display: inline-block; padding: 15px 30px; border-radius: 5px; margin-bottom: 20px; position: relative; font-weight: bold; }
+        .org-level-1 { background: var(--secondary); color: white; text-transform: uppercase; font-size: 1.2rem; }
+        .org-level-2 { background: var(--primary); color: white; margin: 10px; width: 220px; vertical-align: top; height: 100px; display: inline-flex; align-items: center; justify-content: center; }
         
-        .main-menu { display: flex; gap: 30px; }
-        .main-menu a { font-weight: 500; font-size: 1rem; position: relative; }
-        .main-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--primary); transition: 0.3s; }
-        .main-menu a:hover::after { width: 100%; }
-
-        /* --- HERO SLIDER (Static) --- */
-        .hero { 
-            background: linear-gradient(to right, rgba(0, 105, 92, 0.9), rgba(0, 105, 92, 0.6)), url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Bac_Lieu_City_Hall.jpg');
-            background-size: cover; background-position: center; color: white; padding: 100px 0; text-align: center;
-        }
-        .hero h1 { font-size: 3rem; margin-bottom: 20px; font-weight: 900; }
-        .hero p { font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto; }
-        .hero-btns { display: flex; justify-content: center; gap: 20px; }
-
-        /* --- ABOUT & STATS --- */
-        .about-section { padding: 80px 0; background: var(--white); }
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-        .about-img img { width: 100%; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .stats-box { display: flex; gap: 20px; margin-top: 30px; }
-        .stat-item { background: var(--bg-light); padding: 15px; border-radius: 8px; text-align: center; flex: 1; border-bottom: 3px solid var(--primary); }
-        .stat-item h3 { font-size: 2rem; color: var(--primary); }
-
-        /* --- SERVICES --- */
-        .services-section { padding: 80px 0; }
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .service-card { background: var(--white); padding: 30px; border-radius: 8px; transition: 0.3s; border: 1px solid #eee; }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--primary); }
-        .service-icon { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
-        .service-card h3 { margin-bottom: 15px; font-size: 1.3rem; }
-        .service-card ul { list-style: circle; padding-left: 20px; color: var(--text-light); }
-        .service-card ul li { margin-bottom: 5px; }
-
-        /* --- STAFF (CƠ CẤU TỔ CHỨC) --- */
-        .staff-section { padding: 80px 0; background: var(--white); }
-        .staff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .staff-card { text-align: center; }
-        .staff-img { width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary-light); }
-        .staff-img img { width: 100%; height: 100%; object-fit: cover; }
-        .staff-role { color: var(--primary); font-weight: 500; font-size: 0.9rem; text-transform: uppercase; }
-
-        /* --- LOCATIONS (Updated) --- */
-        .locations-section { padding: 80px 0; background: #e0f2f1; }
+        /* LOCATIONS */
         .loc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .loc-card { background: white; padding: 25px; border-radius: 10px; position: relative; overflow: hidden; }
-        .loc-card::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--accent); }
-        .loc-card h3 { margin-bottom: 10px; color: var(--text-dark); }
-        .loc-btn { display: block; margin-top: 15px; text-align: center; background: #222; color: #fff; padding: 10px; border-radius: 5px; }
-        .loc-btn i { margin-right: 5px; }
-        .loc-btn:hover { background: #000; }
+        .loc-item { padding: 20px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; }
+        .btn-apple { display: inline-block; background: #000; color: white; padding: 8px 15px; border-radius: 5px; margin-top: 10px; font-size: 0.8rem; }
 
-        /* --- NEWS (BLOG) --- */
-        .news-section { padding: 80px 0; background: var(--white); }
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .news-item { border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); background: white; display: flex; flex-direction: column; }
-        .news-img { height: 180px; background-size: cover; background-position: center; }
-        .news-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-        .news-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .news-meta { font-size: 0.85rem; color: #888; margin-bottom: 15px; }
-        .read-more { margin-top: auto; color: var(--primary); font-weight: 600; }
+        /* NEWS */
+        .news-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .news-item { border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
+        .news-item img { width: 100%; height: 160px; object-fit: cover; }
+        .news-content { padding: 15px; }
+        .news-title { font-weight: bold; margin-bottom: 10px; color: var(--primary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
 
-        /* --- CONTACT & FOOTER --- */
-        .footer { background: #263238; color: #eceff1; padding: 60px 0 20px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer h4 { color: white; margin-bottom: 20px; font-size: 1.2rem; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a:hover { color: var(--primary-light); margin-left: 5px; }
-        .copyright { text-align: center; border-top: 1px solid #37474f; padding-top: 20px; font-size: 0.9rem; }
+        /* ADMIN MODAL */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+        .form-control { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; }
 
-        /* --- ADMIN PANEL --- */
-        .admin-trigger { cursor: pointer; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: white; width: 95%; max-width: 600px; padding: 25px; border-radius: 10px; max-height: 90vh; overflow-y: auto; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .main-menu { display: none; } /* Mobile menu toggle can be added if needed */
-            .about-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2rem; }
-            .top-content { flex-direction: column; gap: 5px; }
-        }
+        /* FOOTER */
+        footer { background: #263238; color: #eceff1; padding: 40px 0; font-size: 0.9rem; }
+        .footer-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+        .footer-title { color: white; text-transform: uppercase; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid var(--secondary); display: inline-block; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <header>
-        <div class="top-header">
-            <div class="container top-content">
-                <span id="hotline-display"><i class="fas fa-phone-volume"></i> Cấp cứu / Hotline: 0291 3835 672</span>
-                <div class="auth-box">
-                    <span id="user-display" style="display:none; margin-right:10px;"></span>
-                    <span class="admin-trigger" onclick="handleAuth()"><i class="fas fa-user-lock"></i> <span id="auth-text">Đăng nhập Admin</span></span>
+        <div class="top-bar">
+            <div class="container flex-between">
+                <span><i class="fas fa-file-contract"></i> Thực hiện theo Thông tư 43/2025/TT-BYT</span>
+                <div id="auth-box">
+                    <span id="hotline-display" style="margin-right: 15px; font-weight: bold;">Hotline: 0291 3835 672</span>
+                    <a href="#" onclick="openAdmin()" id="admin-link"><i class="fas fa-user-cog"></i> Quản trị</a>
                 </div>
             </div>
         </div>
         <div class="container">
+            <div class="branding">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Logo_Bo_Y_Te_%28Viet_Nam%29.svg/1200px-Logo_Bo_Y_Te_%28Viet_Nam%29.svg.png" alt="Logo">
+                <div class="site-title">
+                    <p>UBND PHƯỜNG HIỆP THÀNH</p>
+                    <h1>TRẠM Y TẾ PHƯỜNG HIỆP THÀNH</h1>
+                </div>
+            </div>
             <nav>
-                <a href="#" class="logo">
-                    <i class="fas fa-hospital-alt" style="font-size: 2rem;"></i>
-                    <div>
-                        <div style="font-size: 0.8rem; text-transform: uppercase; color: #666;">Sở Y Tế Tỉnh Bạc Liêu</div>
-                        TYT PHƯỜNG HIỆP THÀNH
-                    </div>
-                </a>
-                <ul class="main-menu">
-                    <li><a href="#about">Giới thiệu</a></li>
-                    <li><a href="#services">Dịch vụ</a></li>
-                    <li><a href="#staff">Tổ chức</a></li>
-                    <li><a href="#locations">Mạng lưới</a></li>
+                <ul>
+                    <li><a href="#intro">Giới thiệu</a></li>
+                    <li><a href="#tasks">Nhiệm vụ</a></li>
+                    <li><a href="#org">Tổ chức</a></li>
                     <li><a href="#news">Tin tức</a></li>
                     <li><a href="#contact">Liên hệ</a></li>
                 </ul>
@@ -167,234 +126,188 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero">
+    <section class="hero" id="intro">
         <div class="container">
-            <h1>Chăm Sóc Sức Khỏe Toàn Dân</h1>
-            <p>Tận tâm - Chuyên nghiệp - Hiệu quả. Chúng tôi cam kết mang đến dịch vụ y tế cơ sở chất lượng cao cho người dân phường Hiệp Thành và khu vực lân cận.</p>
-            <div class="hero-btns">
-                <a href="#services" class="btn btn-primary">Xem Dịch Vụ</a>
-                <a href="#locations" class="btn btn-primary" style="background: white; color: var(--primary);">Tìm Đường Đi</a>
-            </div>
+            <h2>Đơn Vị Sự Nghiệp Y Tế Công Lập</h2>
+            <p>Trực thuộc Ủy ban nhân dân Phường Hiệp Thành, chịu sự chỉ đạo, quản lý trực tiếp về tổ chức bộ máy, nhân lực, tài sản, tài chính của UBND cấp xã.</p>
         </div>
     </section>
 
-    <!-- About -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-img">
-                    <img src="https://images.unsplash.com/photo-1516574187841-693083f69382?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Trạm y tế">
-                </div>
-                <div class="about-text">
-                    <div class="section-title" style="text-align: left; margin-bottom: 20px;">
-                        <h2>Về Chúng Tôi</h2>
-                        <span style="margin: 0;"></span>
-                    </div>
-                    <p>Trạm Y tế Phường Hiệp Thành là đơn vị y tế cơ sở trực thuộc Trung tâm Y tế Thành phố Bạc Liêu. Với phương châm "Lương y như từ mẫu", tập thể cán bộ nhân viên trạm luôn nỗ lực hết mình trong công tác chăm sóc sức khỏe ban đầu.</p>
-                    <br>
-                    <strong>Chức năng chính:</strong>
-                    <ul style="list-style: check; margin-left: 20px; margin-top: 10px;">
-                        <li><i class="fas fa-check-circle" color="var(--primary)"></i> Khám chữa bệnh BHYT ban đầu.</li>
-                        <li><i class="fas fa-check-circle" color="var(--primary)"></i> Thực hiện các chương trình mục tiêu Y tế Quốc gia.</li>
-                        <li><i class="fas fa-check-circle" color="var(--primary)"></i> Phòng chống dịch bệnh, vệ sinh môi trường.</li>
-                    </ul>
-                    <div class="stats-box">
-                        <div class="stat-item">
-                            <h3>10+</h3>
-                            <p>Năm hoạt động</p>
-                        </div>
-                        <div class="stat-item">
-                            <h3>15K+</h3>
-                            <p>Lượt khám/năm</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services -->
-    <section id="services" class="services-section">
+    <section id="tasks">
         <div class="container">
             <div class="section-title">
-                <h2>Danh Mục Dịch Vụ</h2>
-                <span></span>
+                <h3>Chức Năng & Nhiệm Vụ</h3>
+                <hr>
+                <p>Căn cứ Chương II, Thông tư 43/2025/TT-BYT ngày 15/11/2025</p>
             </div>
-            <div class="service-grid">
-                <div class="service-card">
-                    <i class="fas fa-stethoscope service-icon"></i>
-                    <h3>Khám Chữa Bệnh BHYT</h3>
-                    <ul>
-                        <li>Khám bệnh nội khoa thông thường.</li>
-                        <li>Cấp phát thuốc BHYT định kỳ.</li>
-                        <li>Quản lý bệnh mãn tính (Huyết áp, Tiểu đường).</li>
-                    </ul>
+
+            <div class="legal-box">
+                <h4><i class="fas fa-balance-scale"></i> Vị trí pháp lý (Điều 2)</h4>
+                <p>Trạm Y tế cấp xã là đơn vị sự nghiệp y tế công lập trực thuộc Ủy ban nhân dân xã, phường. Có tư cách pháp nhân, con dấu riêng, tài khoản riêng.</p>
+            </div>
+
+            <div class="tasks-grid">
+                <!-- Task 1 -->
+                <div class="task-card">
+                    <div class="task-header"><i class="fas fa-shield-virus"></i> Phòng bệnh & SK Cộng đồng</div>
+                    <div class="task-body">
+                        <ul>
+                            <li>Phòng chống dịch bệnh truyền nhiễm, HIV/AIDS.</li>
+                            <li>Phòng chống bệnh không lây nhiễm (Tăng huyết áp, Đái tháo đường...).</li>
+                            <li>Y tế trường học, vệ sinh lao động, tai nạn thương tích.</li>
+                            <li>Bảo vệ môi trường, vệ sinh trong mai táng, phòng chống tác hại thuốc lá/rượu bia.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-baby-carriage service-icon"></i>
-                    <h3>Tiêm Chủng Mở Rộng</h3>
-                    <ul>
-                        <li>Tiêm chủng định kỳ cho trẻ dưới 1 tuổi.</li>
-                        <li>Tiêm uốn ván cho phụ nữ mang thai.</li>
-                        <li>Tư vấn an toàn tiêm chủng.</li>
-                    </ul>
+
+                <!-- Task 2 -->
+                <div class="task-card">
+                    <div class="task-header"><i class="fas fa-user-md"></i> Khám bệnh, chữa bệnh</div>
+                    <div class="task-body">
+                        <ul>
+                            <li>Sơ cứu, cấp cứu ban đầu tai nạn, thương tích.</li>
+                            <li>Khám chữa bệnh BHYT, quản lý bệnh mãn tính ngoại trú.</li>
+                            <li>Kết hợp Y học cổ truyền và Y học hiện đại.</li>
+                            <li>Khám sức khỏe định kỳ, khám nghĩa vụ quân sự.</li>
+                            <li>Điều trị nghiện chất bằng thuốc thay thế.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-female service-icon"></i>
-                    <h3>Chăm Sóc SKSS - KHHGĐ</h3>
-                    <ul>
-                        <li>Khám thai định kỳ.</li>
-                        <li>Đặt vòng, cấp phát thuốc tránh thai.</li>
-                        <li>Tư vấn sức khỏe sinh sản tiền hôn nhân.</li>
-                    </ul>
+
+                <!-- Task 3 -->
+                <div class="task-card">
+                    <div class="task-header"><i class="fas fa-baby"></i> CSSK Sinh sản & Dân số</div>
+                    <div class="task-body">
+                        <ul>
+                            <li>Quản lý thai, chăm sóc sức khỏe bà mẹ, trẻ em.</li>
+                            <li>Tư vấn tiền hôn nhân, sàng lọc trước sinh/sơ sinh.</li>
+                            <li>Cung cấp dịch vụ kế hoạch hóa gia đình.</li>
+                            <li>Chăm sóc sức khỏe người cao tuổi.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-mortar-pestle service-icon"></i>
-                    <h3>Y Học Cổ Truyền</h3>
-                    <ul>
-                        <li>Khám và kê đơn thuốc nam.</li>
-                        <li>Kết hợp Đông - Tây y trong điều trị.</li>
-                        <li>Vườn thuốc nam mẫu tại trạm.</li>
-                    </ul>
+
+                <!-- Task 4 -->
+                <div class="task-card">
+                    <div class="task-header"><i class="fas fa-utensils"></i> ATTP & Dược</div>
+                    <div class="task-body">
+                        <ul>
+                            <li>Phòng ngừa ngộ độc thực phẩm, giám sát ATTP trên địa bàn.</li>
+                            <li>Quản lý, cấp phát thuốc, vắc xin, hóa chất, thiết bị y tế.</li>
+                            <li>Hướng dẫn sử dụng thuốc an toàn, hợp lý.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <i class="fas fa-ambulance service-icon"></i>
-                    <h3>Sơ Cấp Cứu Ban Đầu</h3>
-                    <ul>
-                        <li>Xử lý vết thương phần mềm.</li>
-                        <li>Sơ cứu tai nạn giao thông, ngộ độc.</li>
-                        <li>Chuyển tuyến an toàn kịp thời.</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-file-medical service-icon"></i>
-                    <h3>Chứng Nhận Sức Khỏe</h3>
-                    <ul>
-                        <li>Khám sức khỏe học sinh.</li>
-                        <li>Khám sức khỏe nghĩa vụ quân sự.</li>
-                        <li>Xác nhận tình trạng sức khỏe.</li>
-                    </ul>
+
+                <!-- Task 5 -->
+                <div class="task-card">
+                    <div class="task-header"><i class="fas fa-hands-helping"></i> Bảo trợ xã hội & Khác</div>
+                    <div class="task-body">
+                        <ul>
+                            <li>Hỗ trợ người cao tuổi, người khuyết tật, nạn nhân bạo lực.</li>
+                            <li>Quản lý trường hợp, can thiệp công tác xã hội tại cộng đồng.</li>
+                            <li>Truyền thông giáo dục sức khỏe.</li>
+                            <li>Ứng dụng CNTT, chuyển đổi số y tế (Hồ sơ sức khỏe điện tử).</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Staff -->
-    <section id="staff" class="staff-section">
+    <section id="org" style="background-color: #f1f8e9;">
         <div class="container">
             <div class="section-title">
-                <h2>Đội Ngũ Nhân Sự</h2>
-                <span></span>
+                <h3>Cơ Cấu Tổ Chức (Điều 5)</h3>
+                <hr>
             </div>
-            <div class="staff-grid">
-                <!-- Bạn có thể thay tên thật vào đây -->
-                <div class="staff-card">
-                    <div class="staff-img">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Doctor">
-                    </div>
-                    <h4>BS. Nguyễn Văn A</h4>
-                    <p class="staff-role">Trưởng Trạm</p>
+            <div class="org-chart">
+                <div class="org-box org-level-1">
+                    UBND PHƯỜNG HIỆP THÀNH
                 </div>
-                <div class="staff-card">
-                    <div class="staff-img">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774293.png" alt="Doctor">
-                    </div>
-                    <h4>YS. Trần Thị B</h4>
-                    <p class="staff-role">Phó Trưởng Trạm</p>
+                <div style="height: 30px; width: 2px; background: #333; margin: 0 auto;"></div>
+                <div class="org-box org-level-1" style="background: var(--primary);">
+                    GIÁM ĐỐC TRẠM Y TẾ <br> (Và các Phó Giám đốc)
                 </div>
-                <div class="staff-card">
-                    <div class="staff-img">
-                        <img src="https://cdn-icons-png.flaticon.com/512/846/846747.png" alt="Nurse">
-                    </div>
-                    <h4>CN. Lê Văn C</h4>
-                    <p class="staff-role">Điều Dưỡng Trưởng</p>
+                <div style="height: 30px; width: 2px; background: #333; margin: 0 auto;"></div>
+                <div style="height: 2px; width: 80%; background: #333; margin: 0 auto 30px;"></div>
+                
+                <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                    <div class="org-box org-level-2">Văn phòng / <br>Phòng Hành chính tổng hợp</div>
+                    <div class="org-box org-level-2">Phòng Dân số, Trẻ em,<br>Bảo trợ xã hội</div>
+                    <div class="org-box org-level-2">Khoa Phòng bệnh,<br>An toàn thực phẩm</div>
+                    <div class="org-box org-level-2">Khoa Khám bệnh,<br>Chữa bệnh</div>
+                    <div class="org-box org-level-2">Khoa Dược, Thiết bị,<br>Cận lâm sàng</div>
                 </div>
-                <div class="staff-card">
-                    <div class="staff-img">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3304/3304567.png" alt="Pharmacist">
-                    </div>
-                    <h4>DS. Phạm Thị D</h4>
-                    <p class="staff-role">Dược Sĩ</p>
-                </div>
+                
+                <p style="margin-top: 20px; font-style: italic;">*Các điểm trạm y tế (nếu có) trực thuộc Trạm Y tế xã (Theo Điều 5.2.e)</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="news">
+        <div class="container">
+            <div class="section-title">
+                <h3>Tin Tức & Hoạt Động</h3>
+                <hr>
+            </div>
+            <div id="blog-list" class="news-container">
+                <!-- Nội dung tin tức sẽ load từ Firebase -->
+                <p style="width:100%; text-align:center">Đang tải dữ liệu...</p>
             </div>
         </div>
     </section>
 
-    <!-- Locations -->
-    <section id="locations" class="locations-section">
+    <section id="contact">
         <div class="container">
             <div class="section-title">
-                <h2>Mạng Lưới Hoạt Động</h2>
-                <span></span>
+                <h3>Mạng Lưới & Liên Hệ</h3>
+                <hr>
             </div>
             <div class="loc-grid">
-                <div class="loc-card">
-                    <h3><i class="fas fa-star" style="color: gold;"></i> Trạm Y tế Phường Hiệp Thành (Trụ sở)</h3>
-                    <p>Địa chỉ: Đường Hai Bà Trưng, Phường Hiệp Thành, TP. Bạc Liêu.</p>
-                    <a href="https://maps.apple/p/Xz~wQk1MYPMxCv" target="_blank" class="loc-btn"><i class="fab fa-apple"></i> Chỉ đường (Apple Maps)</a>
+                <div class="loc-item">
+                    <h4><i class="fas fa-star" style="color: gold"></i> Trạm Y tế Phường Hiệp Thành</h4>
+                    <p>Địa chỉ: Phường Hiệp Thành, TP. Bạc Liêu.</p>
+                    <a href="https://maps.apple/p/Xz~wQk1MYPMxCv" target="_blank" class="btn-apple"><i class="fab fa-apple"></i> Mở Apple Maps</a>
                 </div>
-                <div class="loc-card">
-                    <h3><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Điểm Trạm Hiệp Thành</h3>
-                    <p>Phục vụ khu vực dân cư mở rộng, hỗ trợ tiêm chủng và sơ cấp cứu.</p>
-                    <a href="https://maps.apple/p/QhGHcCkzzjyUQ9" target="_blank" class="loc-btn"><i class="fab fa-apple"></i> Chỉ đường (Apple Maps)</a>
+                <div class="loc-item">
+                    <h4><i class="fas fa-map-marker-alt" style="color: var(--primary)"></i> Điểm Trạm Hiệp Thành</h4>
+                    <p>Điểm y tế vệ tinh.</p>
+                    <a href="https://maps.apple/p/QhGHcCkzzjyUQ9" target="_blank" class="btn-apple"><i class="fab fa-apple"></i> Mở Apple Maps</a>
                 </div>
-                <div class="loc-card">
-                    <h3><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Điểm Trạm Vĩnh Trạch Đông</h3>
-                    <p>Điểm y tế phối hợp phục vụ bà con xã Vĩnh Trạch Đông giáp ranh.</p>
-                    <a href="https://maps.apple/p/QKfi4eYDVc.Cb5" target="_blank" class="loc-btn"><i class="fab fa-apple"></i> Chỉ đường (Apple Maps)</a>
+                <div class="loc-item">
+                    <h4><i class="fas fa-map-marker-alt" style="color: var(--primary)"></i> Điểm Trạm Vĩnh Trạch Đông</h4>
+                    <p>Khu vực phối hợp.</p>
+                    <a href="https://maps.apple/p/QKfi4eYDVc.Cb5" target="_blank" class="btn-apple"><i class="fab fa-apple"></i> Mở Apple Maps</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- News (Dynamic) -->
-    <section id="news" class="news-section">
+    <footer>
         <div class="container">
-            <div class="section-title">
-                <h2>Tin Tức & Sự Kiện</h2>
-                <span></span>
-            </div>
-            <div id="blog-container" class="news-grid">
-                <!-- Data from Firebase -->
-                <p style="text-align: center; width: 100%;">Đang tải dữ liệu...</p>
-            </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn btn-primary" onclick="window.openAdmin()" id="btn-add-news" style="display:none;">
-                    <i class="fas fa-plus"></i> Thêm tin tức mới
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact" class="footer">
-        <div class="container">
-            <div class="footer-grid">
+            <div class="footer-cols">
                 <div>
-                    <h4>TYT PHƯỜNG HIỆP THÀNH</h4>
-                    <p>Đơn vị y tế công lập, chịu trách nhiệm chăm sóc sức khỏe ban đầu cho nhân dân trên địa bàn phường Hiệp Thành và các vùng lân cận.</p>
+                    <div class="footer-title">Đơn vị chủ quản</div>
+                    <p style="font-weight: bold; font-size: 1.1rem;">UBND PHƯỜNG HIỆP THÀNH</p>
+                    <p style="margin-top: 10px;">TRẠM Y TẾ PHƯỜNG HIỆP THÀNH</p>
+                    <p>Đơn vị sự nghiệp y tế công lập.</p>
                 </div>
                 <div>
-                    <h4>LIÊN HỆ</h4>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-phone-alt"></i> Hotline: <span class="dynamic-phone">0291 3835 672</span></li>
-                        <li><i class="fas fa-map-marker-alt"></i> Phường Hiệp Thành, TP. Bạc Liêu</li>
-                        <li><i class="fas fa-envelope"></i> tyt.hiepthanh@baclieu.gov.vn</li>
-                        <li><i class="fas fa-clock"></i> 7:00 - 17:00 (Thứ 2 - Thứ 6)</li>
-                    </ul>
+                    <div class="footer-title">Thông tin liên hệ</div>
+                    <p><i class="fas fa-phone"></i> <span class="dynamic-phone">0291 3835 672</span></p>
+                    <p><i class="fas fa-envelope"></i> tyt.hiepthanh@baclieu.gov.vn</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Phường Hiệp Thành, TP. Bạc Liêu.</p>
                 </div>
                 <div>
-                    <h4>LIÊN KẾT NHANH</h4>
-                    <ul class="footer-links">
-                        <li><a href="https://moh.gov.vn">Bộ Y Tế</a></li>
-                        <li><a href="#">Sở Y Tế Bạc Liêu</a></li>
-                        <li><a href="#">Bảo Hiểm Xã Hội</a></li>
-                    </ul>
+                    <div class="footer-title">Văn bản áp dụng</div>
+                    <p>- Thông tư 43/2025/TT-BYT</p>
+                    <p>- Luật Khám bệnh, chữa bệnh</p>
+                    <p>- Luật Bảo hiểm y tế</p>
                 </div>
             </div>
-            <div class="copyright">
-                &copy; 2024 Trạm Y tế Phường Hiệp Thành. All rights reserved.
+            <div style="text-align: center; margin-top: 40px; border-top: 1px solid #455a64; padding-top: 20px;">
+                &copy; 2025 Trạm Y tế Phường Hiệp Thành.
             </div>
         </div>
     </footer>
@@ -402,46 +315,51 @@
     <!-- ADMIN MODAL -->
     <div id="admin-modal" class="modal">
         <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3>Quản Lý Dữ Liệu</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                <h3><i class="fas fa-user-shield"></i> Admin Panel</h3>
                 <button onclick="closeAdmin()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
             
-            <div class="form-group">
-                <label>Cập nhật Hotline:</label>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="admin-phone" class="form-input">
-                    <button onclick="savePhone()" class="btn btn-primary">Lưu</button>
+            <div id="login-form">
+                <p>Vui lòng đăng nhập để quản trị.</p>
+                <button onclick="loginGoogle()" class="btn-submit" style="background: #db4437; margin-top: 10px;"><i class="fab fa-google"></i> Đăng nhập Google</button>
+            </div>
+
+            <div id="admin-controls" style="display:none;">
+                <div style="margin-bottom: 20px; background: #f9f9f9; padding: 10px; border-radius: 5px;">
+                    <label><strong>Cập nhật Hotline:</strong></label>
+                    <div style="display:flex; gap: 10px;">
+                        <input type="text" id="phone-input" class="form-control" style="margin:0;">
+                        <button onclick="savePhone()" style="width: 80px; cursor:pointer; background: var(--primary); color: white; border:none; border-radius:4px;">Lưu</button>
+                    </div>
                 </div>
-            </div>
 
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                <hr style="margin: 20px 0;">
 
-            <h4>Đăng Bài Mới</h4>
-            <div class="form-group">
-                <label>Link bài viết (Website/Facebook):</label>
-                <input type="text" id="post-link" class="form-input" placeholder="https://..." oninput="autoFetchTitle()">
-                <small style="color:#666">Dán link để tự động lấy tiêu đề.</small>
+                <h4>Đăng tin mới</h4>
+                <label>Link bài viết:</label>
+                <input type="text" id="post-link" class="form-control" placeholder="http://..." oninput="autoFetchTitle()">
+                <small style="color:#666">Hệ thống sẽ tự động lấy tiêu đề từ link.</small>
+
+                <label>Tiêu đề:</label>
+                <input type="text" id="post-title" class="form-control">
+
+                <label>Link ảnh:</label>
+                <input type="text" id="post-img" class="form-control">
+
+                <button onclick="addPost()" class="btn-submit">Đăng bài</button>
+                <button onclick="logout()" style="margin-top: 20px; background: #555; width: 100%; padding: 10px; border:none; color:white; border-radius:4px; cursor:pointer;">Đăng xuất</button>
             </div>
-            <div class="form-group">
-                <label>Tiêu đề bài viết:</label>
-                <input type="text" id="post-title" class="form-input" placeholder="Tiêu đề...">
-            </div>
-            <div class="form-group">
-                <label>Link ảnh minh họa:</label>
-                <input type="text" id="post-img" class="form-input" placeholder="Link ảnh...">
-            </div>
-            <button onclick="createPost()" class="btn btn-primary" style="width:100%;">Đăng Bài</button>
         </div>
     </div>
 
-    <!-- FIREBASE SCRIPT -->
+    <!-- FIREBASE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-    const firebaseConfig = {
+     const firebaseConfig = {
         apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
         authDomain: "profile-d1214.firebaseapp.com",
         projectId: "profile-d1214",
@@ -458,152 +376,126 @@
         let currentUser = null;
 
         // AUTH
-        window.handleAuth = () => {
-            if (currentUser) {
-                if(confirm("Bạn muốn đăng xuất?")) {
-                    signOut(auth).then(() => location.reload());
-                }
-            } else {
-                signInWithPopup(auth, provider).then(() => {
-                    Toastify({ text: "Đăng nhập thành công!", backgroundColor: "#00695c" }).showToast();
-                }).catch(e => alert(e.message));
-            }
-        };
+        window.openAdmin = () => document.getElementById('admin-modal').style.display = 'flex';
+        window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
+        
+        window.loginGoogle = () => {
+            signInWithPopup(auth, provider)
+                .then(() => Toastify({text: "Đăng nhập thành công!", backgroundColor: "green"}).showToast())
+                .catch(e => alert(e.message));
+        }
+
+        window.logout = () => {
+            signOut(auth).then(() => {
+                location.reload();
+            });
+        }
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
-            if (user) {
-                document.getElementById('auth-text').innerText = "Đăng xuất";
-                document.getElementById('user-display').style.display = 'inline-block';
-                document.getElementById('user-display').innerText = `Hi, ${user.displayName}`;
-                document.getElementById('btn-add-news').style.display = 'inline-block';
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+            if(user) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-controls').style.display = 'block';
+                document.getElementById('admin-link').innerHTML = `<i class="fas fa-user-check"></i> ${user.displayName}`;
+                renderBlogs(); // Show delete buttons
             } else {
-                document.getElementById('auth-text').innerText = "Đăng nhập Admin";
-                document.getElementById('user-display').style.display = 'none';
-                document.getElementById('btn-add-news').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('admin-controls').style.display = 'none';
             }
-            renderBlogs(); // Re-render to show/hide delete buttons
         });
 
-        // DATA: PHONE
+        // PHONE SYNC
         const settingsRef = doc(db, "settings", "general");
-        onSnapshot(settingsRef, (doc) => {
-            if(doc.exists() && doc.data().phone) {
-                const p = doc.data().phone;
-                document.getElementById('hotline-display').innerHTML = `<i class="fas fa-phone-volume"></i> Cấp cứu / Hotline: ${p}`;
-                document.querySelectorAll('.dynamic-phone').forEach(e => e.innerText = p);
-                document.getElementById('admin-phone').value = p;
+        onSnapshot(settingsRef, (docSnap) => {
+            if(docSnap.exists() && docSnap.data().phone) {
+                const p = docSnap.data().phone;
+                document.getElementById('hotline-display').innerText = `Hotline: ${p}`;
+                document.querySelectorAll('.dynamic-phone').forEach(el => el.innerText = p);
+                document.getElementById('phone-input').value = p;
             }
         });
 
         window.savePhone = async () => {
             if(!currentUser) return;
-            const val = document.getElementById('admin-phone').value;
+            const val = document.getElementById('phone-input').value;
             await setDoc(settingsRef, { phone: val }, { merge: true });
-            Toastify({ text: "Đã cập nhật số điện thoại", backgroundColor: "green" }).showToast();
-        };
+            Toastify({text: "Đã cập nhật số điện thoại", backgroundColor: "green"}).showToast();
+        }
 
-        // DATA: BLOGS
-        let blogsData = [];
+        // BLOGS
+        let blogs = [];
         const q = query(collection(db, "blogs"), orderBy("timestamp", "desc"));
         onSnapshot(q, (snapshot) => {
-            blogsData = [];
-            snapshot.forEach(doc => blogsData.push({id: doc.id, ...doc.data()}));
+            blogs = [];
+            snapshot.forEach(d => blogs.push({id: d.id, ...d.data()}));
             renderBlogs();
         });
 
         function renderBlogs() {
-            const container = document.getElementById('blog-container');
+            const container = document.getElementById('blog-list');
             container.innerHTML = '';
-            
-            if(blogsData.length === 0) {
-                container.innerHTML = '<p>Chưa có tin tức nào.</p>';
+            if(blogs.length === 0) {
+                container.innerHTML = '<p style="text-align:center; width:100%">Chưa có bài viết.</p>';
                 return;
             }
-
-            blogsData.forEach(blog => {
-                const date = new Date(blog.timestamp).toLocaleDateString('vi-VN');
-                const deleteBtn = currentUser ? `<button onclick="deletePost('${blog.id}')" style="float:right; color:red; border:none; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button>` : '';
-                
-                const html = `
+            blogs.forEach(blog => {
+                const delBtn = currentUser ? `<button onclick="delPost('${blog.id}')" style="color:red; border:none; background:none; cursor:pointer; float:right"><i class="fas fa-trash"></i></button>` : '';
+                container.innerHTML += `
                     <div class="news-item">
-                        <div class="news-img" style="background-image: url('${blog.image || 'https://via.placeholder.com/300x200?text=News'}');"></div>
+                        <img src="${blog.image || 'https://via.placeholder.com/300x160'}" alt="News">
                         <div class="news-content">
-                            <div class="news-meta">
-                                <i class="far fa-calendar-alt"></i> ${date}
-                                ${deleteBtn}
-                            </div>
-                            <h3 class="news-title">${blog.title}</h3>
-                            <a href="${blog.link}" target="_blank" class="read-more">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+                            <div style="font-size:0.8rem; color:#888; margin-bottom:5px;">${new Date(blog.timestamp).toLocaleDateString()} ${delBtn}</div>
+                            <h4 class="news-title">${blog.title}</h4>
+                            <a href="${blog.link}" target="_blank" style="color:var(--primary); font-size:0.9rem;">Xem chi tiết &rarr;</a>
                         </div>
                     </div>
                 `;
-                container.innerHTML += html;
             });
         }
 
-        // ADMIN FUNCTIONS
-        window.openAdmin = () => document.getElementById('admin-modal').style.display = 'flex';
-        window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
-
-        // Auto Fetch Title Logic
-        let timeout;
+        // AUTO TITLE & ADD POST
+        let typingTimer;
         window.autoFetchTitle = () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(async () => {
-                const url = document.getElementById('post-link').value;
-                if(!url) return;
-                
+            clearTimeout(typingTimer);
+            const url = document.getElementById('post-link').value;
+            if(!url) return;
+            
+            typingTimer = setTimeout(async () => {
                 document.getElementById('post-title').placeholder = "Đang lấy tiêu đề...";
                 try {
-                    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    const res = await fetch(proxy);
+                    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
                     const data = await res.json();
-                    if(data.contents) {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(data.contents, "text/html");
-                        const title = doc.querySelector('title').innerText;
-                        if(title) {
-                            document.getElementById('post-title').value = title;
-                            Toastify({ text: "Đã lấy tiêu đề tự động!", backgroundColor: "#00695c" }).showToast();
-                        }
-                    }
-                } catch(e) {
-                    console.error(e);
-                }
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data.contents, "text/html");
+                    const title = doc.querySelector('title').innerText;
+                    if(title) document.getElementById('post-title').value = title;
+                } catch(e) { console.log(e); }
             }, 1000);
-        };
+        }
 
-        window.createPost = async () => {
-            if(!currentUser) return;
+        window.addPost = async () => {
+            if(!currentUser) return alert("Cần đăng nhập!");
             const title = document.getElementById('post-title').value;
             const link = document.getElementById('post-link').value;
             const img = document.getElementById('post-img').value;
 
-            if(!title || !link) return alert("Cần nhập link và tiêu đề");
-
+            if(!title || !link) return alert("Thiếu thông tin!");
+            
             await addDoc(collection(db, "blogs"), {
                 title, link, image: img, timestamp: Date.now()
             });
-            
-            Toastify({ text: "Đăng bài thành công", backgroundColor: "green" }).showToast();
+            Toastify({text: "Đăng tin thành công!", backgroundColor: "green"}).showToast();
             document.getElementById('post-title').value = '';
             document.getElementById('post-link').value = '';
             document.getElementById('post-img').value = '';
-            closeAdmin();
-        };
+        }
 
-        window.deletePost = async (id) => {
-            if(confirm("Xóa bài viết này?")) {
-                await deleteDoc(doc(db, "blogs", id));
-                Toastify({ text: "Đã xóa", backgroundColor: "orange" }).showToast();
-            }
-        };
+        window.delPost = async (id) => {
+            if(confirm("Xóa tin này?")) await deleteDoc(doc(db, "blogs", id));
+        }
         
-        // Expose functions to window
-        window.deletePost = deletePost;
+        window.delPost = delPost; // Expose to HTML
     </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>
