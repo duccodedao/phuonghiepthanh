@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trạm Y tế Phường Hiệp Thành - TP. Bạc Liêu</title>
+    <!-- CSS Framework & Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Toastify cho thông báo đẹp -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <style>
+        :root {
+            --primary: #009688; /* Màu xanh y tế đậm hơn chút */
+            --secondary: #263238;
+            --bg-light: #f4f7f6;
+            --text: #333;
+            --white: #fff;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background: var(--bg-light); color: var(--text); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        
+        /* HEADER */
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .top-bar { background: var(--secondary); color: var(--white); padding: 8px 0; font-size: 0.9rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        nav { padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .nav-menu a { margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav-menu a:hover { color: var(--primary); }
+        
+        /* ADMIN BTN */
+        #login-btn { cursor: pointer; background: var(--bg-light); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; border: 1px solid #ddd; }
+        #user-info { display: none; align-items: center; gap: 10px; }
+        #user-avatar { width: 30px; height: 30px; border-radius: 50%; }
+
+        /* HERO */
+        .hero { background: linear-gradient(rgba(0,150,136,0.9), rgba(0,150,136,0.7)), url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Bac_Lieu_City_Hall.jpg'); background-size: cover; color: var(--white); padding: 80px 0; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        
+        /* SECTIONS */
+        section { padding: 50px 0; }
+        .section-title { text-align: center; margin-bottom: 40px; font-size: 2rem; color: var(--secondary); }
+        
+        /* LOCATIONS */
+        .locations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .loc-card { background: var(--white); padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--primary); }
+        .loc-card h3 { color: var(--primary); margin-bottom: 10px; }
+        .btn-map { display: inline-block; margin-top: 10px; padding: 5px 15px; background: #e0f2f1; color: var(--primary); border-radius: 4px; font-size: 0.9rem; }
+        .btn-map:hover { background: var(--primary); color: var(--white); }
+
+        /* BLOG GRID */
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .blog-card { background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.1); transition: 0.3s; display: flex; flex-direction: column; }
+        .blog-card:hover { transform: translateY(-5px); }
+        .blog-img { height: 160px; background: #ddd; background-size: cover; background-position: center; }
+        .blog-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .blog-date { font-size: 0.8rem; color: #777; margin-bottom: 5px; }
+        .blog-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: var(--secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .blog-link { margin-top: auto; color: var(--primary); font-weight: bold; }
+        .delete-btn { color: red; cursor: pointer; float: right; display: none; } /* Admin only */
+
+        /* ADMIN PANEL (MODAL) */
+        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .panel-content { background: var(--white); width: 90%; max-width: 600px; padding: 20px; border-radius: 10px; max-height: 90vh; overflow-y: auto; }
+        .panel-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; }
+        .btn-submit.loading { opacity: 0.7; cursor: not-allowed; }
+        
+        /* FOOTER */
+        footer { background: var(--secondary); color: #bbb; padding: 30px 0; text-align: center; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="top-bar">
+            <div class="container flex-between">
+                <span id="header-phone"><i class="fas fa-phone-alt"></i> 0291 3835 672</span>
+                <div id="auth-section">
+                    <button id="login-btn" onclick="signIn()"><i class="fab fa-google"></i> Đăng nhập Admin</button>
+                    <div id="user-info">
+                        <img id="user-avatar" src="" alt="Avatar">
+                        <span id="user-name"></span>
+                        <a href="#" onclick="openAdmin()" style="color: var(--primary); margin-left:10px;"><i class="fas fa-cog"></i> Quản lý</a>
+                        <a href="#" onclick="signOut()" style="color: red; margin-left:10px;"><i class="fas fa-sign-out-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo"><i class="fas fa-hospital-symbol"></i> TYT Hiệp Thành</a>
+                <div class="nav-menu">
+                    <a href="#locations">Mạng lưới trạm</a>
+                    <a href="#blog">Tin tức</a>
+                    <a href="#contact">Liên hệ</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Trạm Y tế Phường Hiệp Thành</h1>
+            <p>TP. Bạc Liêu - Chăm sóc sức khỏe nhân dân</p>
+        </div>
+    </section>
+
+    <!-- Locations -->
+    <section id="locations">
+        <div class="container">
+            <h2 class="section-title">Mạng lưới Trạm Y tế</h2>
+            <div class="locations-grid">
+                <!-- Main Station -->
+                <div class="loc-card">
+                    <h3><i class="fas fa-star"></i> TYT Phường Hiệp Thành (Chính)</h3>
+                    <p>Trạm chính phục vụ khám chữa bệnh BHYT và tiêm chủng.</p>
+                    <a href="https://maps.apple/p/Xz~wQk1MYPMxCv" target="_blank" class="btn-map"><i class="fab fa-apple"></i> Apple Maps</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Trạm+Y+tế+Phường+Hiệp+Thành+Bạc+Liêu" target="_blank" class="btn-map"><i class="fab fa-google"></i> Google Maps</a>
+                </div>
+                <!-- Point 1 -->
+                <div class="loc-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Điểm trạm Hiệp Thành</h3>
+                    <p>Điểm y tế hỗ trợ khu vực dân cư phường Hiệp Thành.</p>
+                    <a href="https://maps.apple/p/QhGHcCkzzjyUQ9" target="_blank" class="btn-map"><i class="fab fa-apple"></i> Apple Maps</a>
+                </div>
+                <!-- Point 2 -->
+                <div class="loc-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Điểm trạm Vĩnh Trạch Đông</h3>
+                    <p>Phục vụ bà con khu vực xã Vĩnh Trạch Đông lân cận.</p>
+                    <a href="https://maps.apple/p/QKfi4eYDVc.Cb5" target="_blank" class="btn-map"><i class="fab fa-apple"></i> Apple Maps</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Tin tức & Hoạt động</h2>
+            <div id="blog-list" class="blog-grid">
+                <!-- Blog items will be loaded here from Firebase -->
+                <div style="text-align: center; grid-column: 1/-1;">Đang tải tin tức...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Info (Dynamic) -->
+    <section id="contact">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">Thông tin liên hệ</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 10px;">
+                <i class="fas fa-phone"></i> Đường dây nóng: <strong id="contact-phone">0291 3835 672</strong>
+            </p>
+            <p>Địa chỉ chính: Phường Hiệp Thành, Thành phố Bạc Liêu.</p>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2024 Trạm Y tế Phường Hiệp Thành - TP. Bạc Liêu.
+    </footer>
+
+    <!-- ADMIN MODAL -->
+    <div id="admin-modal" class="admin-panel">
+        <div class="panel-content">
+            <div class="panel-header">
+                <h3>Admin Panel</h3>
+                <button onclick="closeAdmin()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            
+            <!-- Tab: Settings -->
+            <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <h4><i class="fas fa-tools"></i> Cài đặt chung</h4>
+                <div class="form-group">
+                    <label>Số điện thoại trạm:</label>
+                    <input type="text" id="edit-phone" class="form-control" value="0291 3835 672">
+                </div>
+                <button onclick="saveSettings()" class="btn-submit" style="background: var(--secondary);">Lưu cài đặt</button>
+            </div>
+
+            <!-- Tab: Add Blog -->
+            <div>
+                <h4><i class="fas fa-plus-circle"></i> Đăng bài mới</h4>
+                <div class="form-group">
+                    <label>Link bài viết (Facebook/Website):</label>
+                    <input type="text" id="blog-link" class="form-control" placeholder="Dán link vào đây..." oninput="autoFetchTitle()">
+                    <small style="color: #666; font-size: 0.8rem;">Hệ thống sẽ cố gắng tự lấy tiêu đề khi dán link.</small>
+                </div>
+                <div class="form-group">
+                    <label>Tiêu đề bài viết:</label>
+                    <input type="text" id="blog-title" class="form-control" placeholder="Tiêu đề...">
+                </div>
+                <div class="form-group">
+                    <label>Link ảnh minh họa (Tùy chọn):</label>
+                    <input type="text" id="blog-img" class="form-control" placeholder="https://...">
+                </div>
+                <button id="btn-post" onclick="postBlog()" class="btn-submit">Đăng bài</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // ==========================================
+        // 1. CẤU HÌNH FIREBASE (THAY THẾ PHẦN NÀY)
+        // ==========================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            // --- DÁN CONFIG CỦA BẠN VÀO ĐÂY ---
+            apiKey: "AIzaSyD...",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+            // ----------------------------------
+        };
+
+        // Khởi tạo Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+
+        // ==========================================
+        // 2. XỬ LÝ ĐĂNG NHẬP / AUTH
+        // ==========================================
+        window.signIn = () => {
+            signInWithPopup(auth, provider).then((result) => {
+                Toastify({ text: "Đăng nhập thành công!", backgroundColor: "green" }).showToast();
+            }).catch((error) => {
+                console.error(error);
+                Toastify({ text: "Lỗi đăng nhập", backgroundColor: "red" }).showToast();
+            });
+        };
+
+        window.signOut = () => {
+            signOut(auth).then(() => {
+                location.reload();
+            });
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-btn').style.display = 'none';
+                document.getElementById('user-info').style.display = 'flex';
+                document.getElementById('user-avatar').src = user.photoURL;
+                document.getElementById('user-name').innerText = user.displayName;
+                // Hiển thị nút xóa cho admin
+                document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'block');
+            } else {
+                currentUser = null;
+                document.getElementById('login-btn').style.display = 'block';
+                document.getElementById('user-info').style.display = 'none';
+            }
+        });
+
+        // ==========================================
+        // 3. QUẢN LÝ DỮ LIỆU (BLOG & SETTINGS)
+        // ==========================================
+        
+        // --- Load Settings (SĐT) ---
+        const settingsRef = doc(db, "settings", "general");
+        onSnapshot(settingsRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if(data.phone) {
+                    document.getElementById('header-phone').innerHTML = `<i class="fas fa-phone-alt"></i> ${data.phone}`;
+                    document.getElementById('contact-phone').innerText = data.phone;
+                    document.getElementById('edit-phone').value = data.phone;
+                }
+            }
+        });
+
+        // --- Load Blogs ---
+        const blogsRef = collection(db, "blogs");
+        const q = query(blogsRef, orderBy("timestamp", "desc"));
+        
+        onSnapshot(q, (snapshot) => {
+            const blogContainer = document.getElementById('blog-list');
+            blogContainer.innerHTML = '';
+            
+            if(snapshot.empty) {
+                blogContainer.innerHTML = '<p style="text-align:center">Chưa có tin tức nào.</p>';
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const post = docSnap.data();
+                const div = document.createElement('div');
+                div.className = 'blog-card';
+                // Ảnh mặc định nếu không có
+                const bgImg = post.image || 'https://via.placeholder.com/300x160?text=TYT+Hiep+Thanh';
+                
+                div.innerHTML = `
+                    <div class="blog-img" style="background-image: url('${bgImg}')"></div>
+                    <div class="blog-content">
+                        <div class="blog-date">${new Date(post.timestamp).toLocaleDateString('vi-VN')} 
+                             <i class="fas fa-trash delete-btn" onclick="deleteBlog('${docSnap.id}')"></i>
+                        </div>
+                        <h3 class="blog-title">${post.title}</h3>
+                        <a href="${post.link}" target="_blank" class="blog-link">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                `;
+                blogContainer.appendChild(div);
+            });
+
+            // Nếu đang đăng nhập thì hiện nút xóa
+            if(currentUser) {
+                document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'block');
+            }
+        });
+
+        // --- Functions Admin ---
+        window.openAdmin = () => document.getElementById('admin-modal').style.display = 'flex';
+        window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
+
+        window.saveSettings = async () => {
+            if(!currentUser) return alert("Vui lòng đăng nhập!");
+            const newPhone = document.getElementById('edit-phone').value;
+            await setDoc(settingsRef, { phone: newPhone }, { merge: true });
+            Toastify({ text: "Đã cập nhật số điện thoại!", backgroundColor: "green" }).showToast();
+        };
+
+        window.postBlog = async () => {
+            if(!currentUser) return alert("Vui lòng đăng nhập!");
+            const btn = document.getElementById('btn-post');
+            const title = document.getElementById('blog-title').value;
+            const link = document.getElementById('blog-link').value;
+            const img = document.getElementById('blog-img').value;
+
+            if(!title || !link) return alert("Vui lòng nhập Link và Tiêu đề");
+
+            btn.innerText = "Đang đăng...";
+            btn.classList.add('loading');
+
+            try {
+                await addDoc(blogsRef, {
+                    title: title,
+                    link: link,
+                    image: img,
+                    timestamp: Date.now()
+                });
+                Toastify({ text: "Đăng bài thành công!", backgroundColor: "green" }).showToast();
+                // Reset form
+                document.getElementById('blog-title').value = '';
+                document.getElementById('blog-link').value = '';
+                document.getElementById('blog-img').value = '';
+                closeAdmin();
+            } catch (e) {
+                console.error(e);
+                alert("Lỗi khi đăng bài");
+            } finally {
+                btn.innerText = "Đăng bài";
+                btn.classList.remove('loading');
+            }
+        };
+
+        window.deleteBlog = async (id) => {
+            if(!confirm("Bạn chắc chắn muốn xóa bài viết này?")) return;
+            await deleteDoc(doc(db, "blogs", id));
+            Toastify({ text: "Đã xóa bài viết", backgroundColor: "orange" }).showToast();
+        }
+
+        // --- Logic Tự động lấy Title (Auto Fetch) ---
+        let typingTimer;
+        window.autoFetchTitle = () => {
+            clearTimeout(typingTimer);
+            const url = document.getElementById('blog-link').value;
+            if(!url) return;
+
+            typingTimer = setTimeout(async () => {
+                const titleInput = document.getElementById('blog-title');
+                titleInput.placeholder = "Đang lấy tiêu đề...";
+                
+                try {
+                    // Sử dụng Proxy AllOrigins để vượt qua CORS (Miễn phí)
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    const response = await fetch(proxyUrl);
+                    const data = await response.json();
+                    
+                    if (data.contents) {
+                        // Parse HTML để tìm thẻ <title>
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(data.contents, "text/html");
+                        const pageTitle = doc.querySelector("title").innerText;
+                        
+                        if(pageTitle) {
+                            titleInput.value = pageTitle;
+                            Toastify({ text: "Đã tự động lấy tiêu đề!", backgroundColor: "#009688" }).showToast();
+                        }
+                    }
+                } catch (error) {
+                    console.log("Không thể tự lấy tiêu đề, vui lòng nhập tay.");
+                    titleInput.placeholder = "Không lấy được tiêu đề, hãy nhập tay";
+                }
+            }, 1000); // Đợi 1s sau khi dừng gõ
+        }
+    </script>
+    
+    <!-- Thư viện thông báo -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+</html>
