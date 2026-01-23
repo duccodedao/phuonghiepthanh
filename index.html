@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HongDuc Dev - Stable</title>
+    <title>HongDuc Dev</title>
 
     <meta name="description" content="Cổng thông tin nhân sự.">
     <link rel="icon" type="image/png" href="https://hdd.io.vn/img/bmassloadings.png">
@@ -231,13 +231,7 @@
                                     <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
                                 </div>
 
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="inpBhxh" placeholder="BHXH" disabled>
-                                        <label>Mã BHXH</label>
-                                    </div>
-                                    <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpBhxh')"></i></div>
-                                </div>
+                                <!-- ĐÃ XÓA MỤC BHXH Ở ĐÂY -->
                                 
                                 <div class="col-12">
                                     <div class="form-floating">
@@ -454,11 +448,6 @@
         const toggleEditPermission = document.getElementById('toggleEditPermission');
         const adminSettingsArea = document.getElementById('adminSettingsArea');
 
-        function maskString(str) {
-            if (!str || str.length < 6) return str; 
-            return str.substring(0, 3) + "***" + str.substring(str.length - 3);
-        }
-
         window.showToast = (title, icon = 'success') => {
             Swal.fire({
                 title: title, icon: icon, showConfirmButton: false, timer: 1500,
@@ -537,7 +526,8 @@
             });
             const currentVal = document.getElementById('userSelect').value;
             if(currentVal && !isEditAllowed) {
-                 ['inpName', 'inpBhxh', 'inpDob', 'inpGender', 'inpCccd'].forEach(id => {
+                // Đã xóa inpBhxh
+                 ['inpName', 'inpDob', 'inpGender', 'inpCccd'].forEach(id => {
                      document.getElementById(id).disabled = true;
                  });
             }
@@ -588,17 +578,10 @@
 
         // --- FETCH DATA (Reverted to Safe Method) ---
         onSnapshot(collection(db, COLL_DATA), (snapshot) => {
-            // Reset array every time to ensure data integrity
             const tempUsers = [];
             snapshot.forEach(doc => tempUsers.push(doc.data()));
-            
-            // Sort
             tempUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
-            
-            // Update Global
             allUsers = tempUsers;
-
-            // Render UI
             updateUserSelectOptions();
             renderAdminTable();
         });
@@ -612,12 +595,10 @@
                 opt.value = u.cccd; opt.textContent = u.name;
                 select.appendChild(opt);
             });
-            // Try to restore selection if it still exists
             if(currentVal && allUsers.some(u=>u.cccd==currentVal)) select.value = currentVal;
         }
 
         document.getElementById('userSelect').onchange = function() {
-            // FORCE STRING COMPARISON
             const selectedVal = String(this.value);
             currentData = allUsers.find(u => String(u.cccd) === selectedVal);
             
@@ -625,20 +606,16 @@
                 const form = document.getElementById('formContent');
                 form.style.opacity="1"; form.style.pointerEvents="auto";
                 
+                // Đã xóa Bhxh khỏi mapping
                 const mapping = {
-                    'Name': 'name', 'Cccd': 'cccd', 'Dob': 'dob', 'Bhxh': 'bhxh',
+                    'Name': 'name', 'Cccd': 'cccd', 'Dob': 'dob',
                     'Agri': 'agribank', 'Vcb': 'vietcombank'
                 };
                 
                 for(let k in mapping) {
                     const el = document.getElementById('inp'+k);
                     let val = currentData[mapping[k]] || "";
-
-                    if(k === 'Bhxh') {
-                        el.value = maskString(val);
-                    } else {
-                        el.value = val;
-                    }
+                    el.value = val;
                     
                     if(k === 'Agri' || k === 'Vcb') {
                         el.disabled = false;
@@ -651,24 +628,14 @@
                 document.getElementById('inpGender').disabled = true;
                 
                 updateUserEditUI(); 
-            } else {
-                // Should not happen, but if it does
-                console.warn("User data not found for:", selectedVal);
             }
         };
 
         window.toggleEdit = (id) => {
             if(!isEditAllowed) return; 
-
             let el = document.getElementById(id);
             el.disabled = !el.disabled; 
-            
-            if(!el.disabled) {
-                el.focus();
-                if(id === 'inpBhxh' && currentData) {
-                    el.value = currentData.bhxh || "";
-                }
-            }
+            if(!el.disabled) el.focus();
         };
         
         // --- SAVE DATA (USER) ---
@@ -684,15 +651,13 @@
                 const newCccd = document.getElementById('inpCccd').value.trim();
                 const oldCccd = currentData.cccd;
                 
-                let inputBhxh = document.getElementById('inpBhxh').value;
-                if(inputBhxh.includes('***') && currentData) {
-                    inputBhxh = currentData.bhxh;
-                }
+                // User View không có input BHXH, nên ta lấy giá trị cũ từ DB
+                const preservedBhxh = currentData.bhxh || "";
 
                 const data = {
                     cccd: newCccd,
                     name: document.getElementById('inpName').value,
-                    bhxh: inputBhxh,
+                    bhxh: preservedBhxh, // Giữ nguyên BHXH
                     dob: document.getElementById('inpDob').value,
                     gender: document.getElementById('inpGender').value,
                     agribank: document.getElementById('inpAgri').value,
