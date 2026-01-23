@@ -5,16 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HongDuc Dev</title>
 
-    <!-- 1. MÔ TẢ TRANG WEB -->
-    <meta name="description" content="Cổng thông tin nhân sự. Tra cứu và cập nhật thông tin hồ sơ, mã BHXH, tài khoản ngân hàng nhanh chóng, bảo mật.">
-    <meta name="keywords" content="HR, Nhân sự, BHXH, Lương, CCCD">
-    <meta name="author" content="Admin HR">
-
-    <!-- 2. ICON TAB TRÌNH DUYỆT -->
+    <meta name="description" content="Cổng thông tin nhân sự. Tra cứu và cập nhật thông tin hồ sơ.">
     <link rel="icon" type="image/png" href="https://hdd.io.vn/img/bmassloadings.png">
     <link rel="apple-touch-icon" href="https://hdd.io.vn/img/bmassloadings.png">
 
-    <!-- Libraries -->
+    <!-- Libs -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -41,10 +36,8 @@
             overflow-x: hidden;
         }
 
-        /* --- LAYOUT STRUCTURE --- */
         .main-layout { display: flex; min-height: 100vh; transition: all 0.3s ease; }
 
-        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: rgba(255, 255, 255, 0.98);
@@ -58,7 +51,6 @@
         }
         .sidebar.active { transform: translateX(0) !important; }
 
-        /* --- CONTENT AREA --- */
         .content-area {
             flex-grow: 1; padding: 20px; width: 100%;
             transition: margin-left 0.3s ease; margin-left: 0; 
@@ -79,7 +71,6 @@
         }
         .mobile-toggle:active { transform: scale(0.95); }
 
-        /* --- GLASS UI --- */
         .glass-card {
             background: var(--glass-bg); backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px); border-radius: 20px;
@@ -107,7 +98,6 @@
         }
         .btn-gradient:hover { transform: translateY(-2px); color: white; }
 
-        /* --- TABLE FIX FOR MOBILE --- */
         .table-responsive {
             overflow-x: auto !important; -webkit-overflow-scrolling: touch;
             border-radius: 16px; background: white; box-shadow: var(--shadow-soft);
@@ -123,7 +113,6 @@
             border-bottom: 1px solid #f1f2f6; white-space: nowrap; 
         }
 
-        /* --- SWAL CUSTOM --- */
         .glass-popup {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px) !important;
@@ -134,7 +123,6 @@
         .history-item { border-left: 3px solid #6c5ce7; transition: all 0.2s; }
         .history-item:hover { transform: translateX(5px); background: white !important; }
 
-        /* --- RESPONSIVE LOGIC --- */
         @media (min-width: 992px) {
             .sidebar.desktop-visible { transform: translateX(0); }
             .content-area.desktop-shifted { margin-left: var(--sidebar-width); }
@@ -148,7 +136,6 @@
 </head>
 <body>
 
-    <!-- Loading -->
     <div id="loading" style="position: fixed; inset:0; background:rgba(255,255,255,0.9); z-index:9999; display:none; align-items:center; justify-content:center;">
         <div class="spinner-border text-primary" role="status"></div>
     </div>
@@ -224,7 +211,6 @@
 
                         <div id="formContent" style="opacity:0.5; pointer-events:none; transition:0.3s">
                             
-                            <!-- DATA FIELDS -->
                             <div class="row g-3 mb-4">
                                 <div class="col-12">
                                     <div class="form-floating">
@@ -234,6 +220,7 @@
                                     <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
                                 </div>
 
+                                <!-- BHXH Field -->
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="inpBhxh" placeholder="BHXH" disabled>
@@ -276,7 +263,6 @@
                                     <label class="small fw-bold">Agribank <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><img id="logoAgri" src="" height="20"></span>
-                                        <!-- FIX 1: Đổi type="number" thành type="text" -->
                                         <input type="text" id="inpAgri" class="form-control bg-light border-0" placeholder="Số tài khoản..." required>
                                     </div>
                                 </div>
@@ -284,7 +270,6 @@
                                     <label class="small fw-bold">Vietcombank</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><img id="logoVcb" src="" height="20"></span>
-                                        <!-- FIX 2: Đổi type="number" thành type="text" -->
                                         <input type="text" id="inpVcb" class="form-control bg-light border-0" placeholder="Nhập số tài khoản...">
                                     </div>
                                 </div>
@@ -385,7 +370,6 @@
                         <div class="col-12 bg-light p-3 rounded-3 mt-2">
                             <label class="small fw-bold text-muted mb-2 d-block">Nhập hộ ngân hàng</label>
                             <div class="d-grid gap-2">
-                                <!-- FIX 3: Đổi type="number" thành type="text" ở Admin luôn -->
                                 <input type="text" id="admAgri" class="form-control bg-white" placeholder="Agribank">
                                 <input type="text" id="admVcb" class="form-control bg-white" placeholder="Vietcombank">
                             </div>
@@ -414,13 +398,11 @@
         </div>
     </div>
 
-    <!-- SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, getDoc, addDoc, onSnapshot, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
             authDomain: "profile-d1214.firebaseapp.com",
@@ -458,7 +440,13 @@
         const btnLoginUser = document.getElementById('btnLoginUser');
         const btnToAdmin = document.getElementById('btnToAdmin');
 
-        // --- CUSTOM ALERT ---
+        // --- HELPER FUNCTION: MASK STRING ---
+        function maskString(str) {
+            if (!str || str.length < 6) return str; 
+            // Giữ 3 ký tự đầu, 3 ký tự cuối, che ở giữa
+            return str.substring(0, 3) + "***" + str.substring(str.length - 3);
+        }
+
         window.showToast = (title, icon = 'success') => {
             Swal.fire({
                 title: title, icon: icon, showConfirmButton: false, timer: 1500,
@@ -468,7 +456,6 @@
             });
         }
 
-        // --- FETCH ASSETS ---
         async function fetchLogos() {
             try {
                 const r = await fetch('https://api.vietqr.io/v2/banks');
@@ -493,13 +480,11 @@
             return `${String(date_info.getDate()).padStart(2,'0')}/${String(date_info.getMonth()+1).padStart(2,'0')}/${date_info.getFullYear()}`;
         }
 
-        // --- SIDEBAR LOGIC ---
         function toggleSidebarMobile() { sidebar.classList.toggle('active'); overlay.classList.toggle('show'); }
         window.closeSidebarMobile = function() { sidebar.classList.remove('active'); overlay.classList.remove('show'); }
         sidebarToggle.addEventListener('click', toggleSidebarMobile);
         overlay.addEventListener('click', closeSidebarMobile);
 
-        // --- VIEW SWITCHER ---
         window.switchViewMode = function(mode) {
             closeSidebarMobile();
             if(mode === 'admin') {
@@ -518,9 +503,7 @@
             }
         };
 
-        // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
-            if(user) console.log("UID:", user.uid);
             if (user && ALLOWED_ADMINS.includes(user.uid)) {
                 currentUser = user;
                 document.getElementById('adminNameDisplay').textContent = user.displayName;
@@ -545,7 +528,6 @@
         btnLoginUser.onclick = () => signInWithPopup(auth, provider);
         document.getElementById('btnLogout').onclick = () => signOut(auth);
 
-        // --- DATA ---
         onSnapshot(collection(db, COLL_DATA), (snap) => {
             allUsers = [];
             snap.forEach(doc => allUsers.push(doc.data()));
@@ -564,14 +546,13 @@
             renderAdminTable();
         });
 
-        // --- USER LOGIC ---
+        // --- USER SELECT & FILL DATA ---
         document.getElementById('userSelect').onchange = function() {
             currentData = allUsers.find(u=>u.cccd==this.value);
             if(currentData) {
                 const form = document.getElementById('formContent');
                 form.style.opacity="1"; form.style.pointerEvents="auto";
                 
-                // Fields mapping
                 const mapping = {
                     'Name': 'name', 'Cccd': 'cccd', 'Dob': 'dob', 'Bhxh': 'bhxh',
                     'Agri': 'agribank', 'Vcb': 'vietcombank'
@@ -579,11 +560,16 @@
                 
                 for(let k in mapping) {
                     const el = document.getElementById('inp'+k);
-                    el.value = currentData[mapping[k]] || "";
+                    let val = currentData[mapping[k]] || "";
+
+                    // Nếu là BHXH thì CHE SỐ (Masking)
+                    if(k === 'Bhxh') {
+                        el.value = maskString(val);
+                    } else {
+                        el.value = val;
+                    }
                     
-                    // FIX 4: Logic khóa/mở input
-                    // Nếu là thông tin ngân hàng (Agri, Vcb) -> Mở ra cho nhập luôn
-                    // Nếu là thông tin cá nhân -> Khóa lại (dùng nút bút chì để sửa)
+                    // Logic khóa/mở input
                     if(k === 'Agri' || k === 'Vcb') {
                         el.disabled = false;
                     } else {
@@ -596,20 +582,37 @@
             }
         };
 
+        // --- TOGGLE EDIT (Click bút chì) ---
         window.toggleEdit = (id) => {
-            let el=document.getElementById(id); el.disabled=!el.disabled; if(!el.disabled) el.focus();
+            let el = document.getElementById(id);
+            el.disabled = !el.disabled; 
+            
+            if(!el.disabled) {
+                el.focus();
+                // Nếu đang mở khóa ô BHXH, HIỆN LẠI MÃ GỐC để sửa
+                if(id === 'inpBhxh' && currentData) {
+                    el.value = currentData.bhxh || "";
+                }
+            }
         };
         
-        // --- SAVE DATA WITH ID MIGRATION ---
+        // --- SAVE DATA (USER) ---
         document.getElementById('userForm').onsubmit = async(e) => {
             e.preventDefault();
             const newCccd = document.getElementById('inpCccd').value.trim();
             const oldCccd = currentData.cccd;
             
+            // Lấy giá trị BHXH từ input
+            let inputBhxh = document.getElementById('inpBhxh').value;
+            // Nếu input vẫn chứa dấu *** thì tức là người dùng KHÔNG sửa, giữ nguyên giá trị gốc
+            if(inputBhxh.includes('***') && currentData) {
+                inputBhxh = currentData.bhxh;
+            }
+
             const data = {
                 cccd: newCccd,
                 name: document.getElementById('inpName').value,
-                bhxh: document.getElementById('inpBhxh').value,
+                bhxh: inputBhxh, // Sử dụng giá trị đã xử lý
                 dob: document.getElementById('inpDob').value,
                 gender: document.getElementById('inpGender').value,
                 agribank: document.getElementById('inpAgri').value,
@@ -667,7 +670,7 @@
             finally { showLoading(false); }
         }
 
-        // --- ADMIN ---
+        // --- ADMIN RENDER (Vẫn hiện Full BHXH) ---
         function renderAdminTable() {
             const tbody = document.getElementById('adminTableBody');
             const term = document.getElementById('adminSearch').value.toLowerCase();
@@ -683,6 +686,7 @@
                 const agri = u.agribank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoAgri}" height="12"> ${u.agribank}</span>` : '<span class="text-muted small">-</span>';
                 const vcb = u.vietcombank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoVcb}" height="12"> ${u.vietcombank}</span>` : '<span class="text-muted small">-</span>';
                 
+                // Ở Admin View: u.bhxh là dữ liệu gốc, hiển thị đầy đủ
                 const bhxhDisplay = u.bhxh ? `<div class="small"><i class="fas fa-id-card text-muted me-1"></i>BHXH: ${u.bhxh}</div>` : '';
 
                 tr.innerHTML = `
