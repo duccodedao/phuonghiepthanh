@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HongDuc Dev</title>
+    <title>HongDuc Dev - Optimized</title>
 
     <meta name="description" content="Cổng thông tin nhân sự.">
     <link rel="icon" type="image/png" href="https://hdd.io.vn/img/bmassloadings.png">
@@ -97,6 +97,7 @@
             box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); transition: 0.2s;
         }
         .btn-gradient:hover { transform: translateY(-2px); color: white; }
+        .btn-gradient:disabled { opacity: 0.7; transform: none; cursor: not-allowed; }
 
         .table-responsive {
             overflow-x: auto !important; -webkit-overflow-scrolling: touch;
@@ -123,13 +124,8 @@
         .history-item { border-left: 3px solid #6c5ce7; transition: all 0.2s; }
         .history-item:hover { transform: translateX(5px); background: white !important; }
 
-        /* Style cho nút Switch */
-        .form-switch .form-check-input {
-            width: 3em; height: 1.5em; cursor: pointer;
-        }
-        .form-switch .form-check-input:checked {
-            background-color: #6c5ce7; border-color: #6c5ce7;
-        }
+        .form-switch .form-check-input { width: 3em; height: 1.5em; cursor: pointer; }
+        .form-switch .form-check-input:checked { background-color: #6c5ce7; border-color: #6c5ce7; }
 
         @media (min-width: 992px) {
             .sidebar.desktop-visible { transform: translateX(0); }
@@ -180,7 +176,6 @@
                     <i class="fas fa-file-export me-3"></i>Xuất báo cáo
                 </button>
                 
-                <!-- NEW FEATURE: SETTING SWITCH -->
                 <div id="adminSettingsArea" class="bg-light p-3 rounded-3 mt-2 d-none">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="toggleEditPermission">
@@ -233,7 +228,6 @@
                                         <input type="text" class="form-control" id="inpName" placeholder="Tên" disabled>
                                         <label>Họ và Tên</label>
                                     </div>
-                                    <!-- Added Class: edit-btn-group -->
                                     <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
                                 </div>
 
@@ -242,7 +236,6 @@
                                         <input type="text" class="form-control" id="inpBhxh" placeholder="BHXH" disabled>
                                         <label>Mã BHXH</label>
                                     </div>
-                                    <!-- Added Class: edit-btn-group -->
                                     <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpBhxh')"></i></div>
                                 </div>
                                 
@@ -251,7 +244,6 @@
                                         <input type="text" class="form-control" id="inpDob" placeholder="Dob" disabled>
                                         <label>Ngày sinh</label>
                                     </div>
-                                    <!-- Added Class: edit-btn-group -->
                                     <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpDob')"></i></div>
                                 </div>
 
@@ -263,7 +255,6 @@
                                         </select>
                                         <label>Giới tính</label>
                                     </div>
-                                    <!-- Added Class: edit-btn-group -->
                                     <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpGender')"></i></div>
                                 </div>
 
@@ -272,7 +263,6 @@
                                         <input type="number" class="form-control" id="inpCccd" placeholder="CCCD" disabled>
                                         <label>CCCD</label>
                                     </div>
-                                    <!-- Added Class: edit-btn-group -->
                                     <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpCccd')"></i></div>
                                 </div>
                             </div>
@@ -295,7 +285,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-gradient w-100 py-3 shadow-lg">Lưu thông tin</button>
+                            <button type="submit" id="btnSaveUser" class="btn btn-gradient w-100 py-3 shadow-lg">Lưu thông tin</button>
                         </div>
                     </form>
                 </div>
@@ -444,13 +434,13 @@
         const provider = new GoogleAuthProvider();
         const COLL_DATA = "personnel_data";
         const COLL_LOGS = "audit_logs";
-        const COLL_SETTINGS = "system_settings"; // New Collection for Settings
+        const COLL_SETTINGS = "system_settings";
 
         let allUsers = [];
         let currentUser = null;
         let currentData = null;
         let bankLogoAgri = "", bankLogoVcb = "";
-        let isEditAllowed = false; // Global permission flag
+        let isEditAllowed = false;
 
         // UI References
         const sidebar = document.getElementById('sidebar');
@@ -464,7 +454,6 @@
         const toggleEditPermission = document.getElementById('toggleEditPermission');
         const adminSettingsArea = document.getElementById('adminSettingsArea');
 
-        // --- HELPER FUNCTION: MASK STRING ---
         function maskString(str) {
             if (!str || str.length < 6) return str; 
             return str.substring(0, 3) + "***" + str.substring(str.length - 3);
@@ -526,18 +515,14 @@
             }
         };
 
-        // --- LISTEN FOR SETTINGS CHANGE ---
+        // --- SETTINGS ---
         onSnapshot(doc(db, COLL_SETTINGS, "general_config"), (docSn) => {
             if (docSn.exists()) {
                 isEditAllowed = docSn.data().allow_edit_info || false;
             } else {
-                isEditAllowed = false; // Default
+                isEditAllowed = false; 
             }
-            
-            // Sync Toggle UI for Admin
             if(currentUser) toggleEditPermission.checked = isEditAllowed;
-            
-            // Update User Interface (Hide/Show Pencils)
             updateUserEditUI();
         });
 
@@ -550,8 +535,6 @@
                     btn.style.display = 'none';
                 }
             });
-            
-            // Re-run select logic to ensure fields are disabled if permission revoked
             const currentVal = document.getElementById('userSelect').value;
             if(currentVal && !isEditAllowed) {
                  ['inpName', 'inpBhxh', 'inpDob', 'inpGender', 'inpCccd'].forEach(id => {
@@ -560,7 +543,6 @@
             }
         }
 
-        // --- ADMIN TOGGLE SETTING ---
         toggleEditPermission.addEventListener('change', async function() {
             if(!currentUser) return;
             try {
@@ -571,17 +553,18 @@
             } catch(e) {
                 console.error(e);
                 showToast('Lỗi lưu cài đặt', 'error');
-                this.checked = !this.checked; // Revert on error
+                this.checked = !this.checked;
             }
         });
 
+        // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
             if (user && ALLOWED_ADMINS.includes(user.uid)) {
                 currentUser = user;
                 document.getElementById('adminNameDisplay').textContent = user.displayName;
                 btnLoginUser.style.display = 'none';
                 btnToAdmin.style.display = 'block'; 
-                adminSettingsArea.classList.remove('d-none'); // Show setting for admin
+                adminSettingsArea.classList.remove('d-none');
                 switchViewMode('admin');
             } else if (user) {
                 currentUser = null;
@@ -603,11 +586,45 @@
         btnLoginUser.onclick = () => signInWithPopup(auth, provider);
         document.getElementById('btnLogout').onclick = () => signOut(auth);
 
-        onSnapshot(collection(db, COLL_DATA), (snap) => {
-            allUsers = [];
-            snap.forEach(doc => allUsers.push(doc.data()));
-            allUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
+        // --- OPTIMIZED DATA LISTENER (Xử lý cập nhật nhanh hơn) ---
+        onSnapshot(collection(db, COLL_DATA), (snapshot) => {
+            let hasChange = false;
             
+            snapshot.docChanges().forEach((change) => {
+                hasChange = true;
+                const data = change.doc.data();
+                
+                if (change.type === "added") {
+                    // Nếu chưa có thì thêm vào
+                    if (!allUsers.some(u => u.cccd === data.cccd)) {
+                        allUsers.push(data);
+                    }
+                }
+                if (change.type === "modified") {
+                    // Tìm và cập nhật đúng người đó
+                    const idx = allUsers.findIndex(u => u.cccd === data.cccd);
+                    if (idx > -1) {
+                        allUsers[idx] = data;
+                    }
+                }
+                if (change.type === "removed") {
+                    // Xóa khỏi danh sách
+                    const idx = allUsers.findIndex(u => u.cccd === change.doc.id);
+                    if (idx > -1) {
+                        allUsers.splice(idx, 1);
+                    }
+                }
+            });
+
+            // Chỉ vẽ lại nếu có thay đổi
+            if (hasChange) {
+                allUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
+                updateUserSelectOptions();
+                renderAdminTable();
+            }
+        });
+
+        function updateUserSelectOptions() {
             const select = document.getElementById('userSelect');
             const currentVal = select.value;
             select.innerHTML = '<option value="" selected disabled>-- Tìm hồ sơ của bạn --</option>';
@@ -617,11 +634,8 @@
                 select.appendChild(opt);
             });
             if(currentVal && allUsers.some(u=>u.cccd==currentVal)) select.value = currentVal;
-            
-            renderAdminTable();
-        });
+        }
 
-        // --- USER SELECT & FILL DATA ---
         document.getElementById('userSelect').onchange = function() {
             currentData = allUsers.find(u=>u.cccd==this.value);
             if(currentData) {
@@ -643,12 +657,9 @@
                         el.value = val;
                     }
                     
-                    // Logic khóa/mở input
                     if(k === 'Agri' || k === 'Vcb') {
-                        // BANK ACCOUNTS: ALWAYS EDITABLE
                         el.disabled = false;
                     } else {
-                        // INFO FIELDS: Locked initially
                         el.disabled = true; 
                     }
                 }
@@ -656,13 +667,11 @@
                 document.getElementById('inpGender').value = currentData.gender || 'Nam';
                 document.getElementById('inpGender').disabled = true;
                 
-                updateUserEditUI(); // Apply Hide/Show logic for Pencils
+                updateUserEditUI(); 
             }
         };
 
-        // --- TOGGLE EDIT (Click bút chì) ---
         window.toggleEdit = (id) => {
-            // Check permission again just in case
             if(!isEditAllowed) return; 
 
             let el = document.getElementById(id);
@@ -679,29 +688,44 @@
         // --- SAVE DATA (USER) ---
         document.getElementById('userForm').onsubmit = async(e) => {
             e.preventDefault();
-            const newCccd = document.getElementById('inpCccd').value.trim();
-            const oldCccd = currentData.cccd;
             
-            let inputBhxh = document.getElementById('inpBhxh').value;
-            if(inputBhxh.includes('***') && currentData) {
-                inputBhxh = currentData.bhxh;
-            }
+            // UI Feedback: Disable button and show loading text
+            const btnSave = document.getElementById('btnSaveUser');
+            const originalText = btnSave.innerHTML;
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...';
 
-            const data = {
-                cccd: newCccd,
-                name: document.getElementById('inpName').value,
-                bhxh: inputBhxh,
-                dob: document.getElementById('inpDob').value,
-                gender: document.getElementById('inpGender').value,
-                agribank: document.getElementById('inpAgri').value,
-                vietcombank: document.getElementById('inpVcb').value
-            };
-            
-            await saveData(oldCccd, data, currentData);
+            try {
+                const newCccd = document.getElementById('inpCccd').value.trim();
+                const oldCccd = currentData.cccd;
+                
+                let inputBhxh = document.getElementById('inpBhxh').value;
+                if(inputBhxh.includes('***') && currentData) {
+                    inputBhxh = currentData.bhxh;
+                }
+
+                const data = {
+                    cccd: newCccd,
+                    name: document.getElementById('inpName').value,
+                    bhxh: inputBhxh,
+                    dob: document.getElementById('inpDob').value,
+                    gender: document.getElementById('inpGender').value,
+                    agribank: document.getElementById('inpAgri').value,
+                    vietcombank: document.getElementById('inpVcb').value
+                };
+                
+                await saveData(oldCccd, data, currentData);
+            } catch(err) {
+                console.error(err);
+            } finally {
+                // Restore button
+                btnSave.disabled = false;
+                btnSave.innerHTML = originalText;
+            }
         };
 
         async function saveData(oldCccd, newData, oldData) {
-            showLoading(true);
+            // Không show loading toàn màn hình nữa để đỡ giật, chỉ dùng nút Loading
             const newCccd = newData.cccd;
             const changes = [];
             const editor = currentUser ? `Admin: ${currentUser.displayName}` : "Khách";
@@ -745,7 +769,6 @@
                 showToast('Lưu thành công!');
                 bootstrap.Modal.getInstance(document.getElementById('adminModal'))?.hide();
             } catch(e) { showToast(e.message, 'error'); } 
-            finally { showLoading(false); }
         }
 
         // --- ADMIN RENDER ---
