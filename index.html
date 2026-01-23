@@ -732,8 +732,8 @@
             filtered.forEach(u => {
                 const tr = document.createElement('tr');
                 const avatar = u.name.charAt(0).toUpperCase();
-                const agri = u.agribank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoAgri}" height="12"> ${u.agribank}</span>` : '<span class="text-muted small">-</span>';
-                const vcb = u.vietcombank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoVcb}" height="12"> ${u.vietcombank}</span>` : '<span class="text-muted small">-</span>';
+                const agri = u.agribank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoAgri}" height="36"> ${u.agribank}</span>` : '<span class="text-muted small">-</span>';
+                const vcb = u.vietcombank ? `<span class="badge bg-light text-dark border"><img src="${bankLogoVcb}" height="36"> ${u.vietcombank}</span>` : '<span class="text-muted small">-</span>';
                 
                 const bhxhDisplay = u.bhxh ? `<div class="small"><i class="fas fa-id-card text-muted me-1"></i>BHXH: ${u.bhxh}</div>` : '';
 
