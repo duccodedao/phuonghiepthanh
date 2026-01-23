@@ -91,7 +91,6 @@
             box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
         }
         
-        /* Input bị disable thì nền xám hơn chút để rõ */
         .form-control:disabled, .form-select:disabled {
             background-color: #e9ecef;
             opacity: 1;
@@ -229,14 +228,16 @@
                                     </div>
                                     <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpName')"></i></div>
                                 </div>
-                                <!-- CCCD Bị khóa hoàn toàn -->
+                                
+                                <!-- EDIT: CCCD đã được mở để chỉnh sửa -->
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="inpCccd" placeholder="CCCD" disabled readonly style="background-color: #e9ecef;">
-                                        <label>CCCD (Không thể chỉnh sửa)</label>
+                                        <input type="number" class="form-control" id="inpCccd" placeholder="CCCD" disabled>
+                                        <label>CCCD</label>
                                     </div>
-                                    <!-- Không có nút edit ở đây -->
+                                    <div class="text-end mt-1"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpCccd')"></i></div>
                                 </div>
+                                
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="inpDob" placeholder="Dob" disabled>
@@ -340,6 +341,9 @@
                 <div class="modal-body p-4">
                     <form id="adminForm" class="row g-3">
                         <input type="hidden" id="editMode" value="add">
+                        <!-- Trường ẩn để lưu CCCD gốc khi edit trong Admin -->
+                        <input type="hidden" id="originalCccdAdmin"> 
+                        
                         <div class="col-12">
                             <label class="small fw-bold">Họ và Tên</label>
                             <input type="text" id="admName" class="form-control" required>
@@ -393,7 +397,7 @@
     <!-- SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, addDoc, onSnapshot, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, getDoc, addDoc, onSnapshot, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
         // CONFIG
@@ -407,13 +411,9 @@
             measurementId: "G-C587M69LZW"
         };
 
-        // --- CẤU HÌNH ADMIN (QUAN TRỌNG) ---
-        // Bạn dán thêm các UID vào trong dấu ngoặc vuông này
-        // Ví dụ: ["UID1", "UID2", "UID3"]
         const ALLOWED_ADMINS = [
-            "VYIs9XHLR9RMStwtcdwMrOIo33w1", // Admin chính
-            // "ZQKPUtks4FgJUmllWytScYONuqF3",   // Admin phụ 1
-            // "PASTE_UID_ADMIN_3_VAO_DAY"    // Admin phụ 2
+            "VYIs9XHLR9RMStwtcdwMrOIo33w1", 
+            // Thêm các UID admin khác tại đây
         ];
 
         const app = initializeApp(firebaseConfig);
@@ -500,14 +500,7 @@
 
         // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
-            if(user) {
-                // IN RA UID ĐỂ BẠN DỄ COPY VÀO DANH SÁCH ADMIN
-                console.log("------------------------------------------");
-                console.log("UID CỦA TÀI KHOẢN ĐANG LOGIN:", user.uid);
-                console.log("Hãy copy dòng trên vào biến ALLOWED_ADMINS nếu muốn cấp quyền Admin");
-                console.log("------------------------------------------");
-            }
-
+            if(user) console.log("User UID:", user.uid);
             if (user && ALLOWED_ADMINS.includes(user.uid)) {
                 currentUser = user;
                 document.getElementById('adminNameDisplay').textContent = user.displayName;
@@ -515,7 +508,6 @@
                 btnToAdmin.style.display = 'block'; 
                 switchViewMode('admin');
             } else if (user) {
-                // User thường login
                 currentUser = null;
                 signOut(auth);
                 showToast('Bạn không có quyền Admin. Đang ở chế độ khách.', 'warning');
@@ -540,12 +532,16 @@
             allUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
             
             const select = document.getElementById('userSelect');
+            // Giữ lại giá trị đang chọn nếu có
+            const currentVal = select.value;
             select.innerHTML = '<option value="" selected disabled>-- Tìm hồ sơ của bạn --</option>';
             allUsers.forEach(u => {
                 const opt = document.createElement('option');
                 opt.value = u.cccd; opt.textContent = u.name;
                 select.appendChild(opt);
             });
+            if(currentVal && allUsers.some(u=>u.cccd==currentVal)) select.value = currentVal;
+            
             renderAdminTable();
         });
 
@@ -558,47 +554,44 @@
                 ['Name','Cccd','Dob','Agri','Vcb'].forEach(k => {
                     let f = k.toLowerCase(); if(k=='Vcb') f='vietcombank'; if(k=='Agri') f='agribank';
                     document.getElementById('inp'+k).value = currentData[f] || "";
+                    document.getElementById('inp'+k).disabled = true; // Mặc định disable hết
                 });
                 document.getElementById('inpGender').value = currentData.gender || 'Nam';
-                
-                document.getElementById('inpName').disabled=true;
-                document.getElementById('inpDob').disabled=true;
-                document.getElementById('inpGender').disabled=true;
-                // CCCD luôn luôn disabled
-                document.getElementById('inpCccd').disabled=true;
+                document.getElementById('inpGender').disabled = true;
             }
         };
 
         window.toggleEdit = (id) => {
-            // Không cho phép toggleEdit với CCCD
-            if(id === 'inpCccd') return;
             let el=document.getElementById(id); el.disabled=!el.disabled; if(!el.disabled) el.focus();
         };
         
-        // --- SAVE DATA WITH LOGS ---
+        // --- SAVE DATA WITH ID MIGRATION ---
         document.getElementById('userForm').onsubmit = async(e) => {
             e.preventDefault();
-            // Lấy CCCD từ input (đang bị disabled, nhưng vẫn có value)
-            const cccd = document.getElementById('inpCccd').value;
+            // Lấy CCCD mới từ input (có thể đã bị sửa)
+            const newCccd = document.getElementById('inpCccd').value.trim();
+            const oldCccd = currentData.cccd; // CCCD cũ (ID hiện tại của doc)
             
-            // Chỉ lấy các trường cho phép sửa
             const data = {
+                cccd: newCccd, // Lưu CCCD mới vào data object
                 name: document.getElementById('inpName').value,
                 dob: document.getElementById('inpDob').value,
                 gender: document.getElementById('inpGender').value,
                 agribank: document.getElementById('inpAgri').value,
                 vietcombank: document.getElementById('inpVcb').value
             };
-            await saveData(cccd, data, currentData);
+            
+            await saveData(oldCccd, data, currentData);
         };
 
-        async function saveData(cccd, newData, oldData) {
+        async function saveData(oldCccd, newData, oldData) {
             showLoading(true);
+            const newCccd = newData.cccd;
             const changes = [];
             const editor = currentUser ? `Admin: ${currentUser.displayName}` : "Khách";
             const fieldMap = {
                 'name': 'Họ tên', 'dob': 'Ngày sinh', 'gender': 'Giới tính',
-                'agribank': 'TK Agribank', 'vietcombank': 'TK Vietcombank'
+                'agribank': 'TK Agribank', 'vietcombank': 'TK Vietcombank', 'cccd': 'CCCD'
             };
 
             for(let k in newData) {
@@ -610,19 +603,54 @@
                     });
                 }
             }
+
             try {
-                // Merge data vào document có ID là CCCD. 
-                // CCCD không được update như một field thay đổi ID, nó là key.
-                await setDoc(doc(db, COLL_DATA, cccd), {...newData, cccd, last_updated:new Date().toISOString()}, {merge:true});
-                if(changes.length>0) {
-                    await addDoc(collection(db, COLL_LOGS), {
-                        cccd_ref: cccd, editor: editor, time: new Date().toISOString(), details: changes
-                    });
+                // TRƯỜNG HỢP 1: CCCD bị thay đổi -> Phải di chuyển dữ liệu sang Doc mới
+                if (oldCccd !== newCccd) {
+                    // Kiểm tra xem CCCD mới đã có chưa
+                    const snap = await getDoc(doc(db, COLL_DATA, newCccd));
+                    if(snap.exists()) {
+                        throw new Error(`CCCD mới (${newCccd}) đã tồn tại trong hệ thống!`);
+                    }
+
+                    // 1. Tạo doc mới
+                    await setDoc(doc(db, COLL_DATA, newCccd), {...newData, last_updated:new Date().toISOString()});
+                    
+                    // 2. Ghi log (Gắn log vào doc mới)
+                    if(changes.length>0) {
+                        await addDoc(collection(db, COLL_LOGS), {
+                            cccd_ref: newCccd, editor: editor, time: new Date().toISOString(), details: changes
+                        });
+                    }
+
+                    // 3. Xóa doc cũ
+                    if(oldCccd) await deleteDoc(doc(db, COLL_DATA, oldCccd));
+                    
+                    // 4. Cập nhật UI nếu đang ở user view
+                    if(!currentUser) {
+                         // Cập nhật currentData để trỏ tới cái mới, tránh lỗi khi user sửa tiếp
+                         currentData = {...newData};
+                         document.getElementById('userSelect').value = newCccd; 
+                    }
+
+                } 
+                // TRƯỜNG HỢP 2: CCCD giữ nguyên -> Update bình thường
+                else {
+                    await setDoc(doc(db, COLL_DATA, oldCccd), {...newData, last_updated:new Date().toISOString()}, {merge:true});
+                    if(changes.length>0) {
+                        await addDoc(collection(db, COLL_LOGS), {
+                            cccd_ref: oldCccd, editor: editor, time: new Date().toISOString(), details: changes
+                        });
+                    }
                 }
+
                 showToast('Lưu thành công!');
                 bootstrap.Modal.getInstance(document.getElementById('adminModal'))?.hide();
-            } catch(e) { showToast(e.message, 'error'); }
-            finally { showLoading(false); }
+            } catch(e) { 
+                showToast(e.message, 'error'); 
+            } finally { 
+                showLoading(false); 
+            }
         }
 
         // --- ADMIN ---
@@ -668,6 +696,7 @@
         window.openAdminModal = () => {
             document.getElementById('adminForm').reset();
             document.getElementById('editMode').value='add';
+            document.getElementById('originalCccdAdmin').value='';
             document.getElementById('admCccd').readOnly=false;
             new bootstrap.Modal(document.getElementById('adminModal')).show();
         };
@@ -675,7 +704,12 @@
         window.editUser = (cccd) => {
             const u = allUsers.find(x=>x.cccd==cccd);
             document.getElementById('editMode').value='update';
-            document.getElementById('admCccd').value=u.cccd; document.getElementById('admCccd').readOnly=true;
+            // Lưu CCCD gốc để so sánh khi Admin sửa
+            document.getElementById('originalCccdAdmin').value = u.cccd; 
+            
+            document.getElementById('admCccd').value=u.cccd; 
+            document.getElementById('admCccd').readOnly=false; // Admin cũng có thể sửa CCCD
+            
             document.getElementById('admName').value=u.name;
             document.getElementById('admDob').value=u.dob;
             document.getElementById('admGender').value=u.gender||'Nam';
@@ -686,17 +720,24 @@
 
         document.getElementById('adminForm').onsubmit = async(e) => {
             e.preventDefault();
-            const cccd = document.getElementById('admCccd').value;
-            if(document.getElementById('editMode').value=='add' && allUsers.some(u=>u.cccd==cccd)) return showToast('CCCD đã tồn tại', 'error');
-            const oldData = allUsers.find(u=>u.cccd==cccd) || {};
+            const newCccd = document.getElementById('admCccd').value.trim();
+            const oldCccd = document.getElementById('editMode').value === 'add' ? null : document.getElementById('originalCccdAdmin').value;
+
+            // Nếu là thêm mới, oldCccd là null. Nếu là sửa, oldCccd là giá trị ban đầu.
+            const oldData = oldCccd ? (allUsers.find(u=>u.cccd==oldCccd) || {}) : {};
+
             const data = {
+                cccd: newCccd,
                 name: document.getElementById('admName').value,
                 dob: document.getElementById('admDob').value,
                 gender: document.getElementById('admGender').value,
                 agribank: document.getElementById('admAgri').value,
                 vietcombank: document.getElementById('admVcb').value
             };
-            await saveData(cccd, data, oldData);
+            
+            // Nếu add mới: logic saveData sẽ thấy oldCccd=null != newCccd -> Tạo mới
+            // Nếu update: logic saveData sẽ xử lý đổi ID nếu cần
+            await saveData(oldCccd, data, oldData);
         };
 
         window.delUser = async(cccd) => {
