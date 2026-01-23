@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HongDuc Dev - Optimized</title>
+    <title>HongDuc Dev - Stable</title>
 
     <meta name="description" content="Cổng thông tin nhân sự.">
     <link rel="icon" type="image/png" href="https://hdd.io.vn/img/bmassloadings.png">
@@ -586,42 +586,21 @@
         btnLoginUser.onclick = () => signInWithPopup(auth, provider);
         document.getElementById('btnLogout').onclick = () => signOut(auth);
 
-        // --- OPTIMIZED DATA LISTENER (Xử lý cập nhật nhanh hơn) ---
+        // --- FETCH DATA (Reverted to Safe Method) ---
         onSnapshot(collection(db, COLL_DATA), (snapshot) => {
-            let hasChange = false;
+            // Reset array every time to ensure data integrity
+            const tempUsers = [];
+            snapshot.forEach(doc => tempUsers.push(doc.data()));
             
-            snapshot.docChanges().forEach((change) => {
-                hasChange = true;
-                const data = change.doc.data();
-                
-                if (change.type === "added") {
-                    // Nếu chưa có thì thêm vào
-                    if (!allUsers.some(u => u.cccd === data.cccd)) {
-                        allUsers.push(data);
-                    }
-                }
-                if (change.type === "modified") {
-                    // Tìm và cập nhật đúng người đó
-                    const idx = allUsers.findIndex(u => u.cccd === data.cccd);
-                    if (idx > -1) {
-                        allUsers[idx] = data;
-                    }
-                }
-                if (change.type === "removed") {
-                    // Xóa khỏi danh sách
-                    const idx = allUsers.findIndex(u => u.cccd === change.doc.id);
-                    if (idx > -1) {
-                        allUsers.splice(idx, 1);
-                    }
-                }
-            });
+            // Sort
+            tempUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
+            
+            // Update Global
+            allUsers = tempUsers;
 
-            // Chỉ vẽ lại nếu có thay đổi
-            if (hasChange) {
-                allUsers.sort((a,b) => parseDate(a.dob) - parseDate(b.dob));
-                updateUserSelectOptions();
-                renderAdminTable();
-            }
+            // Render UI
+            updateUserSelectOptions();
+            renderAdminTable();
         });
 
         function updateUserSelectOptions() {
@@ -633,11 +612,15 @@
                 opt.value = u.cccd; opt.textContent = u.name;
                 select.appendChild(opt);
             });
+            // Try to restore selection if it still exists
             if(currentVal && allUsers.some(u=>u.cccd==currentVal)) select.value = currentVal;
         }
 
         document.getElementById('userSelect').onchange = function() {
-            currentData = allUsers.find(u=>u.cccd==this.value);
+            // FORCE STRING COMPARISON
+            const selectedVal = String(this.value);
+            currentData = allUsers.find(u => String(u.cccd) === selectedVal);
+            
             if(currentData) {
                 const form = document.getElementById('formContent');
                 form.style.opacity="1"; form.style.pointerEvents="auto";
@@ -668,6 +651,9 @@
                 document.getElementById('inpGender').disabled = true;
                 
                 updateUserEditUI(); 
+            } else {
+                // Should not happen, but if it does
+                console.warn("User data not found for:", selectedVal);
             }
         };
 
@@ -689,7 +675,6 @@
         document.getElementById('userForm').onsubmit = async(e) => {
             e.preventDefault();
             
-            // UI Feedback: Disable button and show loading text
             const btnSave = document.getElementById('btnSaveUser');
             const originalText = btnSave.innerHTML;
             btnSave.disabled = true;
@@ -718,14 +703,12 @@
             } catch(err) {
                 console.error(err);
             } finally {
-                // Restore button
                 btnSave.disabled = false;
                 btnSave.innerHTML = originalText;
             }
         };
 
         async function saveData(oldCccd, newData, oldData) {
-            // Không show loading toàn màn hình nữa để đỡ giật, chỉ dùng nút Loading
             const newCccd = newData.cccd;
             const changes = [];
             const editor = currentUser ? `Admin: ${currentUser.displayName}` : "Khách";
