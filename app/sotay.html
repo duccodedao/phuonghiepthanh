@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ Tay Công Tác - TYT Phường Hiệp Thành</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { 
+                extend: { 
+                    colors: { primary: '#0ea5e9', secondary: '#ef4444', dark: '#0f172a', success: '#22c55e', warning: '#f59e0b' },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                } 
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f9ff; transition: background 0.3s; } 
+        .dark body { background-color: #0f172a; color: #e2e8f0; }
+        
+        .loader { width: 24px; height: 24px; border: 3px solid #e2e8f0; border-bottom-color: #0ea5e9; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Calendar Styles */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+        .calendar-day { min-height: 7rem; transition: all 0.2s; }
+        .calendar-day:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-10">
+
+    <!-- Loading Overlay -->
+    <div id="global-loading" class="fixed inset-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm z-[900] flex flex-col items-center justify-center transition-opacity duration-300 pointer-events-none">
+        <span class="loader mb-4"></span>
+        <span class="text-sm font-bold text-slate-600 dark:text-slate-300">Đang tải dữ liệu lịch...</span>
+    </div>
+
+    <!-- Header (Consistent with News Page) -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-white/5 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-sky-500/30">
+                    <i data-lucide="calendar-days" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm font-black tracking-widest uppercase text-slate-400 leading-none">Hệ thống quản lý</h1>
+                    <h2 class="text-lg font-black tracking-tight text-slate-800 dark:text-white uppercase">SỔ TAY CÔNG TÁC</h2>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="window.toggleTheme()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-400">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                </button>
+                <div id="auth-section"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 md:px-6 py-8 w-full">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Left Sidebar: Tools & Alerts -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- User Card -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 text-center">
+                    <div id="user-info-display" class="hidden">
+                        <img id="user-avatar-lg" src="" class="w-20 h-20 rounded-full mx-auto mb-3 border-4 border-slate-50 dark:border-slate-700">
+                        <h3 id="user-name-lg" class="font-bold text-lg dark:text-white"></h3>
+                        <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mt-1">Nhân sự</p>
+                        <button onclick="window.openEventModal()" class="mt-6 w-full py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-sky-500/20 hover:bg-sky-600 transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Tạo công việc mới
+                        </button>
+                    </div>
+                    <div id="login-require-msg" class="py-4">
+                        <p class="text-slate-500 text-sm mb-4">Vui lòng đăng nhập để xem lịch cá nhân.</p>
+                        <button onclick="window.login()" class="px-6 py-2 bg-primary text-white rounded-lg font-bold text-sm">Đăng nhập ngay</button>
+                    </div>
+                </div>
+
+                <!-- Alerts / Deadline Section -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="bell-ring" class="w-5 h-5 text-secondary"></i>
+                        <h3 class="font-bold text-slate-800 dark:text-white uppercase text-xs tracking-widest">Cảnh báo / Hạn chót</h3>
+                    </div>
+                    <div id="alert-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-1 scrollbar-hide">
+                        <!-- Alert Items Injected Here -->
+                        <div class="text-center py-8 text-slate-400 text-sm">Không có cảnh báo nào.</div>
+                    </div>
+                </div>
+
+                <!-- Filter -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                    <h3 class="font-bold text-slate-800 dark:text-white uppercase text-xs tracking-widest mb-3">Lọc hiển thị</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg">
+                            <input type="checkbox" checked onchange="window.toggleFilter('global')" class="accent-primary w-4 h-4">
+                            <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                            <span class="text-sm font-medium dark:text-slate-300">Lịch Trạm (Chung)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg">
+                            <input type="checkbox" checked onchange="window.toggleFilter('private')" class="accent-primary w-4 h-4">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <span class="text-sm font-medium dark:text-slate-300">Lịch Cá nhân</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg">
+                            <input type="checkbox" checked onchange="window.toggleFilter('deadline')" class="accent-primary w-4 h-4">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="text-sm font-medium dark:text-slate-300">Hạn chót (Deadline)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Calendar Interface -->
+            <div class="lg:col-span-3">
+                <!-- Calendar Controls -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <button onclick="window.changeMonth(-1)" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition"><i data-lucide="chevron-left" class="w-6 h-6 dark:text-white"></i></button>
+                        <h2 id="current-month-label" class="text-2xl font-black text-slate-800 dark:text-white capitalize min-w-[200px] text-center">Tháng --, ----</h2>
+                        <button onclick="window.changeMonth(1)" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition"><i data-lucide="chevron-right" class="w-6 h-6 dark:text-white"></i></button>
+                    </div>
+                    <button onclick="window.goToToday()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-white rounded-lg font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition">Hôm nay</button>
+                </div>
+
+                <!-- Calendar Grid Header -->
+                <div class="grid grid-cols-7 gap-1 mb-2 text-center">
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2">T2</div>
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2">T3</div>
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2">T4</div>
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2">T5</div>
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2">T6</div>
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2 text-secondary">T7</div>
+                    <div class="text-slate-400 font-bold uppercase text-xs py-2 text-secondary">CN</div>
+                </div>
+
+                <!-- Calendar Grid Body -->
+                <div id="calendar-body" class="calendar-grid">
+                    <!-- Days will be rendered here via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal: Add/Edit Event -->
+    <div id="modal-event" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
+                <h3 class="font-bold uppercase text-sm tracking-widest text-primary">Chi tiết công việc</h3>
+                <button onclick="window.closeEventModal()" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <form id="event-form" class="p-6 space-y-4 overflow-y-auto">
+                <input type="hidden" id="event-id">
+                
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Tên công việc / Sự kiện</label>
+                    <input type="text" id="event-title" required placeholder="VD: Trực trạm, Nộp báo cáo..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg font-bold border dark:border-white/5 outline-none focus:border-primary dark:text-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Bắt đầu</label>
+                        <input type="datetime-local" id="event-start" required class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none dark:text-white">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Kết thúc</label>
+                        <input type="datetime-local" id="event-end" required class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none dark:text-white">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Phân loại</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="event-type" value="private" checked class="peer sr-only">
+                            <div class="p-2 rounded-lg border dark:border-white/10 text-center text-xs font-bold text-slate-500 peer-checked:bg-emerald-500 peer-checked:text-white transition">Cá nhân</div>
+                        </label>
+                        <label class="cursor-pointer" id="opt-global">
+                            <input type="radio" name="event-type" value="global" class="peer sr-only">
+                            <div class="p-2 rounded-lg border dark:border-white/10 text-center text-xs font-bold text-slate-500 peer-checked:bg-indigo-500 peer-checked:text-white transition">Toàn trạm</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="event-type" value="deadline" class="peer sr-only">
+                            <div class="p-2 rounded-lg border dark:border-white/10 text-center text-xs font-bold text-slate-500 peer-checked:bg-red-500 peer-checked:text-white transition">Hạn chót</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Ghi chú</label>
+                    <textarea id="event-desc" rows="3" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary dark:text-white"></textarea>
+                </div>
+
+                <div id="event-meta" class="text-xs text-slate-400 italic hidden">
+                    Tạo bởi: <span id="event-creator"></span>
+                </div>
+            </form>
+
+            <div class="p-4 border-t dark:border-white/5 bg-slate-50 dark:bg-slate-800 flex justify-between items-center">
+                <button type="button" id="btn-delete-event" onclick="window.deleteEvent()" class="hidden text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                <div class="flex gap-2 ml-auto">
+                    <button onclick="window.closeEventModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-lg font-bold text-xs uppercase">Hủy</button>
+                    <button onclick="window.saveEvent()" class="px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs uppercase shadow hover:bg-sky-600 transition">Lưu lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-[500] translate-y-20 opacity-0 transition-all duration-300">
+        <div class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm">
+            <i id="toast-icon" data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+            <span id="toast-msg">Thông báo</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, where, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // --- FIREBASE CONFIG (Sử dụng config của bạn) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
+            authDomain: "profile-d1214.firebaseapp.com",
+            projectId: "profile-d1214",
+            storageBucket: "profile-d1214.firebasestorage.app",
+            messagingSenderId: "914980131889",
+            appId: "1:914980131889:web:72f8da15c42dbee671b110"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let isAdmin = false;
+        let events = [];
+        let currentDate = new Date();
+        let activeFilters = { global: true, private: true, deadline: true };
+
+        // --- AUTH LOGIC ---
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            renderAuthUI();
+            
+            if (user) {
+                document.getElementById('user-info-display').classList.remove('hidden');
+                document.getElementById('login-require-msg').classList.add('hidden');
+                document.getElementById('user-avatar-lg').src = user.photoURL;
+                document.getElementById('user-name-lg').innerText = user.displayName;
+
+                // Check Admin
+                const adminRef = doc(db, "settings", "admins");
+                const snap = await getDoc(adminRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
+                }
+                
+                // Show/Hide "Global" option in Modal based on Admin
+                document.getElementById('opt-global').style.display = isAdmin ? 'block' : 'none';
+
+                loadEvents();
+            } else {
+                document.getElementById('user-info-display').classList.add('hidden');
+                document.getElementById('login-require-msg').classList.remove('hidden');
+                events = [];
+                renderCalendar();
+                renderAlerts();
+            }
+            setLoading(false);
+        });
+
+        // --- DATA LOGIC ---
+        function loadEvents() {
+            if (!currentUser) return;
+            
+            // Listen to 'events' collection
+            // Logic: Get events where type=='global' OR createdBy==uid
+            // Firestore doesn't support complex OR queries easily, so we listen to all and filter client side for simplicity in this scale
+            // Or better: Use two listeners if data is huge. Here we assume small dataset.
+            
+            onSnapshot(collection(db, "events"), (snapshot) => {
+                const allEvents = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                // Filter: Show Global OR (Private & Owned by me)
+                events = allEvents.filter(e => {
+                    if (e.type === 'global') return true;
+                    return e.createdBy === currentUser.uid;
+                });
+                
+                renderCalendar();
+                renderAlerts();
+            });
+        }
+
+        // --- CALENDAR LOGIC ---
+        window.renderCalendar = () => {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            document.getElementById('current-month-label').innerText = `Tháng ${month + 1}, ${year}`;
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Adjust for Mon start
+
+            const calendarBody = document.getElementById('calendar-body');
+            calendarBody.innerHTML = '';
+
+            // Empty slots for previous month
+            for (let i = 0; i < startingDay; i++) {
+                calendarBody.innerHTML += `<div class="bg-transparent"></div>`;
+            }
+
+            // Days
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // Find events for this day
+                const daysEvents = events.filter(e => {
+                    const eStart = e.start.split('T')[0];
+                    const eEnd = e.end.split('T')[0];
+                    // Simple logic: if event starts on this day (Expand for range logic if needed)
+                    return eStart === dateStr;
+                });
+
+                // Check Today
+                const isToday = (day === today.getDate() && month === today.getMonth() && year === today.getFullYear());
+                
+                let eventsHtml = '';
+                daysEvents.forEach(e => {
+                    if (!activeFilters[e.type]) return; // Apply Filter
+                    let colorClass = 'bg-slate-400';
+                    if (e.type === 'global') colorClass = 'bg-indigo-500';
+                    if (e.type === 'private') colorClass = 'bg-emerald-500';
+                    if (e.type === 'deadline') colorClass = 'bg-red-500';
+
+                    eventsHtml += `
+                        <div onclick="window.editEvent('${e.id}', event)" class="mt-1 px-1.5 py-0.5 text-[10px] rounded truncate text-white ${colorClass} font-bold cursor-pointer hover:opacity-80 shadow-sm">
+                            ${e.title}
+                        </div>
+                    `;
+                });
+
+                calendarBody.innerHTML += `
+                    <div class="calendar-day bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-100 dark:border-white/5 flex flex-col ${isToday ? 'ring-2 ring-primary bg-sky-50 dark:bg-sky-900/20' : ''}" onclick="window.openEventModal('${dateStr}')">
+                        <span class="text-sm font-bold ${isToday ? 'text-primary' : 'text-slate-600 dark:text-slate-400'}">${day}</span>
+                        <div class="flex-1 flex flex-col gap-0.5 overflow-hidden mt-1">
+                            ${eventsHtml}
+                        </div>
+                    </div>
+                `;
+            }
+        };
+
+        window.changeMonth = (dir) => {
+            currentDate.setMonth(currentDate.getMonth() + dir);
+            renderCalendar();
+        };
+
+        window.goToToday = () => {
+            currentDate = new Date();
+            renderCalendar();
+        };
+
+        window.toggleFilter = (type) => {
+            activeFilters[type] = !activeFilters[type];
+            renderCalendar();
+        };
+
+        // --- ALERT LOGIC ---
+        function renderAlerts() {
+            const list = document.getElementById('alert-list');
+            const now = new Date();
+            
+            // Get upcoming events (next 3 days) or Overdue pending deadlines
+            const alerts = events.filter(e => {
+                const start = new Date(e.start);
+                const diffTime = start - now;
+                const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                
+                // Case 1: Deadline overdue (and within last 7 days to not show ancient history)
+                if (e.type === 'deadline' && diffTime < 0 && diffDays > -7) return true;
+                
+                // Case 2: Upcoming in next 3 days
+                if (diffDays >= 0 && diffDays <= 3) return true;
+                
+                return false;
+            }).sort((a,b) => new Date(a.start) - new Date(b.start));
+
+            if (alerts.length === 0) {
+                list.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Không có cảnh báo nào.</div>`;
+                return;
+            }
+
+            list.innerHTML = alerts.map(e => {
+                const start = new Date(e.start);
+                const isLate = start < now;
+                const timeStr = start.toLocaleDateString('vi-VN') + ' ' + start.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
+                
+                let icon = 'calendar';
+                let color = 'text-slate-500';
+                let bg = 'bg-slate-100 dark:bg-slate-700';
+                
+                if (e.type === 'deadline') {
+                    icon = 'alert-octagon';
+                    color = isLate ? 'text-red-500' : 'text-orange-500';
+                    bg = isLate ? 'bg-red-50 dark:bg-red-900/20' : 'bg-orange-50 dark:bg-orange-900/20';
+                } else if (e.type === 'global') {
+                    icon = 'users';
+                    color = 'text-indigo-500';
+                    bg = 'bg-indigo-50 dark:bg-indigo-900/20';
+                }
+
+                return `
+                <div class="flex items-start gap-3 p-3 rounded-xl border border-slate-100 dark:border-white/5 ${bg} hover:shadow-md transition cursor-pointer" onclick="window.editEvent('${e.id}')">
+                    <i data-lucide="${icon}" class="w-5 h-5 ${color} mt-0.5"></i>
+                    <div>
+                        <h4 class="font-bold text-sm text-slate-800 dark:text-white leading-tight">${e.title}</h4>
+                        <p class="text-xs ${color} font-semibold mt-1">${isLate ? 'Đã quá hạn: ' : 'Hạn chót: '} ${timeStr}</p>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- EVENT CRUD ---
+        window.openEventModal = (dateStr = null) => {
+            if (!currentUser) { showToast("Vui lòng đăng nhập!", true); return; }
+            
+            document.getElementById('event-form').reset();
+            document.getElementById('event-id').value = '';
+            document.getElementById('btn-delete-event').classList.add('hidden');
+            document.getElementById('event-meta').classList.add('hidden');
+            
+            // Set default dates
+            const now = new Date();
+            if(dateStr) {
+                const d = new Date(dateStr);
+                now.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
+            }
+            // Format to YYYY-MM-DDThh:mm for datetime-local
+            const toLocalIso = (d) => {
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                return d.toISOString().slice(0, 16);
+            }
+            
+            document.getElementById('event-start').value = toLocalIso(now);
+            // End time + 1 hour
+            const end = new Date(now);
+            end.setHours(end.getHours() + 1);
+            document.getElementById('event-end').value = toLocalIso(end);
+
+            document.getElementById('modal-event').classList.remove('hidden');
+        };
+
+        window.editEvent = (id, e) => {
+            if(e) e.stopPropagation(); // Stop clicking day
+            const ev = events.find(x => x.id === id);
+            if (!ev) return;
+            
+            // Permission check: Can only edit if Owner or Admin (if global)
+            const isOwner = ev.createdBy === currentUser.uid;
+            if (!isOwner && !isAdmin) {
+                // View only mode could be implemented, but for now restrict open
+                // Or open in read-only? Let's just alert
+                // showToast("Bạn không có quyền sửa lịch này", true);
+                // Actually, let's open modal but hide save button if needed.
+                // For simplicity: Allow open, but check on save.
+            }
+
+            document.getElementById('event-id').value = id;
+            document.getElementById('event-title').value = ev.title;
+            document.getElementById('event-start').value = ev.start;
+            document.getElementById('event-end').value = ev.end;
+            document.getElementById('event-desc').value = ev.description || '';
+            
+            // Radio select
+            const radios = document.getElementsByName('event-type');
+            for(let r of radios) if(r.value === ev.type) r.checked = true;
+
+            document.getElementById('event-creator').innerText = ev.authorName || 'Ẩn danh';
+            document.getElementById('event-meta').classList.remove('hidden');
+
+            if (isOwner || (isAdmin && ev.type === 'global')) {
+                document.getElementById('btn-delete-event').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-delete-event').classList.add('hidden');
+            }
+
+            document.getElementById('modal-event').classList.remove('hidden');
+        };
+
+        window.closeEventModal = () => document.getElementById('modal-event').classList.add('hidden');
+
+        window.saveEvent = async () => {
+            const id = document.getElementById('event-id').value;
+            const title = document.getElementById('event-title').value;
+            const start = document.getElementById('event-start').value;
+            const end = document.getElementById('event-end').value;
+            const desc = document.getElementById('event-desc').value;
+            const type = document.querySelector('input[name="event-type"]:checked').value;
+
+            if (!title || !start || !end) return showToast("Vui lòng nhập đủ thông tin", true);
+
+            // Permission Check
+            if (type === 'global' && !isAdmin) return showToast("Bạn không có quyền tạo lịch chung!", true);
+
+            const data = {
+                title, start, end, description: desc, type,
+                updatedAt: new Date().toISOString(),
+                createdBy: currentUser.uid,
+                authorName: currentUser.displayName
+            };
+
+            try {
+                if (id) {
+                    // Check ownership before update
+                    const oldEv = events.find(e => e.id === id);
+                    if (oldEv.createdBy !== currentUser.uid && !isAdmin) throw new Error("Không có quyền sửa.");
+                    
+                    await updateDoc(doc(db, "events", id), data);
+                    showToast("Đã cập nhật!");
+                } else {
+                    await addDoc(collection(db, "events"), data);
+                    showToast("Đã thêm công việc!");
+                }
+                window.closeEventModal();
+            } catch (err) {
+                showToast("Lỗi: " + err.message, true);
+            }
+        };
+
+        window.deleteEvent = async () => {
+            const id = document.getElementById('event-id').value;
+            if(!confirm("Bạn chắc chắn muốn xóa?")) return;
+            try {
+                await deleteDoc(doc(db, "events", id));
+                showToast("Đã xóa!");
+                window.closeEventModal();
+            } catch (err) {
+                showToast("Lỗi: " + err.message, true);
+            }
+        };
+
+        // --- UTILS ---
+        window.login = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth).then(() => location.reload());
+        window.toggleTheme = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        };
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            const icon = document.getElementById('toast-icon');
+            icon.setAttribute('data-lucide', isError ? 'alert-triangle' : 'check-circle');
+            icon.className = isError ? 'w-5 h-5 text-red-500' : 'w-5 h-5 text-green-500';
+            lucide.createIcons();
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+        function renderAuthUI() {
+            const container = document.getElementById('auth-section');
+            if (currentUser) {
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 cursor-pointer bg-white dark:bg-slate-800 py-1 px-2 rounded-lg border dark:border-white/10" onclick="window.logout()">
+                        <img src="${currentUser.photoURL}" class="w-6 h-6 rounded-full">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300 hidden md:block">${currentUser.displayName}</span>
+                        <i data-lucide="log-out" class="w-4 h-4 text-red-500"></i>
+                    </div>`;
+            } else {
+                container.innerHTML = `<button onclick="window.login()" class="px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs uppercase shadow hover:bg-sky-600 transition">Đăng nhập</button>`;
+            }
+            lucide.createIcons();
+        }
+        function setLoading(active) {
+            const l = document.getElementById('global-loading');
+            active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Init
+        if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
+        setLoading(true);
+        lucide.createIcons();
+    </script>
+</body>
+</html>
