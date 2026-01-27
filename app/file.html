@@ -45,6 +45,9 @@
 
         /* Drag Zone */
         .drag-active { border-color: #2563eb !important; background-color: rgba(37, 99, 235, 0.05) !important; }
+
+        /* Preview Modal */
+        #preview-frame { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body class="min-h-screen pb-24">
@@ -210,7 +213,7 @@
         </div>
     </div>
 
-    <!-- Edit Modal (New) -->
+    <!-- Edit Modal -->
     <div id="modal-edit" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden border dark:border-white/10">
             <div class="p-5 border-b dark:border-white/5 flex justify-between items-center">
@@ -240,6 +243,28 @@
 
                 <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Lưu thay đổi</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal (Mới) -->
+    <div id="modal-preview" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[800] hidden flex flex-col p-4 sm:p-6">
+        <div class="flex justify-between items-center mb-4 text-white">
+            <h3 id="preview-title" class="font-bold truncate max-w-[80%] text-lg">Xem trước tài liệu</h3>
+            <button onclick="window.closeModal('modal-preview')" class="p-2 bg-white/10 hover:bg-white/20 rounded-full transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex-1 bg-white rounded-xl overflow-hidden shadow-2xl relative">
+            <div id="preview-loading" class="absolute inset-0 flex items-center justify-center bg-white z-10">
+                <span class="loader"></span>
+            </div>
+            <iframe id="preview-frame" src="" onload="document.getElementById('preview-loading').style.display='none'"></iframe>
+            <div id="preview-error" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-white z-20 p-6 text-center">
+                <i data-lucide="file-warning" class="w-16 h-16 text-slate-300 mb-4"></i>
+                <p class="text-slate-500 font-bold mb-2">Không thể xem trước file này</p>
+                <p class="text-sm text-slate-400 mb-4">Vui lòng tải xuống để xem nội dung.</p>
+                <a id="preview-download-btn" href="#" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold">Tải xuống</a>
+            </div>
         </div>
     </div>
 
@@ -403,7 +428,9 @@
                 if(['PDF'].includes(fileExt)) iconColor = 'text-red-500';
                 if(['ZIP','RAR'].includes(fileExt)) iconColor = 'text-yellow-500';
 
-                // JSON stringify for edit passing
+                // Check preview ability
+                const canPreview = ['PDF','DOC','DOCX','XLS','XLSX','PPT','PPTX','JPG','PNG','JPEG','TXT'].includes(fileExt);
+
                 const docStr = encodeURIComponent(JSON.stringify(doc));
 
                 return `
@@ -421,10 +448,16 @@
                             <span class="text-[10px] text-slate-400 font-medium">${date} • ${fileSize}</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <a href="${doc.downloadUrl}" target="_blank" download class="p-2 text-primary bg-primary/10 hover:bg-primary hover:text-white rounded-lg transition" title="Tải xuống">
+                    <div class="flex items-center gap-1">
+                        ${canPreview ? `
+                        <button onclick="window.previewDoc('${doc.downloadUrl}', '${fileExt}', '${doc.name}')" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition" title="Xem trước">
+                            <i data-lucide="eye" class="w-5 h-5"></i>
+                        </button>` : ''}
+                        
+                        <a href="${doc.downloadUrl}" target="_blank" download class="p-2 text-primary hover:bg-primary/10 rounded-lg transition" title="Tải xuống">
                             <i data-lucide="download" class="w-5 h-5"></i>
                         </a>
+                        
                         ${isAdmin ? `
                         <button onclick="window.openEditModal('${docStr}')" class="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-slate-700 rounded-lg transition" title="Chỉnh sửa"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
                         <button onclick="window.deleteDocConfirm('${doc.id}', '${doc.name}', '${doc.githubPath}', '${doc.sha}')" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-slate-700 rounded-lg transition" title="Xóa"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
@@ -436,6 +469,45 @@
         }
         
         document.getElementById('search-input').oninput = renderDocs;
+
+        // --- PREVIEW LOGIC (New) ---
+        window.previewDoc = (url, type, name) => {
+            const modal = document.getElementById('modal-preview');
+            const frame = document.getElementById('preview-frame');
+            const title = document.getElementById('preview-title');
+            const loading = document.getElementById('preview-loading');
+            const error = document.getElementById('preview-error');
+            const downloadBtn = document.getElementById('preview-download-btn');
+
+            title.innerText = name;
+            modal.classList.remove('hidden');
+            loading.style.display = 'flex';
+            error.classList.add('hidden');
+            
+            // Determine Viewer URL
+            let src = '';
+            if (['JPG','PNG','JPEG','PDF','TXT'].includes(type)) {
+                src = url;
+            } else if (['DOC','DOCX','XLS','XLSX','PPT','PPTX'].includes(type)) {
+                // Use Microsoft Office Online Viewer
+                src = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+            } else {
+                // Fallback (Should not happen due to button logic)
+                loading.style.display = 'none';
+                error.classList.remove('hidden');
+                downloadBtn.href = url;
+                return;
+            }
+
+            frame.src = src;
+
+            // Handle load error timeout
+            frame.onerror = () => {
+                loading.style.display = 'none';
+                error.classList.remove('hidden');
+                downloadBtn.href = url;
+            };
+        };
 
         // --- GITHUB INTEGRATION ---
         const toBase64 = file => new Promise((resolve, reject) => {
@@ -461,7 +533,12 @@
             if (!ghConfig.token) { showToast("Vui lòng cấu hình GitHub trước!", true); window.toggleAdminSidebar(); return; }
             document.getElementById('modal-upload').classList.remove('hidden');
         };
-        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+        window.closeModal = (id) => {
+            document.getElementById(id).classList.add('hidden');
+            if(id === 'modal-preview') {
+                document.getElementById('preview-frame').src = ''; // Stop video/content
+            }
+        };
 
         // Drag & Drop
         const dropZone = document.getElementById('drop-zone');
