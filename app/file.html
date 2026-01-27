@@ -17,7 +17,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Excel Library (SheetJS) -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-    <!-- ZIP & FileSaver Libraries (Mới) -->
+    <!-- ZIP & FileSaver Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
@@ -83,19 +83,32 @@
         
         <!-- Search & Filter -->
         <div class="flex flex-col md:flex-row gap-4 justify-between items-end md:items-center">
-            <div class="relative w-full md:w-96 group">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-primary transition"></i>
-                <input type="text" id="search-input" placeholder="Tìm kiếm văn bản, biểu mẫu..." 
-                    class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl focus:ring-2 ring-primary/50 outline-none shadow-sm text-sm font-medium transition">
+            <div class="flex flex-col md:flex-row gap-2 w-full md:w-auto flex-1">
+                <!-- Search -->
+                <div class="relative w-full md:w-80 group">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-primary transition"></i>
+                    <input type="text" id="search-input" placeholder="Tìm kiếm văn bản..." 
+                        class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl focus:ring-2 ring-primary/50 outline-none shadow-sm text-sm font-medium transition">
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="relative w-full md:w-48">
+                    <i data-lucide="filter" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                    <select id="category-filter" onchange="window.filterDocs()" class="w-full pl-11 pr-8 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl focus:ring-2 ring-primary/50 outline-none shadow-sm text-sm font-medium appearance-none cursor-pointer">
+                        <option value="all">Tất cả danh mục</option>
+                        <!-- Options generated via JS -->
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none"></i>
+                </div>
             </div>
             
             <!-- User Action Buttons -->
-            <div class="flex gap-2">
+            <div class="flex gap-2 shrink-0">
                 <button onclick="window.downloadZipAll()" class="flex items-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-xs uppercase shadow-lg transition">
-                    <i data-lucide="archive" class="w-4 h-4"></i> Tải trọn bộ (ZIP)
+                    <i data-lucide="archive" class="w-4 h-4"></i> <span class="hidden sm:inline">Tải ZIP</span>
                 </button>
                 <button onclick="window.exportToExcel()" class="flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-xs uppercase shadow-sm transition">
-                    <i data-lucide="sheet" class="w-4 h-4 text-green-600"></i> Xuất Excel
+                    <i data-lucide="sheet" class="w-4 h-4 text-green-600"></i> <span class="hidden sm:inline">Excel</span>
                 </button>
             </div>
         </div>
@@ -167,25 +180,65 @@
             
             <form id="upload-form" class="p-6 space-y-4">
                 <!-- Drag & Drop Area -->
-                <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition relative">
+                <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition relative">
                     <input type="file" id="file-input" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                    <i data-lucide="upload-cloud" class="w-10 h-10 text-slate-400 mb-2"></i>
-                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Kéo thả file vào đây</p>
-                    <p class="text-xs text-slate-400 mt-1">hoặc click để chọn file</p>
-                    <p id="file-selected-name" class="mt-3 text-xs font-bold text-primary break-all"></p>
+                    <i data-lucide="upload-cloud" class="w-8 h-8 text-slate-400 mb-2"></i>
+                    <p class="text-xs font-bold text-slate-600 dark:text-slate-300">Kéo thả hoặc click chọn file</p>
+                    <p id="file-selected-name" class="mt-2 text-xs font-bold text-primary break-all"></p>
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Tên hiển thị</label>
-                    <input type="text" id="doc-name" required placeholder="Tự động điền khi chọn file..." class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Tên hiển thị <span class="text-red-500">*</span></label>
+                    <input type="text" id="doc-name" required placeholder="Nhập tên văn bản..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Danh mục</label>
+                        <select id="doc-category" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary appearance-none">
+                            <!-- JS Generated -->
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Số hiệu / Ghi chú</label>
+                        <input type="text" id="doc-note" placeholder="VD: 123/UBND" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Xác nhận Tải lên</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Modal (New) -->
+    <div id="modal-edit" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden border dark:border-white/10">
+            <div class="p-5 border-b dark:border-white/5 flex justify-between items-center">
+                <h3 class="font-bold uppercase text-sm tracking-widest text-primary">Chỉnh sửa Văn bản</h3>
+                <button onclick="window.closeModal('modal-edit')" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <form id="edit-form" class="p-6 space-y-4">
+                <input type="hidden" id="edit-id">
+                
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Tên hiển thị <span class="text-red-500">*</span></label>
+                    <input type="text" id="edit-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Danh mục</label>
+                    <select id="edit-category" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary appearance-none">
+                        <!-- JS Generated -->
+                    </select>
                 </div>
                 
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Số hiệu / Ghi chú</label>
-                    <input type="text" id="doc-note" placeholder="VD: 123/UBND-VTD" class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    <input type="text" id="edit-note" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Xác nhận Tải lên</button>
+                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Lưu thay đổi</button>
             </form>
         </div>
     </div>
@@ -201,17 +254,29 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- CẤU HÌNH FIREBASE ---
+        // --- CẤU HÌNH ---
         const firebaseConfig = {
-            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE", // Thay bằng API Key của bạn
+            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
             authDomain: "profile-d1214.firebaseapp.com",
             projectId: "profile-d1214",
             storageBucket: "profile-d1214.firebasestorage.app",
             messagingSenderId: "914980131889",
             appId: "1:914980131889:web:72f8da15c42dbee671b110"
         };
+        
+        // --- DANH MỤC ---
+        const CATEGORIES = [
+            "Quyết định",
+            "Báo cáo",
+            "Kế hoạch",
+            "Thông báo",
+            "Công văn",
+            "Biểu mẫu",
+            "Nghị quyết",
+            "Khác"
+        ];
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -223,14 +288,29 @@
         let documents = [];
         let ghConfig = { token: '', owner: '', repo: '' };
 
+        // Init UI Data
+        function initCategorySelects() {
+            const opts = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+            
+            // Filter
+            const filter = document.getElementById('category-filter');
+            filter.innerHTML = `<option value="all">Tất cả danh mục</option>` + opts;
+            
+            // Upload
+            document.getElementById('doc-category').innerHTML = opts;
+            document.getElementById('doc-category').value = "Khác";
+            
+            // Edit
+            document.getElementById('edit-category').innerHTML = opts;
+        }
+        initCategorySelects();
+
         // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             renderAuthUI();
             
             if (user) {
-                // Check Admin (Cơ chế đơn giản: Có trong collection 'settings/admins' hoặc check cứng email)
-                // Ở đây mình sẽ giả lập check email hoặc bạn set quyền trong Firestore
                 const adminRef = doc(db, "settings", "admins");
                 const snap = await getDoc(adminRef);
                 if (snap.exists()) {
@@ -238,16 +318,15 @@
                     isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
                 }
                 
-                // Load Github Config nếu là Admin
                 if (isAdmin) {
                     const ghRef = doc(db, "settings", "github_config");
                     const ghSnap = await getDoc(ghRef);
-                    if (ghSnap.exists()) {
-                        ghConfig = ghSnap.data();
-                        document.getElementById('gh-token').value = ghConfig.token || '';
-                        document.getElementById('gh-owner').value = ghConfig.owner || '';
-                        document.getElementById('gh-repo').value = ghConfig.repo || '';
-                    }
+                    if (ghSnap.exists()) ghConfig = ghSnap.data();
+                    // Populate GH Inputs
+                    document.getElementById('gh-token').value = ghConfig.token || '';
+                    document.getElementById('gh-owner').value = ghConfig.owner || '';
+                    document.getElementById('gh-repo').value = ghConfig.repo || '';
+                    
                     document.getElementById('admin-btn').classList.remove('hidden');
                 }
             } else {
@@ -279,7 +358,6 @@
 
         window.login = () => signInWithPopup(auth, provider);
         window.logout = () => signOut(auth).then(() => location.reload());
-
         window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
@@ -293,10 +371,18 @@
             renderDocs();
         });
 
+        window.filterDocs = renderDocs; // Bind filter change
+
         function renderDocs() {
             const container = document.getElementById('doc-container');
             const search = document.getElementById('search-input').value.toLowerCase();
-            const filtered = documents.filter(d => d.name.toLowerCase().includes(search) || (d.note && d.note.toLowerCase().includes(search)));
+            const catFilter = document.getElementById('category-filter').value;
+
+            const filtered = documents.filter(d => {
+                const matchSearch = d.name.toLowerCase().includes(search) || (d.note && d.note.toLowerCase().includes(search));
+                const matchCat = catFilter === 'all' || (d.category || 'Khác') === catFilter;
+                return matchSearch && matchCat;
+            });
             
             if (filtered.length === 0) {
                 container.innerHTML = '';
@@ -309,6 +395,7 @@
                 const date = new Date(doc.timestamp).toLocaleDateString('vi-VN');
                 const fileSize = (doc.size / 1024).toFixed(1) + ' KB';
                 const fileExt = doc.fileName.split('.').pop().toUpperCase();
+                const category = doc.category || 'Khác';
                 
                 let iconColor = 'text-slate-500';
                 if(['DOC','DOCX'].includes(fileExt)) iconColor = 'text-blue-500';
@@ -316,15 +403,21 @@
                 if(['PDF'].includes(fileExt)) iconColor = 'text-red-500';
                 if(['ZIP','RAR'].includes(fileExt)) iconColor = 'text-yellow-500';
 
+                // JSON stringify for edit passing
+                const docStr = encodeURIComponent(JSON.stringify(doc));
+
                 return `
-                <div class="group bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-white/5 shadow-sm hover:shadow-md transition flex items-center gap-4">
+                <div class="group bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-white/5 shadow-sm hover:shadow-md transition flex items-center gap-4 relative overflow-hidden">
                     <div class="w-12 h-12 bg-slate-50 dark:bg-slate-700 rounded-lg flex items-center justify-center flex-shrink-0">
                         <span class="text-[10px] font-black ${iconColor}">${fileExt}</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-sm font-bold truncate text-slate-800 dark:text-slate-200">${doc.name}</h4>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">${category}</span>
+                            ${doc.note ? `<span class="text-[10px] text-slate-400 font-bold border-l pl-2 border-slate-300 dark:border-slate-600">${doc.note}</span>` : ''}
+                        </div>
+                        <h4 class="text-sm font-bold truncate text-slate-800 dark:text-slate-200" title="${doc.name}">${doc.name}</h4>
                         <div class="flex items-center gap-2 mt-1">
-                            ${doc.note ? `<span class="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-bold text-slate-500 uppercase">${doc.note}</span>` : ''}
                             <span class="text-[10px] text-slate-400 font-medium">${date} • ${fileSize}</span>
                         </div>
                     </div>
@@ -332,7 +425,10 @@
                         <a href="${doc.downloadUrl}" target="_blank" download class="p-2 text-primary bg-primary/10 hover:bg-primary hover:text-white rounded-lg transition" title="Tải xuống">
                             <i data-lucide="download" class="w-5 h-5"></i>
                         </a>
-                        ${isAdmin ? `<button onclick="window.deleteDocConfirm('${doc.id}', '${doc.name}', '${doc.githubPath}', '${doc.sha}')" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-slate-700 rounded-lg transition"><i data-lucide="trash-2" class="w-5 h-5"></i></button>` : ''}
+                        ${isAdmin ? `
+                        <button onclick="window.openEditModal('${docStr}')" class="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-slate-700 rounded-lg transition" title="Chỉnh sửa"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                        <button onclick="window.deleteDocConfirm('${doc.id}', '${doc.name}', '${doc.githubPath}', '${doc.sha}')" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-slate-700 rounded-lg transition" title="Xóa"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        ` : ''}
                     </div>
                 </div>`;
             }).join('');
@@ -342,8 +438,6 @@
         document.getElementById('search-input').oninput = renderDocs;
 
         // --- GITHUB INTEGRATION ---
-        
-        // Helper: Convert File to Base64 (Strip prefix)
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -369,7 +463,7 @@
         };
         window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
 
-        // Drag & Drop Handling
+        // Drag & Drop
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
         
@@ -391,7 +485,7 @@
         function handleDrop(e) {
             const dt = e.dataTransfer;
             const files = dt.files;
-            fileInput.files = files; // Sync with input
+            fileInput.files = files;
             handleFiles();
         }
 
@@ -399,9 +493,7 @@
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 document.getElementById('file-selected-name').innerText = `Đã chọn: ${file.name}`;
-                // Auto fill name if empty
                 if (!document.getElementById('doc-name').value) {
-                    // Remove extension for display name
                     const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
                     document.getElementById('doc-name').value = nameWithoutExt;
                 }
@@ -414,40 +506,39 @@
             const file = fileInput.files[0];
             const display_name = document.getElementById('doc-name').value;
             const note = document.getElementById('doc-note').value;
+            const category = document.getElementById('doc-category').value;
 
             setLoading(true);
             try {
                 // 1. Upload to GitHub
                 const content = await toBase64(file);
-                const path = `docs/${Date.now()}_${file.name}`; // Unique path
+                const path = `docs/${Date.now()}_${file.name}`;
                 const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
                 
                 const response = await fetch(url, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${ghConfig.token}`,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         message: `Upload ${file.name} via Hub Portal`,
                         content: content,
-                        branch: 'main' // hoặc 'master' tùy repo
+                        branch: 'main'
                     })
                 });
 
-                if (!response.ok) throw new Error("GitHub Upload Failed: " + response.statusText);
+                if (!response.ok) throw new Error("GitHub Upload Failed");
                 const ghData = await response.json();
 
                 // 2. Save Metadata to Firestore
                 await addDoc(collection(db, "documents"), {
                     name: display_name,
                     note: note,
+                    category: category,
                     fileName: file.name,
                     size: file.size,
                     type: file.type,
-                    downloadUrl: ghData.content.download_url, // Link tải trực tiếp (Raw)
+                    downloadUrl: ghData.content.download_url,
                     githubPath: path,
-                    sha: ghData.content.sha, // Cần SHA để xóa sau này
+                    sha: ghData.content.sha,
                     timestamp: new Date().toISOString(),
                     uploadedBy: currentUser.email
                 });
@@ -465,6 +556,40 @@
             }
         };
 
+        // --- EDIT LOGIC ---
+        window.openEditModal = (docStr) => {
+            const docData = JSON.parse(decodeURIComponent(docStr));
+            document.getElementById('edit-id').value = docData.id;
+            document.getElementById('edit-name').value = docData.name;
+            document.getElementById('edit-note').value = docData.note || '';
+            document.getElementById('edit-category').value = docData.category || 'Khác';
+            document.getElementById('modal-edit').classList.remove('hidden');
+        };
+
+        document.getElementById('edit-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const name = document.getElementById('edit-name').value;
+            const note = document.getElementById('edit-note').value;
+            const category = document.getElementById('edit-category').value;
+
+            setLoading(true, "Đang cập nhật...");
+            try {
+                const docRef = doc(db, "documents", id);
+                await updateDoc(docRef, {
+                    name: name,
+                    note: note,
+                    category: category
+                });
+                showToast("Đã cập nhật thông tin!");
+                window.closeModal('modal-edit');
+            } catch (error) {
+                showToast("Lỗi cập nhật: " + error.message, true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         // --- DELETE LOGIC ---
         window.deleteDocConfirm = (id, name, path, sha) => {
             if(confirm(`Bạn có chắc chắn muốn xóa "${name}" không?`)) {
@@ -477,20 +602,11 @@
             try {
                 // 1. Delete from GitHub
                 const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
-                const response = await fetch(url, {
+                await fetch(url, {
                     method: 'DELETE',
-                    headers: {
-                        'Authorization': `token ${ghConfig.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: "Delete via Hub Portal",
-                        sha: sha,
-                        branch: 'main'
-                    })
+                    headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: "Delete via Hub Portal", sha: sha, branch: 'main' })
                 });
-
-                if (!response.ok) console.warn("GitHub Delete Warning (File might be already gone):", response.statusText);
 
                 // 2. Delete from Firestore
                 await deleteDoc(doc(db, "documents", id));
@@ -503,15 +619,14 @@
         }
 
         // --- EXPORT FEATURES ---
-        
-        // 1. Export Excel (Metadata Only)
         window.exportToExcel = () => {
             if (documents.length === 0) { showToast("Không có dữ liệu để xuất!", true); return; }
             
             const data = documents.map((d, i) => ({
                 STT: i + 1,
                 "Tên văn bản": d.name,
-                "Ghi chú/Số hiệu": d.note || "",
+                "Danh mục": d.category || "Khác",
+                "Số hiệu/Ghi chú": d.note || "",
                 "Tên file gốc": d.fileName,
                 "Kích thước (KB)": (d.size / 1024).toFixed(2),
                 "Ngày đăng": new Date(d.timestamp).toLocaleString('vi-VN'),
@@ -525,7 +640,6 @@
             showToast("Đã xuất file Excel!");
         };
 
-        // 2. Download All as ZIP
         window.downloadZipAll = async () => {
             if (documents.length === 0) { showToast("Không có file để tải!", true); return; }
             
@@ -534,10 +648,6 @@
             const folder = zip.folder("Van_Ban_VTD");
             
             try {
-                // Lấy tất cả file. Lưu ý: Fetch từ GitHub Raw có thể bị CORS nếu không cấu hình.
-                // Tuy nhiên, GitHub Raw thường cho phép GET simple requests.
-                // Nếu bị chặn, cần dùng Proxy hoặc GitHub API Get Content (nhưng API có rate limit).
-                
                 const promises = documents.map(async (doc) => {
                     try {
                         const response = await fetch(doc.downloadUrl);
@@ -545,20 +655,15 @@
                         const blob = await response.blob();
                         folder.file(doc.fileName, blob);
                     } catch (e) {
-                        console.error(`Lỗi tải file ${doc.name}:`, e);
-                        // Tạo file text báo lỗi thay thế
-                        folder.file(`${doc.name}_ERROR.txt`, `Không thể tải file này. Link gốc: ${doc.downloadUrl}`);
+                        folder.file(`${doc.name}_ERROR.txt`, `Lỗi tải file: ${doc.downloadUrl}`);
                     }
                 });
 
                 await Promise.all(promises);
-                
                 const content = await zip.generateAsync({ type: "blob" });
                 saveAs(content, `Kho_Van_Ban_Full_${Date.now()}.zip`);
                 showToast("Đã tải xuống trọn bộ!");
-
             } catch (e) {
-                console.error(e);
                 showToast("Lỗi khi tạo file ZIP!", true);
             } finally {
                 setLoading(false);
@@ -583,11 +688,7 @@
         function setLoading(active, text = "Đang xử lý...") {
             const l = document.getElementById('global-loading');
             document.getElementById('loading-text').innerText = text;
-            if (active) {
-                l.classList.remove('opacity-0', 'pointer-events-none');
-            } else {
-                l.classList.add('opacity-0', 'pointer-events-none');
-            }
+            active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none');
         }
 
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
