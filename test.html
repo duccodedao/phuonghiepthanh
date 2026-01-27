@@ -1,979 +1,674 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HongDuc Dev - Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Quản lý Văn bản & Biểu mẫu</title>
+    
+    <!-- SEO & Icons -->
+    <meta name="description" content="Hệ thống lưu trữ văn bản hành chính, biểu mẫu công vụ.">
+    <link rel="icon" href="https://hdd.io.vn/img/bmassloadings.png" type="image/png">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
-    <meta name="description" content="Cổng thông tin nhân sự.">
-    <link rel="icon" type="image/png" href="https://hdd.io.vn/img/bmassloadings.png">
-    <link rel="apple-touch-icon" href="https://hdd.io.vn/img/bmassloadings.png">
-
-    <!-- Libs -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { primary: '#2563eb', secondary: '#f43f5e', dark: '#0f172a' } } }
+        }
+    </script>
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.4);
-            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-            --sidebar-width: 280px;
-            --primary-color: #6c5ce7;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f0f2f5;
-            background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-            min-height: 100vh;
-            color: #2d3436;
-            overflow-x: hidden;
-        }
-
-        .main-layout { display: flex; min-height: 100vh; transition: all 0.3s ease; }
-
-        .sidebar {
-            width: var(--sidebar-width);
-            background: rgba(255, 255, 255, 0.98);
-            height: 100vh;
-            position: fixed; top: 0; left: 0; z-index: 1060;
-            padding: 25px;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.05);
-            transform: translateX(-100%); 
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column;
-        }
-        .sidebar.active { transform: translateX(0) !important; }
-
-        .content-area {
-            flex-grow: 1; padding: 20px; width: 100%;
-            transition: margin-left 0.3s ease; margin-left: 0; 
-            overflow-x: hidden;
-        }
-
-        .sidebar-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            z-index: 1050; display: none; backdrop-filter: blur(2px);
-        }
-        .sidebar-overlay.show { display: block; }
-
-        .mobile-toggle {
-            position: fixed; top: 15px; left: 15px; z-index: 1040;
-            background: white; border: none; padding: 10px 14px;
-            border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            color: var(--primary-color); display: none; transition: transform 0.2s;
-        }
-        .mobile-toggle:active { transform: scale(0.95); }
-
-        .glass-card {
-            background: var(--glass-bg); backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px); border-radius: 20px;
-            border: var(--glass-border); box-shadow: var(--shadow-soft); padding: 25px;
-        }
-
-        .form-control, .form-select {
-            border-radius: 12px; padding: 12px;
-            border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.8);
-        }
-        .form-control:focus {
-            background: white; border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; transition: background 0.3s; } 
+        .dark body { background-color: #0f172a; color: #e2e8f0; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .dark .glass { background: rgba(30, 41, 59, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); }
         
-        .btn-gradient {
-            background: var(--primary-gradient); border: none; color: white;
-            border-radius: 12px; padding: 12px; font-weight: 600;
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); transition: 0.2s;
-        }
-        .btn-gradient:hover { transform: translateY(-2px); color: white; }
-        .btn-gradient:disabled { opacity: 0.7; transform: none; cursor: not-allowed; }
+        .admin-sidebar { width: 26rem; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .admin-sidebar.open { transform: translateX(0); }
+        
+        /* Custom Loader */
+        .loader { width: 32px; height: 32px; border: 3px solid #e2e8f0; border-bottom-color: #2563eb; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .table-responsive {
-            overflow-x: auto !important; -webkit-overflow-scrolling: touch;
-            border-radius: 16px; background: white; box-shadow: var(--shadow-soft);
-        }
-        .custom-table { min-width: 900px; margin-bottom: 0; }
-        .custom-table th {
-            background: #f8f9fa; color: #636e72; font-weight: 600;
-            font-size: 0.8rem; padding: 15px; border: none; white-space: nowrap;
-            position: sticky; top: 0; z-index: 10;
-        }
-        .custom-table td { 
-            padding: 15px; vertical-align: middle; 
-            border-bottom: 1px solid #f1f2f6; white-space: nowrap; 
-        }
-
-        .glass-popup {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px) !important;
-            border-radius: 20px !important;
-            border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important;
-        }
-
-        /* Tabs custom */
-        .nav-pills .nav-link {
-            border-radius: 10px; color: #636e72; font-weight: 600; margin-right: 10px;
-        }
-        .nav-pills .nav-link.active {
-            background-color: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
-        }
-
-        @media (min-width: 992px) {
-            .sidebar.desktop-visible { transform: translateX(0); }
-            .content-area.desktop-shifted { margin-left: var(--sidebar-width); }
-            .mobile-toggle { display: none !important; } 
-        }
-        @media (max-width: 991px) {
-            .sidebar { transform: translateX(-100%); }
-            .content-area { margin-left: 0 !important; }
-        }
-
-        /* Login Form Styles */
-        .login-container {
-            max-width: 400px; margin: 0 auto;
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        
+        .drag-active { border-color: #2563eb !important; background-color: rgba(37, 99, 235, 0.05) !important; }
     </style>
 </head>
-<body>
+<body class="min-h-screen pb-24 text-slate-800 dark:text-slate-200">
 
-    <div id="loading" style="position: fixed; inset:0; background:rgba(255,255,255,0.9); z-index:9999; display:none; align-items:center; justify-content:center;">
-        <div class="spinner-border text-primary" role="status"></div>
+    <!-- Global Loading -->
+    <div id="global-loading" class="fixed inset-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm z-[900] flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
+        <span class="loader mb-4"></span>
+        <span id="loading-text" class="text-sm font-bold animate-pulse">Đang xử lý dữ liệu...</span>
     </div>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Header -->
+    <header class="sticky top-0 z-[100] glass px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
+                <i data-lucide="folder-kanban" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 class="text-sm font-black uppercase tracking-wider leading-tight">Văn Bản & Biểu Mẫu</h1>
+                <span id="role-status" class="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">GUEST MODE</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.toggleAdminSidebar()" id="admin-btn" class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hidden transition" title="Cấu hình Admin">
+                <i data-lucide="settings-2" class="w-5 h-5"></i>
+            </button>
+            <button onclick="window.toggleTheme()" class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
+                <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+            </button>
+            <div id="auth-section"></div>
+        </div>
+    </header>
 
-    <button class="mobile-toggle animate__animated animate__fadeInLeft" id="sidebarToggle">
-        <i class="fas fa-bars fa-lg"></i>
-    </button>
-
-    <div class="main-layout">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
         
-        <!-- SIDEBAR -->
-        <nav class="sidebar" id="sidebar">
-            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
-                <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-3 shadow-sm" style="width: 40px; height: 40px;">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <div style="overflow: hidden;">
-                    <h6 class="fw-bold m-0 text-dark">Admin Panel</h6>
-                    <small class="text-muted text-truncate d-block" id="adminNameDisplay">Xin chào</small>
-                </div>
+        <!-- Filter Bar -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border dark:border-white/5 space-y-4 md:space-y-0 md:flex md:items-center md:gap-4">
+            <!-- Search -->
+            <div class="flex-1 relative group">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-primary transition"></i>
+                <input type="text" id="filter-search" placeholder="Nhập tên văn bản, số hiệu..." 
+                    class="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-2 ring-primary/50 outline-none text-sm font-medium transition">
             </div>
 
-            <div class="d-grid gap-2 mb-auto">
-                <button class="btn btn-light text-start py-3 fw-bold text-primary active" onclick="closeSidebarMobile()">
-                    <i class="fas fa-chart-pie me-3"></i>Dashboard
+            <!-- Filters Group -->
+            <div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                <select id="filter-category" class="px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-bold outline-none focus:ring-2 ring-primary/50 min-w-[140px]">
+                    <option value="all">Tất cả loại</option>
+                    <option value="quyet-dinh">Quyết định</option>
+                    <option value="ke-hoach">Kế hoạch</option>
+                    <option value="bao-cao">Báo cáo</option>
+                    <option value="thong-bao">Thông báo</option>
+                    <option value="cong-van">Công văn</option>
+                    <option value="bieu-mau">Biểu mẫu</option>
+                    <option value="khac">Khác</option>
+                </select>
+
+                <input type="date" id="filter-date-start" class="px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary/50 text-slate-500" title="Từ ngày">
+                <i data-lucide="arrow-right" class="w-4 h-4 self-center text-slate-400 hidden md:block"></i>
+                <input type="date" id="filter-date-end" class="px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary/50 text-slate-500" title="Đến ngày">
+            </div>
+            
+            <!-- Actions -->
+             <div class="flex gap-2 border-l dark:border-white/10 pl-0 md:pl-4">
+                <button onclick="window.downloadZipAll()" class="p-3 bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-lg hover:shadow-green-500/30 transition" title="Tải trọn bộ (ZIP)">
+                    <i data-lucide="archive" class="w-5 h-5"></i>
                 </button>
-                <button class="btn btn-light text-start py-3" onclick="closeSidebarMobile(); document.getElementById('fileExcel').click()">
-                    <i class="fas fa-file-import me-3"></i>Import Excel
-                    <input type="file" id="fileExcel" hidden accept=".xlsx" onchange="handleImport()">
+                <button onclick="window.exportToExcel()" class="p-3 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 border dark:border-white/10 text-slate-700 dark:text-white rounded-xl shadow-sm transition" title="Xuất Excel">
+                    <i data-lucide="sheet" class="w-5 h-5"></i>
                 </button>
-                <button class="btn btn-light text-start py-3" onclick="bulkSetupPasswords()">
-                    <i class="fas fa-key me-3"></i>Cấp MK mặc định
-                </button>
-                <button class="btn btn-light text-start py-3" onclick="closeSidebarMobile(); exportExcel()">
-                    <i class="fas fa-file-export me-3"></i>Xuất báo cáo
-                </button>
+            </div>
+        </div>
+
+        <!-- Document Stats -->
+        <div class="flex items-center justify-between px-2">
+            <h2 class="text-sm font-black uppercase tracking-widest text-slate-500">Danh sách tài liệu (<span id="count-display">0</span>)</h2>
+            <button onclick="window.renderDocs()" class="text-xs font-bold text-primary flex items-center gap-1 hover:underline"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Làm mới</button>
+        </div>
+
+        <!-- Document Grid -->
+        <div id="doc-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Items rendered via JS -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden flex flex-col items-center justify-center py-24 text-slate-400">
+            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="folder-search" class="w-10 h-10 opacity-50"></i>
+            </div>
+            <p class="font-bold text-lg">Không tìm thấy tài liệu nào</p>
+            <p class="text-sm">Vui lòng thử lại với từ khóa hoặc bộ lọc khác.</p>
+        </div>
+
+    </main>
+
+    <!-- Admin Sidebar -->
+    <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 bg-white dark:bg-slate-900 border-l dark:border-white/10 shadow-2xl z-[200] flex flex-col">
+        <div class="p-6 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+            <h3 class="font-black uppercase text-sm tracking-widest text-primary flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
+            </h3>
+            <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        
+        <div class="p-6 border-b dark:border-white/5">
+            <button onclick="window.openUploadModal()" class="w-full py-4 bg-gradient-to-r from-primary to-indigo-600 text-white rounded-2xl font-bold uppercase text-xs shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 hover:opacity-90 transition transform hover:scale-[1.02]">
+                <i data-lucide="upload-cloud" class="w-5 h-5"></i> Thêm Văn Bản Mới
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-8">
+            <!-- Github Settings -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-2 border-b dark:border-white/10 pb-2">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-slate-500">Cấu hình Lưu trữ (GitHub)</h4>
+                </div>
                 
-                <div id="adminSettingsArea" class="bg-light p-3 rounded-3 mt-2">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="toggleEditPermission">
-                        <label class="form-check-label fw-bold small text-muted" for="toggleEditPermission">Cho phép sửa hồ sơ</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-3">
-                <button class="btn btn-danger w-100 py-2 rounded-3" id="btnLogout">
-                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                </button>
-            </div>
-        </nav>
-
-        <!-- CONTENT AREA -->
-        <div class="content-area" id="contentArea">
-
-            <!-- A. LOGIN VIEW (USER & ADMIN) -->
-            <div id="loginView" class="container pt-5">
-                <div class="login-container">
-                    <div class="text-center mb-5">
-                        <h2 class="fw-bold text-primary">HongDuc Portal</h2>
-                        <p class="text-muted">Cổng thông tin nhân sự nội bộ</p>
-                    </div>
-
-                    <div class="glass-card animate__animated animate__zoomIn">
-                        <!-- User Login Form -->
-                        <form id="loginFormUser">
-                            <h5 class="fw-bold mb-4 text-center">Đăng nhập</h5>
-                            <div class="mb-3">
-                                <label class="small fw-bold text-muted">Số CCCD</label>
-                                <input type="text" id="loginCccd" class="form-control form-control-lg" placeholder="Nhập số CCCD" required>
-                            </div>
-                            <div class="mb-4">
-                                <label class="small fw-bold text-muted">Mật khẩu</label>
-                                <input type="password" id="loginPass" class="form-control form-control-lg" placeholder="Nhập mật khẩu" required>
-                            </div>
-                            <button type="submit" class="btn btn-gradient w-100 py-3 mb-3">
-                                Đăng nhập
-                            </button>
-                        </form>
-                        
-                        <div class="text-center position-relative my-4">
-                            <hr>
-                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted small">Hoặc</span>
+                <div class="space-y-3">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Personal Access Token (Scope: repo)</label>
+                        <div class="relative">
+                            <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx" class="w-full pl-4 pr-10 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm border dark:border-white/5 outline-none focus:ring-2 ring-primary/50 font-mono">
+                            <i data-lucide="key" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
                         </div>
-
-                        <!-- Admin Google Login -->
-                        <button class="btn btn-outline-dark w-100 py-2 rounded-pill" id="btnLoginGoogle">
-                            <i class="fab fa-google me-2"></i>Admin Login (Google)
-                        </button>
                     </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Username (Owner)</label>
+                        <input type="text" id="gh-owner" placeholder="vd: duccodedao" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm border dark:border-white/5 outline-none focus:ring-2 ring-primary/50">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Repository Name</label>
+                        <input type="text" id="gh-repo" placeholder="vd: kho-van-ban" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm border dark:border-white/5 outline-none focus:ring-2 ring-primary/50">
+                    </div>
+                    <button onclick="window.saveGithubConfig()" class="w-full py-3 bg-slate-800 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold uppercase hover:opacity-90 transition">Lưu cấu hình kết nối</button>
+                    <p class="text-[10px] text-slate-400 italic text-center">Token được lưu an toàn trên Database của bạn.</p>
                 </div>
             </div>
+        </div>
+        
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest border-t dark:border-white/5">
+            System v2.0 • Secured by Firebase
+        </div>
+    </div>
 
-            <!-- B. USER PROFILE VIEW (Logged In) -->
-            <div id="userProfileView" class="container pt-4 d-none" style="max-width: 800px;">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold text-dark m-0">Xin chào, <span id="userWelcomeName">User</span></h4>
-                    <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="logoutUser()">
-                        <i class="fas fa-sign-out-alt me-2"></i>Thoát
-                    </button>
+    <!-- Upload Modal -->
+    <div id="modal-upload" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden border dark:border-white/10 animate-fade-in-up">
+            <div class="p-6 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                <h3 class="font-bold uppercase text-sm tracking-widest text-primary">Tải lên tài liệu</h3>
+                <button onclick="window.closeModal('modal-upload')" class="p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <form id="upload-form" class="p-6 space-y-5">
+                <!-- Drop Zone -->
+                <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition relative group">
+                    <input type="file" id="file-input" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                    <div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-primary rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                        <i data-lucide="cloud-upload" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">Kéo thả file vào đây</p>
+                    <p class="text-xs text-slate-400 mt-1">hoặc click để chọn (PDF, Word, Excel, Zip...)</p>
+                    <p id="file-selected-name" class="mt-3 text-xs font-black text-primary break-all bg-primary/10 px-3 py-1 rounded-full hidden"></p>
                 </div>
 
-                <!-- Tabs -->
-                <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-info">
-                            <i class="fas fa-user me-2"></i>Thông tin cá nhân
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tasks">
-                            <i class="fas fa-tasks me-2"></i>Chức năng nhiệm vụ
-                        </button>
-                    </li>
-                    <li class="nav-item ms-auto">
-                        <button class="nav-link bg-secondary bg-opacity-10 text-dark" onclick="changeUserPassword()">
-                            <i class="fas fa-key me-2"></i>Đổi mật khẩu
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content" id="pills-tabContent">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1 col-span-2">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Tên văn bản <span class="text-red-500">*</span></label>
+                        <input type="text" id="doc-name" required placeholder="Tự động điền khi chọn file..." class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary/50 transition">
+                    </div>
                     
-                    <!-- TAB 1: INFO -->
-                    <div class="tab-pane fade show active" id="pills-info">
-                        <div class="glass-card">
-                            <form id="userUpdateForm">
-                                <div class="row g-3 mb-4">
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="inpName" placeholder="Tên" disabled>
-                                            <label>Họ và Tên</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="inpBhxhDisplay" placeholder="Bhxh" disabled>
-                                            <label>Mã BHXH</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="inpDob" placeholder="Dob" disabled>
-                                            <label>Ngày sinh</label>
-                                        </div>
-                                        <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpDob')"></i></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <select class="form-select" id="inpGender" disabled>
-                                                <option value="Nam">Nam</option>
-                                                <option value="Nữ">Nữ</option>
-                                            </select>
-                                            <label>Giới tính</label>
-                                        </div>
-                                        <div class="text-end mt-1 edit-btn-group"><i class="fas fa-pen text-secondary small cursor-pointer" onclick="toggleEdit('inpGender')"></i></div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            <input type="number" class="form-control bg-light" id="inpCccd" placeholder="CCCD" disabled readonly>
-                                            <label>CCCD (Không thể thay đổi)</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="bg-white p-3 rounded-4 shadow-sm mb-4">
-                                    <h6 class="fw-bold text-primary mb-3 small text-uppercase">Tài khoản ngân hàng</h6>
-                                    <div class="mb-3">
-                                        <label class="small fw-bold">Agribank <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-0"><img id="logoAgri" src="" height="20"></span>
-                                            <input type="text" id="inpAgri" class="form-control bg-light border-0" placeholder="Số tài khoản..." required>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="small fw-bold">Vietcombank</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-0"><img id="logoVcb" src="" height="20"></span>
-                                            <input type="text" id="inpVcb" class="form-control bg-light border-0" placeholder="Nhập số tài khoản...">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" id="btnSaveUser" class="btn btn-gradient w-100 py-3 shadow-lg">Lưu thông tin</button>
-                            </form>
-                        </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Phân loại</label>
+                        <select id="doc-category" class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary/50">
+                            <option value="quyet-dinh">Quyết định</option>
+                            <option value="ke-hoach">Kế hoạch</option>
+                            <option value="bao-cao">Báo cáo</option>
+                            <option value="thong-bao">Thông báo</option>
+                            <option value="cong-van">Công văn</option>
+                            <option value="bieu-mau">Biểu mẫu</option>
+                            <option value="khac">Khác</option>
+                        </select>
                     </div>
 
-                    <!-- TAB 2: TASKS -->
-                    <div class="tab-pane fade" id="pills-tasks">
-                        <div class="glass-card">
-                            <h5 class="fw-bold mb-3"><i class="fas fa-clipboard-list text-primary me-2"></i>Nhiệm vụ được giao</h5>
-                            <div class="bg-white p-4 rounded-3 shadow-sm border" style="min-height: 200px; white-space: pre-wrap;" id="userTaskDisplay">
-                                <p class="text-muted fst-italic">Chưa có nhiệm vụ nào được giao.</p>
-                            </div>
-                        </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Số hiệu / Ghi chú</label>
+                        <input type="text" id="doc-note" placeholder="VD: 123/UBND" class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary/50">
                     </div>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-primary text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 uppercase text-xs hover:bg-blue-600 transition transform active:scale-95">Xác nhận Lưu trữ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="modal-preview" class="fixed inset-0 bg-black/90 z-[400] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 w-full h-full max-w-6xl max-h-[90vh] rounded-2xl flex flex-col overflow-hidden relative shadow-2xl">
+            <div class="flex justify-between items-center p-4 border-b dark:border-white/10 bg-slate-100 dark:bg-slate-800">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="p-2 bg-primary/10 rounded-lg text-primary"><i data-lucide="eye" class="w-5 h-5"></i></div>
+                    <h3 id="preview-title" class="font-bold truncate text-sm uppercase tracking-wide">Xem trước tài liệu</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="preview-download-direct" href="#" class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-blue-600 transition flex items-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i> Tải về
+                    </a>
+                    <button onclick="document.getElementById('modal-preview').classList.add('hidden')" class="p-2 hover:bg-red-500 hover:text-white rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
             </div>
-
-            <!-- C. ADMIN DASHBOARD -->
-            <div id="adminView" class="d-none animate__animated animate__fadeIn px-md-4 pt-4">
-                <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-                    <h3 class="fw-bold text-dark m-0">Dashboard</h3>
-                    <div class="d-flex gap-2 bg-white p-1 rounded-pill shadow-sm">
-                        <input type="text" id="adminSearch" class="form-control border-0 shadow-none bg-transparent" placeholder="Tìm kiếm..." style="width: 180px;">
-                        <button class="btn btn-dark rounded-circle" onclick="openAdminModal()"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-
-                <div class="row g-3 mb-4">
-                    <div class="col-6">
-                        <div class="glass-card d-flex align-items-center justify-content-between p-3">
-                            <div>
-                                <p class="text-muted small fw-bold text-uppercase mb-1">Tổng hồ sơ</p>
-                                <h2 class="fw-bold m-0 text-dark" id="statTotal">0</h2>
-                            </div>
-                            <div class="bg-primary bg-opacity-10 p-2 rounded-circle text-primary"><i class="fas fa-users fa-lg"></i></div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="glass-card d-flex align-items-center justify-content-between p-3">
-                            <div>
-                                <p class="text-muted small fw-bold text-uppercase mb-1">Đã nhập TK</p>
-                                <h2 class="fw-bold m-0 text-success" id="statDone">0</h2>
-                            </div>
-                            <div class="bg-success bg-opacity-10 p-2 rounded-circle text-success"><i class="fas fa-check-circle fa-lg"></i></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table custom-table mb-0 align-middle">
-                        <thead>
-                            <tr>
-                                <th>Nhân viên</th>
-                                <th>Thông tin (BHXH, CCCD)</th>
-                                <th>Ngân hàng</th>
-                                <th>Trạng thái TK</th>
-                                <th class="text-end">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminTableBody"></tbody>
-                    </table>
+            <div class="flex-1 bg-slate-200 dark:bg-black relative flex items-center justify-center">
+                <iframe id="preview-frame" class="w-full h-full hidden" src=""></iframe>
+                <img id="preview-image" class="max-w-full max-h-full object-contain hidden" src="">
+                <div id="preview-error" class="hidden flex flex-col items-center justify-center text-slate-500">
+                    <i data-lucide="file-off" class="w-16 h-16 mb-4 opacity-50"></i>
+                    <p class="font-bold">Định dạng file này không hỗ trợ xem trước.</p>
+                    <p class="text-xs mt-1">Vui lòng tải về máy để xem nội dung.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: Admin Edit/Create -->
-    <div class="modal fade" id="adminModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 rounded-4 shadow-lg glass-popup">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">Thông tin nhân sự</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="adminForm" class="row g-3">
-                        <input type="hidden" id="editMode" value="add">
-                        <input type="hidden" id="originalCccdAdmin"> 
-                        
-                        <div class="col-md-6">
-                            <label class="small fw-bold">Họ và Tên <span class="text-danger">*</span></label>
-                            <input type="text" id="admName" class="form-control" required>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="small fw-bold">CCCD (Tên đăng nhập) <span class="text-danger">*</span></label>
-                            <input type="text" id="admCccd" class="form-control" required>
-                        </div>
-                        
-                        <!-- Password Field for Admin to Set manually -->
-                        <div class="col-md-6">
-                            <label class="small fw-bold">Mật khẩu</label>
-                            <div class="input-group">
-                                <input type="text" id="admPass" class="form-control" placeholder="Để trống nếu không đổi">
-                                <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('admPass').value='123456'">Reset 123456</button>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="small fw-bold">Mã BHXH</label>
-                            <input type="text" id="admBhxh" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="small fw-bold">Ngày sinh</label>
-                            <input type="text" id="admDob" class="form-control" placeholder="DD/MM/YYYY">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="small fw-bold">Giới tính</label>
-                            <select id="admGender" class="form-select">
-                                <option value="Nam">Nam</option>
-                                <option value="Nữ">Nữ</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="small fw-bold">Nhiệm vụ / Chức năng</label>
-                            <textarea id="admTask" class="form-control" rows="3" placeholder="Nhập nhiệm vụ được giao cho nhân sự này..."></textarea>
-                        </div>
-
-                        <div class="col-12 bg-light p-3 rounded-3 mt-2">
-                            <label class="small fw-bold text-muted mb-2 d-block">Ngân hàng</label>
-                            <div class="d-flex gap-2">
-                                <input type="text" id="admAgri" class="form-control bg-white" placeholder="TK Agribank">
-                                <input type="text" id="admVcb" class="form-control bg-white" placeholder="TK Vietcombank">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-4">
-                            <button class="btn btn-primary w-100 py-3 rounded-3 fw-bold">Lưu thay đổi</button>
-                        </div>
-                    </form>
-                </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-[500] translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900/90 text-white dark:bg-white/90 dark:text-slate-900 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-md flex items-center gap-4 border border-white/10">
+            <div id="toast-icon-box" class="w-8 h-8 rounded-full flex items-center justify-center bg-green-500 text-white">
+                <i id="toast-icon" data-lucide="check" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h4 id="toast-title" class="font-bold text-sm">Thành công!</h4>
+                <p id="toast-msg" class="text-xs opacity-80">Thao tác đã được thực hiện.</p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: History -->
-    <div class="modal fade" id="historyModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 glass-popup">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Lịch sử chỉnh sửa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body bg-light rounded-bottom-4" style="max-height: 60vh; overflow-y: auto;">
-                    <div id="historyList" class="d-flex flex-column gap-3"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- JAVASCRIPT LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, getDoc, addDoc, onSnapshot, query, where, orderBy, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // --- CẤU HÌNH FIREBASE (BẠN HÃY THAY THÔNG TIN DỰ ÁN CỦA BẠN VÀO ĐÂY) ---
         const firebaseConfig = {
-            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
+            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE", 
             authDomain: "profile-d1214.firebaseapp.com",
             projectId: "profile-d1214",
             storageBucket: "profile-d1214.firebasestorage.app",
             messagingSenderId: "914980131889",
-            appId: "1:914980131889:web:72f8da15c42dbee671b110",
-            measurementId: "G-C587M69LZW"
+            appId: "1:914980131889:web:72f8da15c42dbee671b110"
         };
-
-        // ADMIN UID LIST
-        const ALLOWED_ADMINS = [
-            "VYIs9XHLR9RMStwtcdwMrOIo33w1", 
-            "ZQKPUtks4FgJUmllWytScYONuqF3",
-        ];
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-        
-        const COLL_DATA = "personnel_data";
-        const COLL_LOGS = "audit_logs";
-        const COLL_SETTINGS = "system_settings";
 
-        let allUsers = [];
-        let currentUserAdmin = null;
-        let currentUserData = null; // For standard user login
-        let isEditAllowed = false;
-        let bankLogoAgri = "", bankLogoVcb = "";
+        let currentUser = null;
+        let isAdmin = false;
+        let documents = [];
+        let ghConfig = { token: '', owner: '', repo: '' };
 
-        // UI References
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const loginView = document.getElementById('loginView');
-        const userProfileView = document.getElementById('userProfileView');
-        const adminView = document.getElementById('adminView');
-        const toggleEditPermission = document.getElementById('toggleEditPermission');
+        // --- INIT ---
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            renderAuthUI();
+            
+            if (user) {
+                // Check Admin quyền trong Firestore
+                const adminRef = doc(db, "settings", "admins");
+                try {
+                    const snap = await getDoc(adminRef);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
+                    }
+                } catch (e) { console.log("Guest User"); }
 
-        window.showToast = (title, icon = 'success') => {
-            Swal.fire({
-                title: title, icon: icon, showConfirmButton: false, timer: 1500,
-                customClass: { popup: 'glass-popup' },
-                position: 'top-end',
-                toast: true
-            });
-        }
-        function showLoading(s) { document.getElementById('loading').style.display=s?'flex':'none'; }
-        
-        async function fetchLogos() {
-            try {
-                const r = await fetch('https://api.vietqr.io/v2/banks');
-                const d = await r.json();
-                const agri = d.data.find(b=>b.code=="VBA");
-                const vcb = d.data.find(b=>b.code=="VCB");
-                if(agri) { bankLogoAgri = agri.logo; document.getElementById('logoAgri').src = agri.logo; }
-                if(vcb) { bankLogoVcb = vcb.logo; document.getElementById('logoVcb').src = vcb.logo; }
-            } catch(e){}
-        }
-        fetchLogos();
-
-        function toggleSidebarMobile() { sidebar.classList.toggle('active'); overlay.classList.toggle('show'); }
-        window.closeSidebarMobile = function() { sidebar.classList.remove('active'); overlay.classList.remove('show'); }
-        document.getElementById('sidebarToggle').addEventListener('click', toggleSidebarMobile);
-        overlay.addEventListener('click', closeSidebarMobile);
-
-        // --- NAVIGATION & VIEW MODES ---
-        window.switchView = (mode) => {
-            loginView.classList.add('d-none');
-            userProfileView.classList.add('d-none');
-            adminView.classList.add('d-none');
-            sidebar.classList.remove('desktop-visible');
-            document.getElementById('contentArea').classList.remove('desktop-shifted');
-            document.getElementById('sidebarToggle').style.display = 'none';
-
-            if (mode === 'login') {
-                loginView.classList.remove('d-none');
-            } else if (mode === 'admin') {
-                adminView.classList.remove('d-none');
-                sidebar.classList.add('desktop-visible');
-                document.getElementById('contentArea').classList.add('desktop-shifted');
-                document.getElementById('sidebarToggle').style.display = 'block';
-            } else if (mode === 'user') {
-                userProfileView.classList.remove('d-none');
-            }
-        };
-
-        // --- AUTHENTICATION (ADMIN & USER) ---
-
-        // 1. Admin Google Login
-        document.getElementById('btnLoginGoogle').onclick = () => signInWithPopup(auth, provider);
-        document.getElementById('btnLogout').onclick = () => { signOut(auth); currentUserAdmin = null; window.location.reload(); };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user && ALLOWED_ADMINS.includes(user.uid)) {
-                currentUserAdmin = user;
-                document.getElementById('adminNameDisplay').textContent = user.displayName;
-                switchView('admin');
-                initAdminListeners();
-            } else if (user) {
-                signOut(auth);
-                showToast('Bạn không có quyền Admin.', 'warning');
+                if (isAdmin) {
+                    document.getElementById('role-status').innerText = "ADMIN MODE";
+                    document.getElementById('role-status').classList.replace('bg-slate-100', 'bg-red-100');
+                    document.getElementById('role-status').classList.add('text-red-600');
+                    document.getElementById('admin-btn').classList.remove('hidden');
+                    
+                    // Load Config GitHub
+                    const ghRef = doc(db, "settings", "github_config");
+                    const ghSnap = await getDoc(ghRef);
+                    if (ghSnap.exists()) {
+                        ghConfig = ghSnap.data();
+                        document.getElementById('gh-token').value = ghConfig.token || '';
+                        document.getElementById('gh-owner').value = ghConfig.owner || '';
+                        document.getElementById('gh-repo').value = ghConfig.repo || '';
+                    }
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('role-status').innerText = "GUEST MODE";
+                document.getElementById('admin-btn').classList.add('hidden');
             }
         });
 
-        // 2. User Custom Login (CCCD + Password)
-        document.getElementById('loginFormUser').onsubmit = async (e) => {
-            e.preventDefault();
-            const cccd = document.getElementById('loginCccd').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
+        // Load Data Realtime
+        onSnapshot(query(collection(db, "documents"), orderBy("timestamp", "desc")), (snap) => {
+            documents = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderDocs();
+        });
 
-            if(!cccd || !pass) return showToast('Vui lòng nhập đủ thông tin', 'warning');
-            
-            showLoading(true);
-            try {
-                const docRef = doc(db, COLL_DATA, cccd);
-                const snap = await getDoc(docRef);
+        // --- CORE FUNCTIONS ---
+        
+        // 1. Render Documents with Multi-Filter
+        window.renderDocs = () => {
+            const container = document.getElementById('doc-container');
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            const catFilter = document.getElementById('filter-category').value;
+            const dateStart = document.getElementById('filter-date-start').value;
+            const dateEnd = document.getElementById('filter-date-end').value;
+
+            // Filter Logic
+            const filtered = documents.filter(d => {
+                const matchName = d.name.toLowerCase().includes(search) || (d.note && d.note.toLowerCase().includes(search));
+                const matchCat = catFilter === 'all' || d.category === catFilter;
                 
-                if (snap.exists()) {
-                    const data = snap.data();
-                    // Simple password check (In real app, hash this!)
-                    if (data.password === pass) {
-                        currentUserData = data;
-                        loadUserProfile(data);
-                        switchView('user');
-                    } else {
-                        showToast('Sai mật khẩu!', 'error');
-                    }
-                } else {
-                    showToast('Không tìm thấy số CCCD này.', 'error');
+                let matchDate = true;
+                if (dateStart || dateEnd) {
+                    const docDate = new Date(d.timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
+                    if (dateStart && docDate < dateStart) matchDate = false;
+                    if (dateEnd && docDate > dateEnd) matchDate = false;
                 }
+
+                return matchName && matchCat && matchDate;
+            });
+
+            document.getElementById('count-display').innerText = filtered.length;
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('empty-state').classList.add('hidden');
+            
+            container.innerHTML = filtered.map(doc => {
+                const date = new Date(doc.timestamp).toLocaleDateString('vi-VN');
+                const fileSize = (doc.size / 1024).toFixed(1) + ' KB';
+                const fileExt = doc.fileName.split('.').pop().toUpperCase();
+                
+                // Icon Logic
+                let iconClass = 'bg-slate-100 text-slate-500';
+                let iconName = 'file';
+                if(['DOC','DOCX'].includes(fileExt)) { iconClass = 'bg-blue-100 text-blue-600'; iconName = 'file-text'; }
+                if(['XLS','XLSX','CSV'].includes(fileExt)) { iconClass = 'bg-green-100 text-green-600'; iconName = 'sheet'; }
+                if(['PDF'].includes(fileExt)) { iconClass = 'bg-red-100 text-red-600'; iconName = 'file-pie-chart'; }
+                if(['ZIP','RAR'].includes(fileExt)) { iconClass = 'bg-yellow-100 text-yellow-600'; iconName = 'archive'; }
+                if(['JPG','PNG','JPEG'].includes(fileExt)) { iconClass = 'bg-purple-100 text-purple-600'; iconName = 'image'; }
+
+                // Category Badge Name
+                const catMap = {
+                    'quyet-dinh': 'Quyết định', 'ke-hoach': 'Kế hoạch', 'bao-cao': 'Báo cáo',
+                    'thong-bao': 'Thông báo', 'cong-van': 'Công văn', 'bieu-mau': 'Biểu mẫu', 'khac': 'Khác'
+                };
+                const catName = catMap[doc.category] || 'Văn bản';
+
+                return `
+                <div class="group bg-white dark:bg-slate-800 p-4 rounded-2xl border dark:border-white/5 shadow-sm hover:shadow-lg hover:-translate-y-1 transition duration-300 flex flex-col justify-between h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                         ${isAdmin ? `<button onclick="window.deleteDocConfirm('${doc.id}', '${doc.name}', '${doc.githubPath}', '${doc.sha}')" class="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition shadow-sm" title="Xóa"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 ${iconClass} rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
+                            <i data-lucide="${iconName}" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1 min-w-0 pt-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded">${catName}</span>
+                                ${doc.note ? `<span class="text-[9px] font-bold text-primary bg-primary/5 px-1.5 py-0.5 rounded truncate max-w-[80px]">${doc.note}</span>` : ''}
+                            </div>
+                            <h4 onclick="window.previewDoc('${doc.downloadUrl}', '${doc.fileName}', '${doc.type}')" class="text-sm font-bold leading-tight text-slate-800 dark:text-slate-200 line-clamp-2 cursor-pointer hover:text-primary transition" title="Bấm để xem trước">${doc.name}</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t dark:border-white/5 flex items-center justify-between">
+                        <div class="text-[10px] font-medium text-slate-400 flex flex-col">
+                            <span>${date}</span>
+                            <span>${fileSize}</span>
+                        </div>
+                        <a href="${doc.downloadUrl}" target="_blank" download class="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white dark:hover:bg-primary text-slate-600 dark:text-slate-300 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                            Tải về <i data-lucide="download" class="w-3 h-3"></i>
+                        </a>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        };
+
+        // Event Listeners for Filters
+        ['filter-search', 'filter-category', 'filter-date-start', 'filter-date-end'].forEach(id => {
+            document.getElementById(id).addEventListener('input', window.renderDocs);
+        });
+
+        // 2. Upload Logic
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+
+        // Drag & Drop Visuals
+        ['dragenter', 'dragover'].forEach(e => dropZone.addEventListener(e, (ev) => { ev.preventDefault(); dropZone.classList.add('border-primary', 'bg-blue-50', 'dark:bg-blue-900/10'); }));
+        ['dragleave', 'drop'].forEach(e => dropZone.addEventListener(e, (ev) => { ev.preventDefault(); dropZone.classList.remove('border-primary', 'bg-blue-50', 'dark:bg-blue-900/10'); }));
+        
+        dropZone.addEventListener('drop', (e) => {
+            fileInput.files = e.dataTransfer.files;
+            handleFiles();
+        });
+        fileInput.addEventListener('change', handleFiles);
+
+        function handleFiles() {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                document.getElementById('file-selected-name').innerText = file.name;
+                document.getElementById('file-selected-name').classList.remove('hidden');
+                if (!document.getElementById('doc-name').value) {
+                    document.getElementById('doc-name').value = file.name.replace(/\.[^/.]+$/, "");
+                }
+            }
+        }
+
+        // Helper: File to Base64
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+
+        document.getElementById('upload-form').onsubmit = async (e) => {
+            e.preventDefault();
+            if (fileInput.files.length === 0) { showToast("Vui lòng chọn file!", true); return; }
+            if (!ghConfig.token) { showToast("Admin chưa cấu hình GitHub!", true); return; }
+
+            const file = fileInput.files[0];
+            const name = document.getElementById('doc-name').value;
+            const category = document.getElementById('doc-category').value;
+            const note = document.getElementById('doc-note').value;
+
+            setLoading(true);
+            try {
+                // 1. Upload to GitHub via API
+                const content = await toBase64(file);
+                // Sanitize filename for URL
+                const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const path = `docs/${Date.now()}_${safeFileName}`;
+                
+                const response = await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: `Upload ${safeFileName}`, content: content, branch: 'main' })
+                });
+
+                if (!response.ok) throw new Error("GitHub Error: " + response.statusText);
+                const ghData = await response.json();
+
+                // 2. Save Metadata to Firebase
+                await addDoc(collection(db, "documents"), {
+                    name: name, category: category, note: note,
+                    fileName: file.name, size: file.size, type: file.type,
+                    downloadUrl: ghData.content.download_url,
+                    githubPath: path, sha: ghData.content.sha,
+                    timestamp: new Date().toISOString(),
+                    uploader: currentUser.email
+                });
+
+                showToast("Tải lên thành công!", false);
+                window.closeModal('modal-upload');
+                document.getElementById('upload-form').reset();
+                document.getElementById('file-selected-name').classList.add('hidden');
             } catch (err) {
                 console.error(err);
-                showToast('Lỗi đăng nhập.', 'error');
+                showToast("Lỗi: " + err.message, true);
             } finally {
-                showLoading(false);
+                setLoading(false);
             }
         };
 
-        window.logoutUser = () => {
-            currentUserData = null;
-            document.getElementById('loginFormUser').reset();
-            switchView('login');
-        };
-
-        window.changeUserPassword = async () => {
-            const { value: newPass } = await Swal.fire({
-                title: 'Đổi mật khẩu',
-                input: 'password',
-                inputLabel: 'Nhập mật khẩu mới',
-                inputPlaceholder: 'Nhập mật khẩu...',
-                showCancelButton: true,
-                customClass: { popup: 'glass-popup' }
-            });
-
-            if (newPass) {
-                try {
-                    await setDoc(doc(db, COLL_DATA, currentUserData.cccd), { password: newPass }, { merge: true });
-                    currentUserData.password = newPass;
-                    showToast('Đổi mật khẩu thành công!');
-                } catch (e) { showToast('Lỗi cập nhật', 'error'); }
+        // 3. Delete Logic
+        window.deleteDocConfirm = (id, name, path, sha) => {
+            if(confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn văn bản:\n"${name}"?`)) {
+                deleteDocument(id, path, sha);
             }
         };
 
-        // --- USER PROFILE LOGIC ---
-        function loadUserProfile(data) {
-            document.getElementById('userWelcomeName').innerText = data.name;
-            document.getElementById('inpName').value = data.name;
-            document.getElementById('inpBhxhDisplay').value = data.bhxh || "Chưa cập nhật";
-            document.getElementById('inpDob').value = data.dob || "";
-            document.getElementById('inpGender').value = data.gender || "Nam";
-            document.getElementById('inpCccd').value = data.cccd;
-            document.getElementById('inpAgri').value = data.agribank || "";
-            document.getElementById('inpVcb').value = data.vietcombank || "";
-
-            // Tasks
-            const taskDiv = document.getElementById('userTaskDisplay');
-            taskDiv.textContent = data.tasks || "Chưa có nhiệm vụ nào được giao.";
-
-            // Permission Check
-            updateUserEditUI();
-        }
-
-        // Listener for settings
-        onSnapshot(doc(db, COLL_SETTINGS, "general_config"), (docSn) => {
-            isEditAllowed = docSn.exists() ? docSn.data().allow_edit_info : false;
-            if(currentUserAdmin) toggleEditPermission.checked = isEditAllowed;
-            updateUserEditUI();
-        });
-
-        function updateUserEditUI() {
-            const btns = document.querySelectorAll('.edit-btn-group');
-            btns.forEach(b => b.style.display = isEditAllowed ? 'block' : 'none');
-            
-            // Lock fields if edit not allowed
-            const fields = ['inpDob', 'inpGender', 'inpAgri', 'inpVcb'];
-            fields.forEach(id => {
-                const el = document.getElementById(id);
-                // Agri/Vcb always editable if empty? Or strictly follow rule? 
-                // Follow rule strictly for Profile Info, Banks usually open. 
-                // Let's stick to global rule for consistency.
-                if(!isEditAllowed) el.disabled = true;
-                else el.disabled = false;
-            });
-            
-            // Name/CCCD/BHXH always disabled for User
-            document.getElementById('inpName').disabled = true;
-            document.getElementById('inpCccd').disabled = true;
-            document.getElementById('inpBhxhDisplay').disabled = true;
-        }
-
-        window.toggleEdit = (id) => {
-            if(!isEditAllowed) return;
-            const el = document.getElementById(id);
-            el.disabled = !el.disabled;
-            if(!el.disabled) el.focus();
-        };
-
-        document.getElementById('userUpdateForm').onsubmit = async (e) => {
-            e.preventDefault();
-            if(!currentUserData) return;
-
-            const newData = {
-                dob: document.getElementById('inpDob').value,
-                gender: document.getElementById('inpGender').value,
-                agribank: document.getElementById('inpAgri').value,
-                vietcombank: document.getElementById('inpVcb').value
-            };
-
+        async function deleteDocument(id, path, sha) {
+            setLoading(true);
             try {
-                // Log changes
-                const changes = [];
-                if(newData.dob !== currentUserData.dob) changes.push({field:'Ngày sinh', old: currentUserData.dob, new: newData.dob});
-                if(newData.agribank !== currentUserData.agribank) changes.push({field:'Agribank', old: currentUserData.agribank, new: newData.agribank});
-
-                await setDoc(doc(db, COLL_DATA, currentUserData.cccd), newData, { merge: true });
-                
-                if(changes.length > 0) {
-                    await addDoc(collection(db, COLL_LOGS), {
-                        cccd_ref: currentUserData.cccd,
-                        editor: `${currentUserData.name} (User)`,
-                        time: new Date().toISOString(),
-                        details: changes
-                    });
-                }
-
-                // Update local state
-                currentUserData = { ...currentUserData, ...newData };
-                showToast('Cập nhật thành công!');
-            } catch(e) {
-                console.error(e);
-                showToast('Lỗi khi lưu.', 'error');
+                // Delete from GitHub
+                await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: "Delete File", sha: sha, branch: 'main' })
+                });
+                // Delete from Firebase
+                await deleteDoc(doc(db, "documents", id));
+                showToast("Đã xóa văn bản!");
+            } catch (e) {
+                showToast("Lỗi xóa file (Có thể file đã mất trên GitHub)", true);
+                // Force delete from DB if Github fails (optional)
+                await deleteDoc(doc(db, "documents", id)); 
+            } finally {
+                setLoading(false);
             }
-        };
-
-        // --- ADMIN FEATURES ---
-
-        function initAdminListeners() {
-            // Permission Toggle
-            toggleEditPermission.addEventListener('change', async function() {
-                await setDoc(doc(db, COLL_SETTINGS, "general_config"), { allow_edit_info: this.checked }, { merge: true });
-                showToast('Đã lưu cài đặt');
-            });
-
-            // Realtime Data
-            onSnapshot(collection(db, COLL_DATA), (snapshot) => {
-                allUsers = [];
-                snapshot.forEach(d => allUsers.push(d.data()));
-                renderAdminTable();
-            });
         }
 
-        function renderAdminTable() {
-            const tbody = document.getElementById('adminTableBody');
-            const term = document.getElementById('adminSearch').value.toLowerCase();
-            tbody.innerHTML = '';
+        // 4. Preview Logic
+        window.previewDoc = (url, name, type) => {
+            const modal = document.getElementById('modal-preview');
+            const frame = document.getElementById('preview-frame');
+            const img = document.getElementById('preview-image');
+            const errorDiv = document.getElementById('preview-error');
             
-            const filtered = allUsers.filter(u => 
-                (u.name && u.name.toLowerCase().includes(term)) || 
-                (u.cccd && u.cccd.includes(term))
-            );
+            document.getElementById('preview-title').innerText = name;
+            document.getElementById('preview-download-direct').href = url;
             
-            document.getElementById('statTotal').innerText = allUsers.length;
-            document.getElementById('statDone').innerText = allUsers.filter(u=>u.agribank).length;
+            modal.classList.remove('hidden');
+            frame.classList.add('hidden');
+            img.classList.add('hidden');
+            errorDiv.classList.add('hidden');
 
-            filtered.forEach(u => {
-                const hasPass = u.password ? '<span class="badge bg-success">Đã có MK</span>' : '<span class="badge bg-danger">Chưa có MK</span>';
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>
-                        <div class="fw-bold">${u.name}</div>
-                        <small class="text-muted">${u.gender || '-'}</small>
-                    </td>
-                    <td>
-                        <div><i class="fas fa-id-card me-1 text-muted"></i>${u.cccd}</div>
-                        <small class="text-muted">BHXH: ${u.bhxh || '-'}</small>
-                    </td>
-                    <td>
-                        <div class="small">Agri: ${u.agribank || '-'}</div>
-                        <div class="small">VCB: ${u.vietcombank || '-'}</div>
-                    </td>
-                    <td>${hasPass}</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-info border-0" onclick="viewHistoryByCccd('${u.cccd}')"><i class="fas fa-history"></i></button>
-                        <button class="btn btn-sm btn-outline-primary border-0" onclick="editUser('${u.cccd}')"><i class="fas fa-pen"></i></button>
-                        <button class="btn btn-sm btn-outline-danger border-0" onclick="delUser('${u.cccd}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-        document.getElementById('adminSearch').onkeyup = renderAdminTable;
+            const ext = name.split('.').pop().toLowerCase();
 
-        // Bulk Password Setup
-        window.bulkSetupPasswords = async () => {
-            const { value: defaultPass } = await Swal.fire({
-                title: 'Cấp mật khẩu đồng loạt',
-                text: "Chỉ cấp cho những tài khoản CHƯA có mật khẩu.",
-                input: 'text',
-                inputValue: '123456',
-                showCancelButton: true,
-                confirmButtonText: 'Thực hiện',
-                customClass: { popup: 'glass-popup' }
-            });
-
-            if (defaultPass) {
-                showLoading(true);
-                const batch = writeBatch(db);
-                let count = 0;
-                
-                allUsers.forEach(u => {
-                    if (!u.password) {
-                        const ref = doc(db, COLL_DATA, u.cccd);
-                        batch.update(ref, { password: defaultPass });
-                        count++;
-                    }
-                });
-
-                if (count > 0) {
-                    await batch.commit();
-                    showToast(`Đã cấp mật khẩu cho ${count} tài khoản.`);
-                } else {
-                    showToast('Tất cả tài khoản đã có mật khẩu.', 'info');
-                }
-                showLoading(false);
+            if (['pdf'].includes(ext)) {
+                frame.src = url;
+                frame.classList.remove('hidden');
+            } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+                img.src = url;
+                img.classList.remove('hidden');
+            } else {
+                errorDiv.classList.remove('hidden');
             }
         };
 
-        // Modal Logic (Create/Edit)
-        window.openAdminModal = () => {
-            document.getElementById('adminForm').reset();
-            document.getElementById('editMode').value = 'add';
-            document.getElementById('admCccd').readOnly = false;
-            document.getElementById('admPass').placeholder = "Nhập mật khẩu (vd: 123456)";
-            new bootstrap.Modal(document.getElementById('adminModal')).show();
-        };
-
-        window.editUser = (cccd) => {
-            const u = allUsers.find(x => x.cccd == cccd);
-            document.getElementById('editMode').value = 'update';
-            document.getElementById('originalCccdAdmin').value = u.cccd;
-            
-            document.getElementById('admCccd').value = u.cccd;
-            document.getElementById('admCccd').readOnly = true; // Cannot change ID in update to avoid duplicates easily
-            document.getElementById('admName').value = u.name;
-            document.getElementById('admBhxh').value = u.bhxh || "";
-            document.getElementById('admDob').value = u.dob || "";
-            document.getElementById('admGender').value = u.gender || "Nam";
-            document.getElementById('admTask').value = u.tasks || "";
-            document.getElementById('admAgri').value = u.agribank || "";
-            document.getElementById('admVcb').value = u.vietcombank || "";
-            document.getElementById('admPass').value = u.password || "";
-            
-            new bootstrap.Modal(document.getElementById('adminModal')).show();
-        };
-
-        document.getElementById('adminForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const mode = document.getElementById('editMode').value;
-            const cccd = document.getElementById('admCccd').value.trim();
-            const pass = document.getElementById('admPass').value.trim();
-            
-            const data = {
-                cccd: cccd,
-                name: document.getElementById('admName').value,
-                bhxh: document.getElementById('admBhxh').value,
-                dob: document.getElementById('admDob').value,
-                gender: document.getElementById('admGender').value,
-                tasks: document.getElementById('admTask').value,
-                agribank: document.getElementById('admAgri').value,
-                vietcombank: document.getElementById('admVcb').value
-            };
-
-            if (pass) data.password = pass; // Only update pass if entered
-
-            try {
-                if (mode === 'add') {
-                    // Check exist
-                    const snap = await getDoc(doc(db, COLL_DATA, cccd));
-                    if (snap.exists()) throw new Error('CCCD này đã tồn tại!');
-                    if (!data.password) data.password = '123456'; // Default for new user if empty
-                    
-                    await setDoc(doc(db, COLL_DATA, cccd), data);
-                    showToast('Đã thêm nhân sự mới');
-                } else {
-                    await setDoc(doc(db, COLL_DATA, cccd), data, { merge: true });
-                    showToast('Cập nhật thành công');
-                }
-                bootstrap.Modal.getInstance(document.getElementById('adminModal')).hide();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        };
-
-        window.delUser = async(cccd) => {
-            if((await Swal.fire({title:'Xóa hồ sơ này?', text:'Hành động không thể hoàn tác!', icon:'warning', showCancelButton:true})).isConfirmed){
-                await deleteDoc(doc(db, COLL_DATA, cccd));
-                showToast('Đã xóa');
-            }
-        };
-
-        // History
-        window.viewHistoryByCccd = async (cccd) => {
-            const q = query(collection(db, COLL_LOGS), where("cccd_ref","==",cccd), orderBy("time","desc"));
-            const snap = await getDocs(q);
-            const div = document.getElementById('historyList');
-            div.innerHTML = snap.empty ? "<p class='text-center text-muted'>Chưa có lịch sử.</p>" : "";
-            
-            snap.forEach(d=>{
-                const l = d.data();
-                const det = l.details.map(x=>`<div><b>${x.field}:</b> ${x.old} <i class="fas fa-arrow-right mx-1"></i> <span class="text-success">${x.new}</span></div>`).join('');
-                div.innerHTML += `<div class='bg-white p-3 rounded shadow-sm border-start border-4 border-primary'><small class="text-muted">${new Date(l.time).toLocaleString()}</small><div class="fw-bold">${l.editor}</div><div class="mt-1 small bg-light p-2 rounded">${det}</div></div>`;
-            });
-            new bootstrap.Modal(document.getElementById('historyModal')).show();
-        };
-
-        // Excel Import/Export
-        window.handleImport = () => {
-            const f = document.getElementById('fileExcel').files[0];
-            if(!f) return;
-            const r = new FileReader();
-            r.onload = async(e) => {
-                const wb = XLSX.read(e.target.result, {type:'array'});
-                const d = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-                showLoading(true);
-                const batch = writeBatch(db);
-                let count = 0;
-                
-                d.forEach(row => {
-                    let cccd = String(row['CCCD']||row['cccd']);
-                    if(cccd && cccd !== 'undefined') {
-                        const ref = doc(db, COLL_DATA, cccd);
-                        // Convert Excel Date if needed
-                        let dob = row['Ngày sinh']||row['DOB']||""; 
-                        if(typeof dob === 'number') {
-                             const date_info = new Date((Math.floor(dob - 25569) * 86400) * 1000);
-                             dob = `${date_info.getDate()}/${date_info.getMonth()+1}/${date_info.getFullYear()}`;
-                        }
-
-                        batch.set(ref, {
-                            cccd, 
-                            name: row['Họ tên']||row['Name'],
-                            bhxh: row['Mã BHXH']||row['BHXH']||"",
-                            dob: dob,
-                            gender: row['Giới tính']||"Nam",
-                            // Don't overwrite password/tasks if exists, logic requires read first, 
-                            // but for bulk import "set with merge" is safer for simple overwrite.
-                            // To prevent password loss, we use {merge: true}
-                        }, {merge: true});
-                        count++;
-                    }
-                });
-                await batch.commit();
-                showLoading(false);
-                showToast(`Đã import ${count} dòng.`);
-                document.getElementById('fileExcel').value='';
-            };
-            r.readAsArrayBuffer(f);
-        };
-
-        window.exportExcel = () => {
-            const d = allUsers.map(u=>({
-                "Họ tên":u.name, "CCCD":u.cccd, "BHXH":u.bhxh, "Ngày sinh":u.dob, 
-                "Giới tính":u.gender, "Agribank":u.agribank, "Vietcombank":u.vietcombank,
-                "Có mật khẩu": u.password ? "Rồi" : "Chưa"
+        // 5. Export Utils
+        window.exportToExcel = () => {
+            if (documents.length === 0) return showToast("Không có dữ liệu!", true);
+            const data = documents.map((d, i) => ({
+                STT: i + 1, "Tên văn bản": d.name, "Loại": d.category,
+                "Ghi chú": d.note || "", "Ngày đăng": new Date(d.timestamp).toLocaleString('vi-VN'),
+                "Link tải": d.downloadUrl
             }));
+            const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(d), "NhanSu");
-            XLSX.writeFile(wb, "DanhSachNhanSu.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "DanhSach");
+            XLSX.writeFile(wb, `DS_VanBan_${Date.now()}.xlsx`);
+            showToast("Đã xuất Excel!");
         };
 
+        window.downloadZipAll = async () => {
+            if (documents.length === 0) return showToast("Không có file!", true);
+            setLoading(true);
+            const zip = new JSZip();
+            const folder = zip.folder("VanBan_Download");
+            
+            try {
+                const promises = documents.map(async (doc) => {
+                    try {
+                        const res = await fetch(doc.downloadUrl);
+                        const blob = await res.blob();
+                        folder.file(doc.fileName, blob);
+                    } catch (e) { folder.file(`${doc.name}_ERROR.txt`, "Lỗi tải file này"); }
+                });
+                await Promise.all(promises);
+                const content = await zip.generateAsync({type:"blob"});
+                saveAs(content, `Full_VanBan_${Date.now()}.zip`);
+                showToast("Đã tải trọn bộ!");
+            } catch (e) { showToast("Lỗi nén file", true); }
+            finally { setLoading(false); }
+        };
+
+        // 6. Config Save
+        window.saveGithubConfig = async () => {
+            if (!isAdmin) return;
+            const token = document.getElementById('gh-token').value.trim();
+            const owner = document.getElementById('gh-owner').value.trim();
+            const repo = document.getElementById('gh-repo').value.trim();
+            await setDoc(doc(db, "settings", "github_config"), { token, owner, repo });
+            ghConfig = { token, owner, repo };
+            showToast("Cấu hình đã lưu!");
+        };
+
+        // UI Helpers
+        window.openUploadModal = () => {
+            if(!ghConfig.token && isAdmin) { showToast("Vui lòng cấu hình GitHub trước!", true); window.toggleAdminSidebar(); return; }
+            if(!isAdmin) { showToast("Bạn không có quyền đăng bài!", true); return; }
+            document.getElementById('modal-upload').classList.remove('hidden');
+        };
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
+        window.toggleTheme = () => { document.documentElement.classList.toggle('dark'); localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'; };
+        
+        // Auth UI
+        function renderAuthUI() {
+            const div = document.getElementById('auth-section');
+            if (currentUser) {
+                div.innerHTML = `<img src="${currentUser.photoURL}" class="w-9 h-9 rounded-xl border-2 border-white shadow-sm cursor-pointer hover:opacity-80 transition" onclick="window.logout()" title="Đăng xuất: ${currentUser.displayName}">`;
+            } else {
+                div.innerHTML = `<button onclick="window.login()" class="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-xs uppercase shadow hover:scale-105 transition">Đăng nhập</button>`;
+            }
+        }
+        window.login = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth).then(()=>location.reload());
+
+        function showToast(msg, isError=false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = isError ? "Có lỗi xảy ra" : "Thành công";
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon-box').className = `w-8 h-8 rounded-full flex items-center justify-center ${isError ? 'bg-red-500' : 'bg-green-500'} text-white`;
+            document.getElementById('toast-icon').setAttribute('data-lucide', isError ? 'alert-circle' : 'check');
+            lucide.createIcons();
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(()=>t.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+        function setLoading(active) {
+            document.getElementById('global-loading').classList.toggle('opacity-0', !active);
+            document.getElementById('global-loading').classList.toggle('pointer-events-none', !active);
+        }
+
+        if(localStorage.theme === 'dark') document.documentElement.classList.add('dark');
+        lucide.createIcons();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
