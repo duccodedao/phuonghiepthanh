@@ -46,7 +46,7 @@
         
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* Animation for Like Button */
+        /* Like Animation */
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
         .like-active i { animation: pop 0.3s ease-in-out; fill: currentColor; }
     </style>
@@ -63,7 +63,6 @@
     <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-white/5 shadow-sm">
         <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href = window.location.pathname">
-                <!-- Logo Y tế -->
                 <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-red-500/30">
                     <i data-lucide="cross" class="w-6 h-6 fill-current"></i>
                 </div>
@@ -88,7 +87,6 @@
 
     <!-- Main Content -->
     <main class="flex-1 max-w-6xl mx-auto px-6 py-10 w-full">
-        
         <!-- Hero Section -->
         <div class="mb-12 text-center max-w-3xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-white/5">
             <h2 class="text-2xl md:text-3xl font-black mb-3 text-slate-800 dark:text-white">Vì sức khỏe cộng đồng</h2>
@@ -101,15 +99,11 @@
         </button>
 
         <!-- Blog Grid -->
-        <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Posts rendered here -->
-        </div>
-
+        <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
             <i data-lucide="activity" class="w-16 h-16 mb-4 opacity-50 text-primary"></i>
             <p class="font-medium">Chưa có bản tin nào được đăng.</p>
         </div>
-
     </main>
 
     <!-- Reading Modal (Full Screen) -->
@@ -144,20 +138,15 @@
                     <img id="read-cover" src="" class="w-full h-full object-cover">
                 </div>
 
-                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg text-justify mb-10">
-                    <!-- Content HTML -->
-                </div>
+                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg text-justify mb-10"></div>
 
                 <!-- Interaction Bar -->
                 <div class="flex items-center justify-between py-4 border-t border-b dark:border-white/10 my-8">
                     <div class="flex gap-4">
-                        <!-- Like Button -->
                         <button id="btn-like" class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition group text-slate-600 dark:text-slate-300">
                             <i data-lucide="heart" class="w-5 h-5 group-active:scale-125 transition"></i>
                             <span class="font-bold text-sm"><span id="count-like">0</span> Thích</span>
                         </button>
-                        
-                        <!-- Share Button -->
                         <button id="btn-share" class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition text-slate-600 dark:text-slate-300">
                             <i data-lucide="share-2" class="w-5 h-5"></i>
                             <span class="font-bold text-sm"><span id="count-share">0</span> Chia sẻ</span>
@@ -166,7 +155,7 @@
                 </div>
             </article>
 
-            <!-- Admin Actions inside Article -->
+            <!-- Admin Actions -->
             <div id="read-admin-actions" class="flex justify-end gap-3 hidden">
                 <button id="btn-edit-post" class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-bold hover:bg-indigo-100 transition"><i data-lucide="edit"></i> Sửa bài</button>
                 <button id="btn-delete-post" class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition"><i data-lucide="trash"></i> Xóa bài</button>
@@ -180,13 +169,10 @@
             <h3 class="font-black uppercase text-sm tracking-widest text-primary">Hệ thống Quản trị</h3>
             <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-
         <div class="p-6 space-y-6 overflow-y-auto">
             <button onclick="window.openPostModal()" class="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-sky-600 transition">
                 <i data-lucide="pen-tool" class="w-4 h-4"></i> Soạn tin mới
             </button>
-
-            <!-- Github Settings -->
             <div class="space-y-4 pt-6 border-t dark:border-white/5">
                 <div class="flex items-center gap-2 text-slate-500 mb-2">
                     <i data-lucide="github" class="w-4 h-4"></i>
@@ -209,7 +195,6 @@
                 <h3 class="font-bold uppercase text-sm tracking-widest text-primary" id="editor-title-label">Soạn thảo tin bài</h3>
                 <button onclick="window.closePostModal()" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
             <form id="post-form" class="flex-1 overflow-y-auto p-6 space-y-6">
                 <input type="hidden" id="post-id">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -245,7 +230,6 @@
                     <textarea id="post-content" required placeholder="Soạn nội dung tại đây..." class="w-full h-80 p-5 bg-slate-50 dark:bg-white/5 rounded-xl text-base outline-none focus:ring-2 ring-primary/50 resize-y font-serif leading-relaxed border border-transparent dark:border-white/5"></textarea>
                 </div>
             </form>
-
             <div class="p-4 border-t dark:border-white/5 bg-slate-50 dark:bg-slate-800 shrink-0 flex justify-end gap-3">
                 <button onclick="window.closePostModal()" class="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-xl font-bold uppercase text-xs hover:bg-slate-300 transition">Hủy</button>
                 <button onclick="document.getElementById('post-form').requestSubmit()" class="px-6 py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-sky-600 transition flex items-center gap-2">
@@ -268,7 +252,7 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc, increment, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- FIREBASE CONFIG (Thay bằng API Key của bạn) ---
+        // --- FIREBASE CONFIG (Thay bằng của bạn) ---
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
             authDomain: "profile-d1214.firebaseapp.com",
@@ -291,14 +275,13 @@
         let currentCoverPath = null;
         let currentPostId = null;
 
-        // Generate Guest ID if not logged in
+        // Guest ID for Liking without Login
         let guestId = localStorage.getItem('guestId');
         if (!guestId) {
             guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('guestId', guestId);
         }
 
-        // --- DATE FORMATTER ---
         function formatDateTime(isoString) {
             if (!isoString) return "";
             const d = new Date(isoString);
@@ -310,11 +293,9 @@
             return `${day}/${month}/${year} ${hour}:${minute}`;
         }
 
-        // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             renderAuthUI();
-            
             if (user) {
                 const adminRef = doc(db, "settings", "admins");
                 const snap = await getDoc(adminRef);
@@ -322,7 +303,6 @@
                     const data = snap.data();
                     isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
                 }
-                
                 if (isAdmin) {
                     const ghRef = doc(db, "settings", "github_config");
                     const ghSnap = await getDoc(ghRef);
@@ -364,12 +344,9 @@
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         };
 
-        // --- DATA LOGIC ---
         onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snap) => {
             posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             renderPosts();
-            
-            // Re-render modal if open to update real-time counts
             if(currentPostId && !document.getElementById('modal-read').classList.contains('hidden')) {
                 const updatedPost = posts.find(p => p.id === currentPostId);
                 if(updatedPost) updateModalStats(updatedPost);
@@ -383,7 +360,6 @@
                 document.getElementById('empty-state').classList.remove('hidden');
                 return;
             }
-
             document.getElementById('empty-state').classList.add('hidden');
             grid.innerHTML = posts.map(post => {
                 const dateStr = formatDateTime(post.timestamp);
@@ -399,20 +375,12 @@
                 return `
                 <article onclick="window.readPost('${post.id}')" class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer border border-slate-100 dark:border-white/5 flex flex-col h-full">
                     <div class="aspect-[16/9] bg-slate-100 dark:bg-slate-700 overflow-hidden relative">
-                        ${post.coverUrl 
-                            ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`
-                            : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`
-                        }
-                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                            ${category}
-                        </div>
+                        ${post.coverUrl ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">` : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`}
+                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">${category}</div>
                     </div>
                     <div class="p-5 flex flex-col flex-1">
                         <div class="flex justify-between items-center mb-3">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
-                                <span class="text-xs text-slate-400 font-medium">${dateStr}</span>
-                            </div>
+                            <div class="flex items-center gap-2"><i data-lucide="clock" class="w-3 h-3 text-slate-400"></i><span class="text-xs text-slate-400 font-medium">${dateStr}</span></div>
                             <div class="flex items-center gap-2 text-xs text-slate-400">
                                 <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> ${post.views || 0}</span>
                                 <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> ${post.likedBy ? post.likedBy.length : 0}</span>
@@ -420,26 +388,19 @@
                         </div>
                         <h3 class="text-lg font-bold mb-3 text-slate-800 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition">${post.title}</h3>
                         <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 flex-1">${excerpt}</p>
-                        <div class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto pt-4 border-t dark:border-white/5">
-                            Xem chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </div>
+                        <div class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto pt-4 border-t dark:border-white/5">Xem chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
                     </div>
-                </article>
-                `;
+                </article>`;
             }).join('');
             lucide.createIcons();
         }
 
-        // --- READ MODE & INTERACTIONS ---
         window.readPost = async (id) => {
             const post = posts.find(p => p.id === id);
             if(!post) return;
             currentPostId = id;
 
-            // Increment View Count (One per session check could be here, but simpler to just increment)
-            const postRef = doc(db, "posts", id);
-            await updateDoc(postRef, { views: increment(1) });
-
+            // 1. Render UI First
             document.getElementById('read-title').innerText = post.title;
             document.getElementById('read-date').innerText = formatDateTime(post.timestamp);
             document.getElementById('read-category').innerText = post.category || 'Tin tức';
@@ -447,13 +408,11 @@
             document.getElementById('read-cover').src = post.coverUrl;
             document.getElementById('read-content').innerHTML = post.content.replace(/\n/g, '<br>');
             
-            updateModalStats(post); // Set initial like/share/view stats UI
+            updateModalStats(post);
 
-            // Bind Action Buttons
             document.getElementById('btn-like').onclick = () => window.toggleLike(id);
             document.getElementById('btn-share').onclick = () => window.sharePost(id, post.title);
 
-            // Admin Actions
             const actionDiv = document.getElementById('read-admin-actions');
             if(isAdmin) {
                 actionDiv.classList.remove('hidden');
@@ -465,17 +424,22 @@
 
             document.getElementById('modal-read').classList.remove('hidden');
             document.body.style.overflow = 'hidden'; 
+
+            // 2. Increment View (After UI)
+            try {
+                const postRef = doc(db, "posts", id);
+                await updateDoc(postRef, { views: increment(1) });
+            } catch (err) {
+                console.warn("View increment failed (permission/network):", err);
+            }
         };
 
         function updateModalStats(post) {
-            document.getElementById('read-views').innerText = (post.views || 0) + 1; // +1 anticipating logic
-            
-            // Like UI
+            document.getElementById('read-views').innerText = (post.views || 0);
             const likes = post.likedBy ? post.likedBy.length : 0;
             document.getElementById('count-like').innerText = likes;
             const btnLike = document.getElementById('btn-like');
             const myId = currentUser ? currentUser.uid : guestId;
-            
             if(post.likedBy && post.likedBy.includes(myId)) {
                 btnLike.classList.add('text-red-500', 'like-active');
                 btnLike.querySelector('i').classList.add('fill-current');
@@ -483,68 +447,49 @@
                 btnLike.classList.remove('text-red-500', 'like-active');
                 btnLike.querySelector('i').classList.remove('fill-current');
             }
-
-            // Share UI
             document.getElementById('count-share').innerText = post.shares || 0;
         }
 
         window.toggleLike = async (id) => {
             const post = posts.find(p => p.id === id);
             if(!post) return;
-            
             const myId = currentUser ? currentUser.uid : guestId;
             const postRef = doc(db, "posts", id);
-
-            if (post.likedBy && post.likedBy.includes(myId)) {
-                // Unlike
-                await updateDoc(postRef, { likedBy: arrayRemove(myId) });
-            } else {
-                // Like
-                await updateDoc(postRef, { likedBy: arrayUnion(myId) });
-            }
+            try {
+                if (post.likedBy && post.likedBy.includes(myId)) {
+                    await updateDoc(postRef, { likedBy: arrayRemove(myId) });
+                } else {
+                    await updateDoc(postRef, { likedBy: arrayUnion(myId) });
+                }
+            } catch (err) { console.warn("Like failed:", err); }
         };
 
         window.sharePost = async (id, title) => {
             const shareUrl = `${window.location.origin}${window.location.pathname}?post=${id}`;
-            
             try {
-                // Native Share if supported
                 if (navigator.share) {
-                    await navigator.share({
-                        title: title,
-                        text: 'Xem bài viết này trên Cổng thông tin TYT Hiệp Thành',
-                        url: shareUrl
-                    });
+                    await navigator.share({ title: title, text: 'Xem tin tức TYT Hiệp Thành', url: shareUrl });
                 } else {
-                    // Fallback to Copy
                     await navigator.clipboard.writeText(shareUrl);
                     showToast("Đã sao chép liên kết!");
                 }
-                
-                // Increment Share Count
                 const postRef = doc(db, "posts", id);
                 await updateDoc(postRef, { shares: increment(1) });
-                
-            } catch (err) {
-                console.log("Share cancelled or failed");
-            }
+            } catch (err) { console.log("Share cancelled"); }
         };
 
         window.closeReadModal = () => {
             document.getElementById('modal-read').classList.add('hidden');
             document.body.style.overflow = 'auto';
-            // Clean URL query param without refresh
             const url = new URL(window.location);
             url.searchParams.delete('post');
             window.history.pushState({}, '', url);
         };
 
-        // Check URL for shared post on load
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const postId = urlParams.get('post');
             if(postId) {
-                // Wait small delay for posts to load then open
                 const checkInterval = setInterval(() => {
                     if(posts.length > 0) {
                         window.readPost(postId);
@@ -554,7 +499,6 @@
             }
         };
 
-        // --- GITHUB UPLOAD & EDITOR ---
         const toBase64 = file => new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -610,7 +554,6 @@
             const fileInput = document.getElementById('cover-input');
             
             setLoading(true);
-
             try {
                 let coverUrl = document.getElementById('cover-preview').src;
                 let coverPath = currentCoverPath;
@@ -620,17 +563,14 @@
                     const file = fileInput.files[0];
                     const base64 = await toBase64(file);
                     const fileName = `tyt_posts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-                    
                     const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${fileName}`;
                     const res = await fetch(url, {
                         method: 'PUT',
                         headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: "Upload banner tyt", content: base64, branch: 'main' })
                     });
-                    
                     if(!res.ok) throw new Error("Lỗi upload ảnh GitHub");
                     const data = await res.json();
-                    
                     coverUrl = data.content.download_url;
                     coverPath = fileName;
                     coverSha = data.content.sha;
@@ -654,9 +594,7 @@
                     await addDoc(collection(db, "posts"), postData);
                     showToast("Đăng tin thành công!");
                 }
-
                 window.closePostModal();
-
             } catch (err) {
                 console.error(err);
                 showToast("Lỗi: " + err.message, true);
@@ -673,7 +611,6 @@
             document.getElementById('post-title').value = post.title;
             document.getElementById('post-content').value = post.content;
             document.getElementById('post-category').value = post.category || 'Thông báo';
-            
             if(post.coverUrl) {
                 const img = document.getElementById('cover-preview');
                 img.src = post.coverUrl;
