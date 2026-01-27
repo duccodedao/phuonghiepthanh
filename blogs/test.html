@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trạm Y tế Phường Hiệp Thành - Tin tức & Hoạt động</title>
+    <title>Trạm Y tế Phường Hiệp Thành - Cổng thông tin</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <!-- Quill Editor CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
@@ -33,6 +32,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f9ff; transition: background 0.3s; } 
         .dark body { background-color: #0f172a; color: #e2e8f0; }
         
+        /* Typography Content */
         .prose { max-width: 65ch; line-height: 1.8; font-family: 'Merriweather', serif; }
         .prose p { margin-bottom: 1.5em; font-size: 1.1rem; color: #334155; }
         .dark .prose p { color: #cbd5e1; }
@@ -40,63 +40,42 @@
         .dark .prose h2 { color: #f1f5f9; }
         .prose img { border-radius: 0.75rem; margin: 2rem 0; width: 100%; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; }
-        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.5em; }
         .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1em; font-style: italic; color: #64748b; }
         
+        /* Admin Sidebar Animation */
         .admin-sidebar { width: 22rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
         .admin-sidebar.open { transform: translateX(0); }
         
-        .loader { width: 24px; height: 24px; border: 3px solid #e2e8f0; border-bottom-color: #0ea5e9; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        /* Custom Loader */
+        .loader { width: 48px; height: 48px; border: 4px solid #e2e8f0; border-bottom-color: #0ea5e9; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* Animation cho Like */
-        @keyframes heart-beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
+        /* Animation Like Heart */
+        @keyframes heart-beat { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
         .animate-heart { animation: heart-beat 0.3s ease-in-out; }
 
-        /* CUSTOM QUILL EDITOR STYLES FOR TAILWIND & DARK MODE */
-        .ql-toolbar {
-            border-top-left-radius: 0.75rem;
-            border-top-right-radius: 0.75rem;
-            background-color: #f8fafc;
-            border-color: #e2e8f0 !important;
-        }
-        .ql-container {
-            border-bottom-left-radius: 0.75rem;
-            border-bottom-right-radius: 0.75rem;
-            font-family: 'Merriweather', serif !important;
-            font-size: 1rem !important;
-            border-color: #e2e8f0 !important;
-            background-color: white;
-        }
+        /* Quill Editor Customization */
+        .ql-toolbar { border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; background-color: #f8fafc; border-color: #e2e8f0 !important; }
+        .ql-container { border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; font-family: 'Merriweather', serif !important; font-size: 1rem !important; border-color: #e2e8f0 !important; background-color: white; }
         
-        /* Dark mode overrides for Quill */
-        .dark .ql-toolbar {
-            background-color: #1e293b;
-            border-color: rgba(255,255,255,0.1) !important;
-        }
+        /* Dark mode for Quill */
+        .dark .ql-toolbar { background-color: #1e293b; border-color: rgba(255,255,255,0.1) !important; }
         .dark .ql-toolbar .ql-stroke { stroke: #cbd5e1; }
         .dark .ql-toolbar .ql-fill { fill: #cbd5e1; }
         .dark .ql-toolbar .ql-picker { color: #cbd5e1; }
-        
-        .dark .ql-container {
-            background-color: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.1) !important;
-            color: #e2e8f0;
-        }
+        .dark .ql-container { background-color: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1) !important; color: #e2e8f0; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
 
-    <!-- Loading Overlay -->
-    <div id="global-loading" class="fixed inset-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm z-[900] flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
-        <span class="loader mb-4"></span>
-        <span id="loading-text" class="text-sm font-bold text-slate-600 dark:text-slate-300">Đang tải dữ liệu...</span>
+    <!-- GLOBAL LOADING OVERLAY -->
+    <div id="global-loading" class="fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm z-[900] flex flex-col items-center justify-center transition-opacity duration-300">
+        <div class="relative mb-4">
+            <span class="loader"></span>
+        </div>
+        <span id="loading-text" class="text-sm font-bold text-slate-600 dark:text-slate-300 animate-pulse">Đang tải dữ liệu...</span>
     </div>
 
     <!-- Header -->
@@ -107,7 +86,7 @@
                     <i data-lucide="cross" class="w-6 h-6 fill-current"></i>
                 </div>
                 <div>
-                    <h1 class="text-sm font-black tracking-widest uppercase text-slate-400 leading-none">Cổng Thông Tin</h1>
+                    <h1 class="text-xs font-black tracking-widest uppercase text-slate-400 leading-none">Cổng Thông Tin</h1>
                     <h2 class="text-lg font-black tracking-tight text-primary uppercase">TYT PHƯỜNG HIỆP THÀNH</h2>
                 </div>
             </div>
@@ -127,28 +106,26 @@
 
     <!-- Main Content -->
     <main class="flex-1 max-w-6xl mx-auto px-6 py-10 w-full">
-        
         <!-- Hero Section -->
         <div class="mb-12 text-center max-w-3xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-white/5">
             <h2 class="text-2xl md:text-3xl font-black mb-3 text-slate-800 dark:text-white">Vì sức khỏe cộng đồng</h2>
             <p class="text-slate-500 dark:text-slate-400">Cập nhật tin tức tiêm chủng, phòng chống dịch bệnh và các hoạt động y tế tại Phường Hiệp Thành.</p>
         </div>
 
-        <!-- Create Post Button -->
-        <button onclick="window.openPostModal()" id="fab-create" class="hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-sky-600 transition z-40">
-            <i data-lucide="plus" class="w-6 h-6"></i>
+        <!-- Create Post Button (Floating) -->
+        <button onclick="window.openPostModal()" id="fab-create" class="hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-sky-600 transition z-40 group">
+            <i data-lucide="plus" class="w-6 h-6 group-hover:rotate-90 transition"></i>
         </button>
 
         <!-- Blog Grid -->
         <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Posts rendered here -->
+            <!-- Javascript Render Here -->
         </div>
 
         <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
             <i data-lucide="activity" class="w-16 h-16 mb-4 opacity-50 text-primary"></i>
             <p class="font-medium">Chưa có bản tin nào được đăng.</p>
         </div>
-
     </main>
 
     <!-- Reading Modal (Full Screen) -->
@@ -174,11 +151,9 @@
                                 <span id="read-author"></span>
                             </div>
                         </div>
-                        
                         <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
                             <i data-lucide="eye" class="w-4 h-4 text-primary"></i>
                             <span id="read-views" class="font-bold text-slate-700 dark:text-slate-300">0</span>
-                            <span class="text-xs">lượt xem</span>
                         </div>
                     </div>
                 </div>
@@ -187,19 +162,16 @@
                     <img id="read-cover" src="" class="w-full h-full object-cover">
                 </div>
 
-                <!-- Content Area -->
-                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg">
-                    <!-- Content HTML will be injected here -->
-                </div>
+                <!-- Rich Content -->
+                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg"></div>
 
                 <div class="mt-10 py-6 border-t border-b dark:border-white/10 flex items-center justify-between">
                     <div class="flex gap-4">
-                        <button onclick="window.handleLike()" id="btn-like" class="group flex items-center gap-2 px-5 py-3 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all border border-slate-200 dark:border-white/5">
+                        <button onclick="window.handleLike()" class="group flex items-center gap-2 px-5 py-3 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all border border-slate-200 dark:border-white/5">
                             <i data-lucide="heart" class="w-5 h-5 text-slate-400 group-hover:text-red-500 transition-colors" id="icon-like"></i>
                             <span class="font-bold text-slate-600 dark:text-slate-300 group-hover:text-red-500 transition-colors">Thích</span>
                             <span id="count-like" class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs px-2 py-0.5 rounded-md font-bold ml-1">0</span>
                         </button>
-                        
                         <button onclick="window.handleShare()" class="group flex items-center gap-2 px-5 py-3 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all border border-slate-200 dark:border-white/5">
                             <i data-lucide="share-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                             <span class="font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-500 transition-colors">Chia sẻ</span>
@@ -207,10 +179,9 @@
                         </button>
                     </div>
                 </div>
-
             </article>
 
-            <!-- Admin Actions inside Article -->
+            <!-- Admin Actions in Read Modal -->
             <div id="read-admin-actions" class="mt-6 flex justify-end gap-3 hidden">
                 <button id="btn-edit-post" class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-bold hover:bg-indigo-100 transition"><i data-lucide="edit"></i> Sửa bài</button>
                 <button id="btn-delete-post" class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition"><i data-lucide="trash"></i> Xóa bài</button>
@@ -218,7 +189,7 @@
         </div>
     </div>
 
-    <!-- Admin Sidebar (Settings) -->
+    <!-- Admin Sidebar -->
     <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 bg-white dark:bg-slate-900 border-l dark:border-white/10 shadow-2xl z-[200] flex flex-col">
         <div class="p-6 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
             <h3 class="font-black uppercase text-sm tracking-widest text-primary">Hệ thống Quản trị</h3>
@@ -226,8 +197,12 @@
         </div>
 
         <div class="p-6 space-y-6 overflow-y-auto">
-            <button onclick="window.openPostModal()" class="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-sky-600 transition">
+            <button onclick="window.openPostModal(); window.toggleAdminSidebar()" class="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-sky-600 transition">
                 <i data-lucide="pen-tool" class="w-4 h-4"></i> Soạn tin mới
+            </button>
+            
+            <button onclick="window.openAdminManager()" class="w-full py-4 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white rounded-xl font-bold uppercase text-xs shadow-sm flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-white/10 transition">
+                <i data-lucide="list" class="w-4 h-4"></i> Danh sách bài viết
             </button>
 
             <!-- Github Settings -->
@@ -237,25 +212,16 @@
                     <h4 class="text-xs font-black uppercase tracking-widest">Cấu hình Lưu trữ Ảnh</h4>
                 </div>
                 <div class="space-y-3">
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Token (Repo Scope)</label>
-                        <input type="password" id="gh-token" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Tên tài khoản (Owner)</label>
-                        <input type="text" id="gh-owner" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Tên Repository</label>
-                        <input type="text" id="gh-repo" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
+                    <input type="password" id="gh-token" placeholder="Token" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    <input type="text" id="gh-owner" placeholder="Owner" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    <input type="text" id="gh-repo" placeholder="Repository" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                 </div>
                 <button onclick="window.saveGithubConfig()" class="w-full py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white rounded-lg text-xs font-bold uppercase hover:bg-slate-300 transition">Lưu cấu hình</button>
             </div>
         </div>
     </div>
 
-    <!-- Post Editor Modal (Create/Edit) -->
+    <!-- Modal Post Editor -->
     <div id="modal-post" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col h-[90vh]">
             <div class="p-4 border-b dark:border-white/5 flex justify-between items-center shrink-0 bg-slate-50 dark:bg-slate-800">
@@ -266,7 +232,6 @@
             <form id="post-form" class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
                 <input type="hidden" id="post-id">
                 
-                <!-- Title & Category -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 shrink-0">
                     <div class="md:col-span-2 space-y-1">
                         <label class="text-[10px] font-bold uppercase text-slate-400">Tiêu đề bài viết</label>
@@ -285,7 +250,6 @@
                     </div>
                 </div>
 
-                <!-- Cover Image Upload -->
                 <div class="space-y-2 shrink-0">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Ảnh đại diện (Banner)</label>
                     <div id="drop-zone" class="relative group h-32 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition overflow-hidden">
@@ -300,10 +264,8 @@
                     </div>
                 </div>
 
-                <!-- Rich Text Editor Container -->
                 <div class="space-y-2 flex-1 flex flex-col min-h-[300px]">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Nội dung chi tiết</label>
-                    <!-- Quill Container -->
                     <div id="quill-editor" class="flex-1 rounded-xl overflow-hidden"></div>
                 </div>
             </form>
@@ -317,7 +279,42 @@
         </div>
     </div>
 
-    <!-- Toast -->
+    <!-- Modal Admin Manager List -->
+    <div id="modal-admin-list" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-6xl shadow-2xl overflow-hidden flex flex-col h-[85vh]">
+            <div class="p-4 border-b dark:border-white/5 flex justify-between items-center shrink-0 bg-slate-50 dark:bg-slate-800">
+                <div class="flex items-center gap-3">
+                    <h3 class="font-bold uppercase text-sm tracking-widest text-primary">Quản lý bài viết</h3>
+                    <span id="admin-count" class="bg-slate-200 dark:bg-slate-700 text-xs font-bold px-2 py-0.5 rounded text-slate-600 dark:text-slate-300">0</span>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="admin-search" oninput="window.renderAdminManager()" placeholder="Tìm theo tiêu đề..." class="px-3 py-1.5 text-sm rounded-lg border dark:border-white/10 bg-white dark:bg-slate-900 focus:outline-none focus:border-primary">
+                    <button onclick="window.closeAdminManager()" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto bg-white dark:bg-slate-900">
+                <table class="w-full text-left border-collapse">
+                    <thead class="sticky top-0 bg-slate-100 dark:bg-slate-800 text-xs font-bold uppercase text-slate-500 z-10 shadow-sm">
+                        <tr>
+                            <th class="p-4 w-16">Ảnh</th>
+                            <th class="p-4">Tiêu đề & Thông tin</th>
+                            <th class="p-4 w-32 text-center">Thống kê</th>
+                            <th class="p-4 w-32 text-center">Trạng thái</th>
+                            <th class="p-4 w-40 text-right">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-list-body" class="divide-y divide-slate-100 dark:divide-white/5"></tbody>
+                </table>
+                <div id="admin-empty" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
+                    <i data-lucide="inbox" class="w-12 h-12 mb-2 opacity-50"></i>
+                    <p class="text-sm">Không tìm thấy bài viết nào.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 right-5 z-[500] translate-y-20 opacity-0 transition-all duration-300">
         <div class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm">
             <i id="toast-icon" data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
@@ -325,7 +322,7 @@
         </div>
     </div>
 
-    <!-- Quill JS -->
+    <!-- Scripts -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <script type="module">
@@ -354,124 +351,144 @@
         let currentUploadSHA = null; 
         let currentCoverPath = null;
         let currentViewingPostId = null;
-        
-        // --- INITIALIZE QUILL EDITOR ---
+        let isFirstLoad = true;
+
+        // Initialize Quill
         let quill;
         document.addEventListener('DOMContentLoaded', () => {
             quill = new Quill('#quill-editor', {
                 theme: 'snow',
-                placeholder: 'Soạn nội dung bài viết tại đây...',
+                placeholder: 'Soạn nội dung bài viết...',
                 modules: {
                     toolbar: [
-                        [{ 'header': [1, 2, 3, false] }], // Headers
-                        ['bold', 'italic', 'underline', 'strike'], // Toggle styles
-                        [{ 'color': [] }, { 'background': [] }], // Colors
-                        [{ 'align': [] }], // Alignment
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // Lists
-                        ['link', 'image', 'clean'] // Links, Images
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link', 'image', 'clean']
                     ]
                 }
             });
+            lucide.createIcons();
         });
 
-        // --- DATE FORMATTER ---
+        // --- UTILS ---
         function formatDateTime(isoString) {
             if (!isoString) return "";
             const d = new Date(isoString);
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            const hour = String(d.getHours()).padStart(2, '0');
-            const minute = String(d.getMinutes()).padStart(2, '0');
-            return `${day}/${month}/${year} ${hour}:${minute}`;
+            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        }
+
+        function setLoading(active, text = "Đang xử lý...") {
+            const l = document.getElementById('global-loading');
+            const t = document.getElementById('loading-text');
+            if (active) {
+                t.innerText = text;
+                l.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                l.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            const icon = document.getElementById('toast-icon');
+            icon.setAttribute('data-lucide', isError ? 'alert-triangle' : 'check-circle');
+            icon.className = isError ? 'w-5 h-5 text-red-500' : 'w-5 h-5 text-green-500';
+            lucide.createIcons();
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
 
         // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
-            renderAuthUI();
+            const authDiv = document.getElementById('auth-section');
             
             if (user) {
+                authDiv.innerHTML = `
+                    <div class="flex items-center gap-2 cursor-pointer bg-white dark:bg-slate-800 py-1 px-2 rounded-lg border dark:border-white/10" onclick="window.logout()">
+                        <img src="${user.photoURL}" class="w-6 h-6 rounded-full">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300 hidden md:block">${user.displayName}</span>
+                        <i data-lucide="log-out" class="w-4 h-4 text-red-500"></i>
+                    </div>`;
+                
                 const adminRef = doc(db, "settings", "admins");
                 const snap = await getDoc(adminRef);
                 if (snap.exists()) {
                     const data = snap.data();
                     isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
                 }
-                
+
                 if (isAdmin) {
                     const ghRef = doc(db, "settings", "github_config");
                     const ghSnap = await getDoc(ghRef);
                     if (ghSnap.exists()) ghConfig = ghSnap.data();
-                    
                     document.getElementById('gh-token').value = ghConfig.token || '';
                     document.getElementById('gh-owner').value = ghConfig.owner || '';
                     document.getElementById('gh-repo').value = ghConfig.repo || '';
-                    
                     document.getElementById('admin-btn').classList.remove('hidden');
                     document.getElementById('fab-create').classList.remove('hidden');
                 }
             } else {
                 isAdmin = false;
+                authDiv.innerHTML = `<button onclick="window.login()" class="px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs uppercase shadow hover:bg-sky-600 transition">Đăng nhập</button>`;
                 document.getElementById('admin-btn').classList.add('hidden');
                 document.getElementById('fab-create').classList.add('hidden');
             }
-            renderPosts();
+            lucide.createIcons();
         });
 
-        // --- UI UTILS ---
-        function renderAuthUI() {
-            const container = document.getElementById('auth-section');
-            if (currentUser) {
-                container.innerHTML = `
-                    <div class="flex items-center gap-2 cursor-pointer bg-white dark:bg-slate-800 py-1 px-2 rounded-lg border dark:border-white/10" onclick="window.logout()">
-                        <img src="${currentUser.photoURL}" class="w-6 h-6 rounded-full">
-                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300 hidden md:block">${currentUser.displayName}</span>
-                        <i data-lucide="log-out" class="w-4 h-4 text-red-500"></i>
-                    </div>`;
-            } else {
-                container.innerHTML = `<button onclick="window.login()" class="px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs uppercase shadow hover:bg-sky-600 transition">Đăng nhập</button>`;
+        window.login = async () => {
+            try {
+                setLoading(true, "Đang kết nối Google...");
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error(error);
+                showToast("Đăng nhập thất bại", true);
+                setLoading(false);
             }
-            lucide.createIcons();
-        }
-
-        window.login = () => signInWithPopup(auth, provider);
-        window.logout = () => signOut(auth).then(() => location.reload());
-        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
-        window.toggleTheme = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         };
 
-        // --- DATA LOGIC ---
+        window.logout = async () => {
+            try {
+                setLoading(true, "Đang đăng xuất...");
+                await signOut(auth);
+                location.reload();
+            } catch (error) { setLoading(false); }
+        };
+
+        // --- DATA SYNC ---
         onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snap) => {
             posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             renderPosts();
             
-            // Logic realtime cho post đang xem (nếu có)
+            if(!document.getElementById('modal-admin-list').classList.contains('hidden')) {
+                renderAdminManager();
+            }
+
+            // Viewing post update
             if(currentViewingPostId) {
                 const updatedPost = posts.find(p => p.id === currentViewingPostId);
                 if(updatedPost) updateModalStats(updatedPost);
             }
 
-            // --- DEEP LINKING LOGIC (MỞ BÀI TỪ URL) ---
+            // Deep Linking
             const urlParams = new URLSearchParams(window.location.search);
             const postIdFromUrl = urlParams.get('id');
-
-            // Nếu có ID trên URL và Modal chưa mở
             if (postIdFromUrl && document.getElementById('modal-read').classList.contains('hidden')) {
                 const postExists = posts.find(p => p.id === postIdFromUrl);
-                if (postExists) {
-                    window.readPost(postIdFromUrl, false); // false để không pushState trùng
-                } else {
-                    // Nếu link sai ID -> xóa id trên url
-                    const newUrl = new URL(window.location.href);
-                    newUrl.searchParams.delete('id');
-                    window.history.replaceState(null, '', newUrl.href);
-                }
+                if (postExists) window.readPost(postIdFromUrl, false);
+            }
+
+            if (isFirstLoad) {
+                setTimeout(() => { setLoading(false); isFirstLoad = false; }, 500);
             }
         });
 
+        // --- RENDER FUNCTIONS ---
         function renderPosts() {
             const grid = document.getElementById('blog-grid');
             if (posts.length === 0) {
@@ -479,24 +496,17 @@
                 document.getElementById('empty-state').classList.remove('hidden');
                 return;
             }
-
             document.getElementById('empty-state').classList.add('hidden');
             grid.innerHTML = posts.map(post => {
                 const dateStr = formatDateTime(post.timestamp);
-                
-                // Strip HTML for excerpt
                 const tmp = document.createElement("DIV");
                 tmp.innerHTML = post.content;
                 const excerpt = (tmp.textContent || tmp.innerText || "").substring(0, 150) + "...";
                 
-                const category = post.category || 'Thông báo';
                 let catColor = "bg-slate-500";
-                if(category === 'Tiêm chủng') catColor = "bg-green-500";
-                if(category === 'Dịch bệnh') catColor = "bg-red-500";
-                if(category === 'Thông báo') catColor = "bg-blue-500";
-                
-                const views = post.views || 0;
-                const likes = post.likes || 0;
+                if(post.category === 'Tiêm chủng') catColor = "bg-green-500";
+                if(post.category === 'Dịch bệnh') catColor = "bg-red-500";
+                if(post.category === 'Thông báo') catColor = "bg-blue-500";
 
                 return `
                 <article onclick="window.readPost('${post.id}')" class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer border border-slate-100 dark:border-white/5 flex flex-col h-full">
@@ -505,19 +515,16 @@
                             ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`
                             : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`
                         }
-                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                            ${category}
-                        </div>
+                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">${post.category || 'Tin tức'}</div>
                     </div>
                     <div class="p-5 flex flex-col flex-1">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
-                                <span class="text-xs text-slate-400 font-medium">${dateStr}</span>
+                            <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
+                                <i data-lucide="clock" class="w-3 h-3"></i> ${dateStr}
                             </div>
                             <div class="flex items-center gap-3 text-xs text-slate-400">
-                                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> ${views}</span>
-                                <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> ${likes}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> ${post.views||0}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> ${post.likes||0}</span>
                             </div>
                         </div>
                         <h3 class="text-lg font-bold mb-3 text-slate-800 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition">${post.title}</h3>
@@ -532,41 +539,81 @@
             lucide.createIcons();
         }
 
-        // --- GITHUB UPLOAD ---
+        // --- ADMIN LIST ---
+        window.openAdminManager = () => {
+            if(!isAdmin) return;
+            document.getElementById('modal-admin-list').classList.remove('hidden');
+            document.getElementById('admin-sidebar').classList.remove('open');
+            window.renderAdminManager();
+        };
+
+        window.closeAdminManager = () => document.getElementById('modal-admin-list').classList.add('hidden');
+
+        window.renderAdminManager = () => {
+            const tbody = document.getElementById('admin-list-body');
+            const searchVal = document.getElementById('admin-search').value.toLowerCase();
+            const filtered = posts.filter(p => p.title.toLowerCase().includes(searchVal));
+            
+            document.getElementById('admin-count').innerText = filtered.length;
+            
+            if(filtered.length === 0) {
+                tbody.innerHTML = '';
+                document.getElementById('admin-empty').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('admin-empty').classList.add('hidden');
+
+            tbody.innerHTML = filtered.map(p => {
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition group border-b dark:border-white/5">
+                        <td class="p-4 align-top">
+                            <img src="${p.coverUrl || 'https://via.placeholder.com/150'}" class="w-12 h-12 rounded-lg object-cover bg-slate-200">
+                        </td>
+                        <td class="p-4 align-top">
+                            <div class="font-bold text-slate-800 dark:text-white line-clamp-1 mb-1 cursor-pointer hover:text-primary" onclick="window.readPost('${p.id}')">${p.title}</div>
+                            <div class="flex items-center gap-2 text-xs text-slate-500">
+                                <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-medium">${p.category}</span>
+                                <span>• ${formatDateTime(p.timestamp)}</span>
+                            </div>
+                        </td>
+                        <td class="p-4 align-middle text-center">
+                            <div class="text-xs font-mono text-slate-500 space-y-1">
+                                <div title="Lượt xem"><i data-lucide="eye" class="w-3 h-3 inline"></i> ${p.views||0}</div>
+                                <div title="Lượt thích"><i data-lucide="heart" class="w-3 h-3 inline"></i> ${p.likes||0}</div>
+                            </div>
+                        </td>
+                        <td class="p-4 align-middle text-center">
+                            <span class="text-[10px] font-bold uppercase text-green-600 bg-green-100 px-2 py-1 rounded-full">Public</span>
+                        </td>
+                        <td class="p-4 align-middle text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <button onclick="window.editPost('${p.id}')" class="p-2 text-blue-500 bg-blue-50 hover:bg-blue-100 rounded-lg transition" title="Sửa"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                <button onclick="window.deletePost('${p.id}', '${p.coverPath}', '${p.coverSha}')" class="p-2 text-red-500 bg-red-50 hover:bg-red-100 rounded-lg transition" title="Xóa"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        };
+
+        // --- POST ACTIONS ---
         const toBase64 = file => new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result.split(',')[1]);
         });
 
-        window.saveGithubConfig = async () => {
-            if (!isAdmin) return;
-            const token = document.getElementById('gh-token').value.trim();
-            const owner = document.getElementById('gh-owner').value.trim();
-            const repo = document.getElementById('gh-repo').value.trim();
-            await setDoc(doc(db, "settings", "github_config"), { token, owner, repo });
-            ghConfig = { token, owner, repo };
-            showToast("Đã lưu cấu hình!");
-        };
-
-        // --- POST ACTIONS (CREATE/EDIT) ---
         window.openPostModal = () => {
-            if(!ghConfig.token) { showToast("Vui lòng cấu hình GitHub!", true); window.toggleAdminSidebar(); return; }
-            
+            if(!ghConfig.token) { showToast("Vui lòng cấu hình GitHub trước!", true); window.toggleAdminSidebar(); return; }
             document.getElementById('post-form').reset();
             document.getElementById('post-id').value = '';
             document.getElementById('editor-title-label').innerText = "Soạn thảo tin bài";
-            document.getElementById('cover-preview').src = '';
             document.getElementById('cover-preview').classList.add('hidden');
             document.getElementById('upload-placeholder').classList.remove('hidden');
-            document.getElementById('post-category').value = 'Thông báo';
-            
-            // Clear Editor
-            if(quill) quill.setContents([]);
-
+            quill.setContents([]);
             currentUploadSHA = null;
             currentCoverPath = null;
-            
             document.getElementById('modal-post').classList.remove('hidden');
         };
 
@@ -590,14 +637,11 @@
             e.preventDefault();
             const postId = document.getElementById('post-id').value;
             const title = document.getElementById('post-title').value;
-            
-            // Get HTML from Quill
-            const content = quill.root.innerHTML; 
-            
+            const content = quill.root.innerHTML;
             const category = document.getElementById('post-category').value;
             const fileInput = document.getElementById('cover-input');
             
-            setLoading(true);
+            setLoading(true, postId ? "Đang cập nhật..." : "Đang đăng bài...");
 
             try {
                 let coverUrl = document.getElementById('cover-preview').src;
@@ -605,6 +649,7 @@
                 let coverSha = currentUploadSHA;
 
                 if(fileInput.files.length > 0) {
+                    setLoading(true, "Đang tải ảnh lên GitHub...");
                     const file = fileInput.files[0];
                     const base64 = await toBase64(file);
                     const fileName = `tyt_posts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
@@ -613,12 +658,11 @@
                     const res = await fetch(url, {
                         method: 'PUT',
                         headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Upload banner tyt", content: base64, branch: 'main' })
+                        body: JSON.stringify({ message: "Upload banner", content: base64, branch: 'main' })
                     });
                     
-                    if(!res.ok) throw new Error("Lỗi upload ảnh GitHub");
+                    if(!res.ok) throw new Error("Lỗi upload ảnh (Kiểm tra Token)");
                     const data = await res.json();
-                    
                     coverUrl = data.content.download_url;
                     coverPath = fileName;
                     coverSha = data.content.sha;
@@ -631,14 +675,14 @@
                     authorPhoto: currentUser.photoURL,
                 };
 
+                setLoading(true, "Đang lưu dữ liệu...");
+
                 if(postId) {
                     await updateDoc(doc(db, "posts", postId), postData);
                     showToast("Cập nhật thành công!");
                 } else {
                     postData.timestamp = new Date().toISOString();
-                    postData.views = 0;
-                    postData.likes = 0;
-                    postData.shares = 0;
+                    postData.views = 0; postData.likes = 0; postData.shares = 0;
                     await addDoc(collection(db, "posts"), postData);
                     showToast("Đăng tin thành công!");
                 }
@@ -653,14 +697,59 @@
             }
         };
 
-        // --- READ MODE (WITH URL UPDATE) ---
+        window.deletePost = async (id, path, sha) => {
+            if(!confirm("CẢNH BÁO: Bạn có chắc chắn muốn xóa bài viết này không?")) return;
+            setLoading(true, "Đang xóa dữ liệu...");
+            try {
+                if(path && sha) {
+                    setLoading(true, "Đang xóa ảnh gốc...");
+                    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
+                    await fetch(url, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: "Delete post banner", sha: sha, branch: 'main' })
+                    });
+                }
+                await deleteDoc(doc(db, "posts", id));
+                showToast("Đã xóa bài viết!");
+                window.closeReadModal();
+            } catch (err) {
+                showToast("Lỗi xóa: " + err.message, true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        window.editPost = (id) => {
+            const post = posts.find(p => p.id === id);
+            window.openPostModal();
+            // Close list modal if open
+            if(!document.getElementById('modal-admin-list').classList.contains('hidden')) {
+                document.getElementById('modal-admin-list').classList.add('hidden');
+            }
+
+            document.getElementById('post-id').value = id;
+            document.getElementById('editor-title-label').innerText = "Chỉnh sửa tin bài";
+            document.getElementById('post-title').value = post.title;
+            quill.root.innerHTML = post.content;
+            document.getElementById('post-category').value = post.category || 'Thông báo';
+            
+            if(post.coverUrl) {
+                const img = document.getElementById('cover-preview');
+                img.src = post.coverUrl;
+                img.classList.remove('hidden');
+                document.getElementById('upload-placeholder').classList.add('hidden');
+                currentCoverPath = post.coverPath;
+                currentUploadSHA = post.coverSha;
+            }
+        };
+
+        // --- READ MODE ---
         window.readPost = async (id, updateHistory = true) => {
             const post = posts.find(p => p.id === id);
             if(!post) return;
-            
             currentViewingPostId = id;
 
-            // Update URL query param without reload
             if(updateHistory) {
                 const newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('id', id);
@@ -672,22 +761,16 @@
             document.getElementById('read-category').innerText = post.category || 'Tin tức';
             document.getElementById('read-author').innerText = post.authorName;
             document.getElementById('read-cover').src = post.coverUrl;
-            
-            // Inject Rich HTML Content
             document.getElementById('read-content').innerHTML = post.content;
-            
             updateModalStats(post);
 
-            try {
-                const postRef = doc(db, "posts", id);
-                await updateDoc(postRef, { views: increment(1) });
-            } catch (e) { console.log("View err", e); }
+            try { await updateDoc(doc(db, "posts", id), { views: increment(1) }); } catch (e) {}
 
             const actionDiv = document.getElementById('read-admin-actions');
             if(isAdmin) {
                 actionDiv.classList.remove('hidden');
                 document.getElementById('btn-edit-post').onclick = () => { window.closeReadModal(); window.editPost(id); };
-                document.getElementById('btn-delete-post').onclick = () => { if(confirm("Xóa bài viết này?")) window.deletePost(id, post.coverPath, post.coverSha); };
+                document.getElementById('btn-delete-post').onclick = () => { window.deletePost(id, post.coverPath, post.coverSha); };
             } else {
                 actionDiv.classList.add('hidden');
             }
@@ -706,132 +789,61 @@
             document.getElementById('modal-read').classList.add('hidden');
             document.body.style.overflow = 'auto';
             currentViewingPostId = null;
-
-            // Remove ID from URL
             const newUrl = new URL(window.location.href);
             newUrl.searchParams.delete('id');
-            // Use replaceState to avoid cluttering history when closing
-            if(newUrl.href !== window.location.href) {
-                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
-            }
+            if(newUrl.href !== window.location.href) window.history.pushState({ path: newUrl.href }, '', newUrl.href);
         };
 
-        // --- INTERACTIONS ---
         window.handleLike = async () => {
             if(!currentViewingPostId) return;
             const icon = document.getElementById('icon-like');
             icon.classList.add('fill-red-500', 'text-red-500', 'animate-heart');
             setTimeout(() => icon.classList.remove('animate-heart'), 300);
-
-            try {
-                const postRef = doc(db, "posts", currentViewingPostId);
-                await updateDoc(postRef, { likes: increment(1) });
-            } catch (e) { console.error(e); }
+            try { await updateDoc(doc(db, "posts", currentViewingPostId), { likes: increment(1) }); } catch (e) {}
         };
 
         window.handleShare = async () => {
             if(!currentViewingPostId) return;
             const post = posts.find(p => p.id === currentViewingPostId);
-            try {
-                const postRef = doc(db, "posts", currentViewingPostId);
-                await updateDoc(postRef, { shares: increment(1) });
-            } catch (e) { console.error(e); }
-
-            // Construct specific URL
+            try { await updateDoc(doc(db, "posts", currentViewingPostId), { shares: increment(1) }); } catch (e) {}
             const shareUrl = window.location.origin + window.location.pathname + '?id=' + currentViewingPostId;
-
             if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: post.title,
-                        text: post.title + ' - Xem chi tiết tại TYT Hiệp Thành',
-                        url: shareUrl 
-                    });
-                } catch (err) { console.log('Share canceled'); }
+                try { await navigator.share({ title: post.title, text: post.title, url: shareUrl }); } catch (err) {}
             } else {
                 navigator.clipboard.writeText(shareUrl);
                 showToast("Đã sao chép liên kết!");
             }
         };
 
-        // --- EDIT/DELETE ---
-        window.editPost = (id) => {
-            const post = posts.find(p => p.id === id);
-            window.openPostModal();
-            document.getElementById('post-id').value = id;
-            document.getElementById('editor-title-label').innerText = "Chỉnh sửa tin bài";
-            document.getElementById('post-title').value = post.title;
-            
-            // Set content to Quill
-            quill.root.innerHTML = post.content;
-            
-            document.getElementById('post-category').value = post.category || 'Thông báo';
-            
-            if(post.coverUrl) {
-                const img = document.getElementById('cover-preview');
-                img.src = post.coverUrl;
-                img.classList.remove('hidden');
-                document.getElementById('upload-placeholder').classList.add('hidden');
-                currentCoverPath = post.coverPath;
-                currentUploadSHA = post.coverSha;
-            }
-        };
-
-        window.deletePost = async (id, path, sha) => {
-            setLoading(true);
+        // --- GITHUB CONFIG ---
+        window.saveGithubConfig = async () => {
+            if (!isAdmin) return;
+            setLoading(true, "Lưu cấu hình...");
+            const token = document.getElementById('gh-token').value.trim();
+            const owner = document.getElementById('gh-owner').value.trim();
+            const repo = document.getElementById('gh-repo').value.trim();
             try {
-                if(path && sha) {
-                    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
-                    await fetch(url, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Delete post banner", sha: sha, branch: 'main' })
-                    });
-                }
-                await deleteDoc(doc(db, "posts", id));
-                showToast("Đã xóa tin bài!");
-                window.closeReadModal();
-            } catch (err) {
-                showToast("Lỗi xóa: " + err.message, true);
-            } finally {
-                setLoading(false);
-            }
+                await setDoc(doc(db, "settings", "github_config"), { token, owner, repo });
+                ghConfig = { token, owner, repo };
+                showToast("Đã lưu cấu hình!");
+            } catch(e) { showToast("Lỗi lưu cấu hình", true); }
+            finally { setLoading(false); }
         };
 
-        function showToast(msg, isError = false) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            const icon = document.getElementById('toast-icon');
-            icon.setAttribute('data-lucide', isError ? 'alert-triangle' : 'check-circle');
-            icon.className = isError ? 'w-5 h-5 text-red-500' : 'w-5 h-5 text-green-500';
-            lucide.createIcons();
-            t.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
-        }
+        // UI Toggles
+        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
+        window.toggleTheme = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        };
 
-        function setLoading(active) {
-            const l = document.getElementById('global-loading');
-            active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        // --- HANDLE BROWSER BACK BUTTON ---
-        window.addEventListener('popstate', (event) => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('id');
-
-            if (postId) {
-                // If Back/Forward brings us to a URL with ID, open post
-                window.readPost(postId, false); // false to avoid pushing another state
-            } else {
-                // If Back brings us to homepage, close modal
-                document.getElementById('modal-read').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                currentViewingPostId = null;
-            }
+        // History Handle
+        window.addEventListener('popstate', () => {
+            const postId = new URLSearchParams(window.location.search).get('id');
+            postId ? window.readPost(postId, false) : window.closeReadModal();
         });
 
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
-        lucide.createIcons();
     </script>
 </body>
 </html>
