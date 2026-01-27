@@ -59,36 +59,19 @@
         }
         .animate-heart { animation: heart-beat 0.3s ease-in-out; }
 
-        /* CUSTOM QUILL EDITOR STYLES FOR TAILWIND & DARK MODE */
-        .ql-toolbar {
-            border-top-left-radius: 0.75rem;
-            border-top-right-radius: 0.75rem;
-            background-color: #f8fafc;
-            border-color: #e2e8f0 !important;
-        }
-        .ql-container {
-            border-bottom-left-radius: 0.75rem;
-            border-bottom-right-radius: 0.75rem;
-            font-family: 'Merriweather', serif !important;
-            font-size: 1rem !important;
-            border-color: #e2e8f0 !important;
-            background-color: white;
-        }
+        /* Quill & Custom Scrollbar */
+        .ql-toolbar { border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; background-color: #f8fafc; border-color: #e2e8f0 !important; }
+        .ql-container { border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; font-family: 'Merriweather', serif !important; font-size: 1rem !important; border-color: #e2e8f0 !important; background-color: white; }
         
-        /* Dark mode overrides for Quill */
-        .dark .ql-toolbar {
-            background-color: #1e293b;
-            border-color: rgba(255,255,255,0.1) !important;
-        }
+        .dark .ql-toolbar { background-color: #1e293b; border-color: rgba(255,255,255,0.1) !important; }
         .dark .ql-toolbar .ql-stroke { stroke: #cbd5e1; }
         .dark .ql-toolbar .ql-fill { fill: #cbd5e1; }
         .dark .ql-toolbar .ql-picker { color: #cbd5e1; }
-        
-        .dark .ql-container {
-            background-color: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.1) !important;
-            color: #e2e8f0;
-        }
+        .dark .ql-container { background-color: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1) !important; color: #e2e8f0; }
+
+        /* Nested Comments Line */
+        .comment-reply-line { position: absolute; left: -16px; top: 0; bottom: 0; width: 2px; background-color: #e2e8f0; }
+        .dark .comment-reply-line { background-color: #334155; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-10">
@@ -127,7 +110,6 @@
 
     <!-- Main Content -->
     <main class="flex-1 max-w-6xl mx-auto px-6 py-10 w-full">
-        
         <!-- Hero Section -->
         <div class="mb-12 text-center max-w-3xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-white/5">
             <h2 class="text-2xl md:text-3xl font-black mb-3 text-slate-800 dark:text-white">Vì sức khỏe cộng đồng</h2>
@@ -140,15 +122,11 @@
         </button>
 
         <!-- Blog Grid -->
-        <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Posts rendered here -->
-        </div>
-
+        <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
             <i data-lucide="activity" class="w-16 h-16 mb-4 opacity-50 text-primary"></i>
             <p class="font-medium">Chưa có bản tin nào được đăng.</p>
         </div>
-
     </main>
 
     <!-- Reading Modal (Full Screen) -->
@@ -162,23 +140,14 @@
                 <div class="mb-8 border-b pb-6 dark:border-white/10">
                     <span id="read-category" class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold uppercase rounded-full mb-3"></span>
                     <h1 id="read-title" class="text-3xl md:text-4xl font-black mb-4 leading-tight text-slate-900 dark:text-white"></h1>
-                    
                     <div class="flex items-center justify-between flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-400">
                         <div class="flex items-center gap-4">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                                <span id="read-date" class="font-bold"></span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="user" class="w-4 h-4"></i>
-                                <span id="read-author"></span>
-                            </div>
+                            <span id="read-date" class="font-bold"></span>
+                            <span id="read-author"></span>
                         </div>
-                        
                         <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
                             <i data-lucide="eye" class="w-4 h-4 text-primary"></i>
                             <span id="read-views" class="font-bold text-slate-700 dark:text-slate-300">0</span>
-                            <span class="text-xs">lượt xem</span>
                         </div>
                     </div>
                 </div>
@@ -187,10 +156,7 @@
                     <img id="read-cover" src="" class="w-full h-full object-cover">
                 </div>
 
-                <!-- Content Area -->
-                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg">
-                    <!-- Content HTML will be injected here -->
-                </div>
+                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg"></div>
 
                 <div class="mt-10 py-6 border-t border-b dark:border-white/10 flex items-center justify-between">
                     <div class="flex gap-4">
@@ -208,10 +174,39 @@
                     </div>
                 </div>
 
+                <!-- COMMENT SECTION -->
+                <div class="mt-12">
+                    <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> Bình luận
+                    </h3>
+                    
+                    <!-- Comment Input (Only for logged in) -->
+                    <div id="comment-input-area" class="flex gap-4 mb-10 hidden">
+                        <img id="my-avatar" class="w-10 h-10 rounded-full shrink-0 shadow-sm border dark:border-white/10" src="">
+                        <div class="flex-1">
+                            <textarea id="comment-text" rows="2" class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-transparent focus:border-primary focus:bg-white dark:focus:bg-slate-800 outline-none transition dark:text-white resize-none" placeholder="Viết bình luận của bạn..."></textarea>
+                            <div class="mt-2 flex justify-end">
+                                <button onclick="window.submitComment()" class="px-5 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-sky-600 transition shadow-lg shadow-primary/30">Gửi bình luận</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="login-to-comment" class="hidden mb-10 p-6 bg-slate-50 dark:bg-slate-800 rounded-xl text-center border dark:border-white/5">
+                        <p class="text-slate-500 dark:text-slate-400 mb-3 text-sm">Vui lòng đăng nhập để bình luận và thả tim.</p>
+                        <button onclick="window.login()" class="px-5 py-2 bg-white dark:bg-slate-700 border dark:border-white/10 rounded-lg text-sm font-bold shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 transition flex items-center gap-2 mx-auto">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4"> Đăng nhập với Google
+                        </button>
+                    </div>
+
+                    <!-- Comments List -->
+                    <div id="comments-list" class="space-y-6">
+                        <!-- Comments will be injected here -->
+                    </div>
+                </div>
             </article>
 
-            <!-- Admin Actions inside Article -->
-            <div id="read-admin-actions" class="mt-6 flex justify-end gap-3 hidden">
+            <!-- Admin Actions -->
+            <div id="read-admin-actions" class="mt-6 flex justify-end gap-3 hidden border-t pt-4 dark:border-white/5">
                 <button id="btn-edit-post" class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-bold hover:bg-indigo-100 transition"><i data-lucide="edit"></i> Sửa bài</button>
                 <button id="btn-delete-post" class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition"><i data-lucide="trash"></i> Xóa bài</button>
             </div>
@@ -331,7 +326,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc, increment, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
@@ -354,6 +349,7 @@
         let currentUploadSHA = null; 
         let currentCoverPath = null;
         let currentViewingPostId = null;
+        let unsubscribeComments = null; // To stop listener
         
         // --- INITIALIZE QUILL EDITOR ---
         let quill;
@@ -363,27 +359,32 @@
                 placeholder: 'Soạn nội dung bài viết tại đây...',
                 modules: {
                     toolbar: [
-                        [{ 'header': [1, 2, 3, false] }], // Headers
-                        ['bold', 'italic', 'underline', 'strike'], // Toggle styles
-                        [{ 'color': [] }, { 'background': [] }], // Colors
-                        [{ 'align': [] }], // Alignment
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // Lists
-                        ['link', 'image', 'clean'] // Links, Images
+                        [{ 'header': [1, 2, 3, false] }], 
+                        ['bold', 'italic', 'underline', 'strike'], 
+                        [{ 'color': [] }, { 'background': [] }], 
+                        [{ 'align': [] }], 
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], 
+                        ['link', 'image', 'clean'] 
                     ]
                 }
             });
         });
 
-        // --- DATE FORMATTER ---
+        // --- HELPERS ---
         function formatDateTime(isoString) {
             if (!isoString) return "";
             const d = new Date(isoString);
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            const hour = String(d.getHours()).padStart(2, '0');
-            const minute = String(d.getMinutes()).padStart(2, '0');
-            return `${day}/${month}/${year} ${hour}:${minute}`;
+            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        }
+        
+        function timeAgo(isoString) {
+            const d = new Date(isoString);
+            const now = new Date();
+            const diff = Math.floor((now - d) / 1000);
+            if(diff < 60) return 'Vừa xong';
+            if(diff < 3600) return `${Math.floor(diff/60)} phút trước`;
+            if(diff < 86400) return `${Math.floor(diff/3600)} giờ trước`;
+            return formatDateTime(isoString);
         }
 
         // --- AUTH ---
@@ -403,11 +404,9 @@
                     const ghRef = doc(db, "settings", "github_config");
                     const ghSnap = await getDoc(ghRef);
                     if (ghSnap.exists()) ghConfig = ghSnap.data();
-                    
                     document.getElementById('gh-token').value = ghConfig.token || '';
                     document.getElementById('gh-owner').value = ghConfig.owner || '';
                     document.getElementById('gh-repo').value = ghConfig.repo || '';
-                    
                     document.getElementById('admin-btn').classList.remove('hidden');
                     document.getElementById('fab-create').classList.remove('hidden');
                 }
@@ -417,6 +416,9 @@
                 document.getElementById('fab-create').classList.add('hidden');
             }
             renderPosts();
+            
+            // Re-render comment area if inside a post
+            if(currentViewingPostId) checkLoginForComments();
         });
 
         // --- UI UTILS ---
@@ -443,28 +445,21 @@
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         };
 
-        // --- DATA LOGIC ---
+        // --- POST DATA LOGIC ---
         onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snap) => {
             posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             renderPosts();
-            
-            // Logic realtime cho post đang xem (nếu có)
             if(currentViewingPostId) {
                 const updatedPost = posts.find(p => p.id === currentViewingPostId);
                 if(updatedPost) updateModalStats(updatedPost);
             }
-
-            // --- DEEP LINKING LOGIC (MỞ BÀI TỪ URL) ---
+            // Deep Link
             const urlParams = new URLSearchParams(window.location.search);
             const postIdFromUrl = urlParams.get('id');
-
-            // Nếu có ID trên URL và Modal chưa mở
             if (postIdFromUrl && document.getElementById('modal-read').classList.contains('hidden')) {
                 const postExists = posts.find(p => p.id === postIdFromUrl);
-                if (postExists) {
-                    window.readPost(postIdFromUrl, false); // false để không pushState trùng
-                } else {
-                    // Nếu link sai ID -> xóa id trên url
+                if (postExists) window.readPost(postIdFromUrl, false);
+                else {
                     const newUrl = new URL(window.location.href);
                     newUrl.searchParams.delete('id');
                     window.history.replaceState(null, '', newUrl.href);
@@ -483,10 +478,7 @@
             document.getElementById('empty-state').classList.add('hidden');
             grid.innerHTML = posts.map(post => {
                 const dateStr = formatDateTime(post.timestamp);
-                
-                // Strip HTML for excerpt
-                const tmp = document.createElement("DIV");
-                tmp.innerHTML = post.content;
+                const tmp = document.createElement("DIV"); tmp.innerHTML = post.content;
                 const excerpt = (tmp.textContent || tmp.innerText || "").substring(0, 150) + "...";
                 
                 const category = post.category || 'Thông báo';
@@ -494,51 +486,247 @@
                 if(category === 'Tiêm chủng') catColor = "bg-green-500";
                 if(category === 'Dịch bệnh') catColor = "bg-red-500";
                 if(category === 'Thông báo') catColor = "bg-blue-500";
-                
-                const views = post.views || 0;
-                const likes = post.likes || 0;
 
                 return `
                 <article onclick="window.readPost('${post.id}')" class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer border border-slate-100 dark:border-white/5 flex flex-col h-full">
                     <div class="aspect-[16/9] bg-slate-100 dark:bg-slate-700 overflow-hidden relative">
-                        ${post.coverUrl 
-                            ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`
-                            : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`
-                        }
-                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                            ${category}
-                        </div>
+                        ${post.coverUrl ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">` : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`}
+                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">${category}</div>
                     </div>
                     <div class="p-5 flex flex-col flex-1">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
-                                <span class="text-xs text-slate-400 font-medium">${dateStr}</span>
-                            </div>
+                            <div class="flex items-center gap-2"><i data-lucide="clock" class="w-3 h-3 text-slate-400"></i><span class="text-xs text-slate-400 font-medium">${dateStr}</span></div>
                             <div class="flex items-center gap-3 text-xs text-slate-400">
-                                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> ${views}</span>
-                                <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> ${likes}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> ${post.views || 0}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> ${post.likes || 0}</span>
                             </div>
                         </div>
                         <h3 class="text-lg font-bold mb-3 text-slate-800 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition">${post.title}</h3>
                         <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 flex-1">${excerpt}</p>
-                        <div class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto pt-4 border-t dark:border-white/5">
-                            Xem chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </div>
+                        <div class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto pt-4 border-t dark:border-white/5">Xem chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
                     </div>
-                </article>
-                `;
+                </article>`;
             }).join('');
             lucide.createIcons();
         }
 
-        // --- GITHUB UPLOAD ---
-        const toBase64 = file => new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-        });
+        // --- COMMENT LOGIC ---
+        function checkLoginForComments() {
+            const inputArea = document.getElementById('comment-input-area');
+            const loginPrompt = document.getElementById('login-to-comment');
+            
+            if (currentUser) {
+                inputArea.classList.remove('hidden');
+                loginPrompt.classList.add('hidden');
+                document.getElementById('my-avatar').src = currentUser.photoURL;
+            } else {
+                inputArea.classList.add('hidden');
+                loginPrompt.classList.remove('hidden');
+            }
+        }
 
+        window.submitComment = async (parentId = null, content = null) => {
+            if (!currentUser) return window.login();
+            
+            // Get content from Main Input OR Reply Input
+            let text = content;
+            if(!text) {
+                const el = document.getElementById('comment-text');
+                text = el.value.trim();
+                el.value = ''; // Clear main input
+            }
+
+            if (!text) return showToast("Vui lòng nhập nội dung!", true);
+
+            try {
+                await addDoc(collection(db, "comments"), {
+                    postId: currentViewingPostId,
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName,
+                    userPhoto: currentUser.photoURL,
+                    content: text,
+                    parentId: parentId, // null for top-level, commentId for reply
+                    timestamp: new Date().toISOString()
+                });
+                
+                // If it was a reply, close the reply form
+                if(parentId) {
+                    const form = document.getElementById(`reply-form-${parentId}`);
+                    if(form) form.remove();
+                }
+
+                showToast("Đã gửi bình luận!");
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi gửi bình luận", true);
+            }
+        };
+
+        window.toggleReplyForm = (commentId) => {
+            if(!currentUser) return window.login();
+            
+            // Check if form exists
+            const existing = document.getElementById(`reply-form-${commentId}`);
+            if(existing) { existing.remove(); return; }
+
+            const container = document.getElementById(`reply-container-${commentId}`);
+            const html = `
+                <div id="reply-form-${commentId}" class="mt-3 flex gap-3 animate-fade-in">
+                    <img src="${currentUser.photoURL}" class="w-8 h-8 rounded-full">
+                    <div class="flex-1">
+                        <textarea id="reply-input-${commentId}" rows="1" class="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-transparent focus:border-primary outline-none text-sm dark:text-white" placeholder="Viết câu trả lời..."></textarea>
+                        <div class="flex justify-end gap-2 mt-2">
+                             <button onclick="document.getElementById('reply-form-${commentId}').remove()" class="text-xs font-bold text-slate-500 hover:text-slate-700 px-3 py-1">Hủy</button>
+                             <button onclick="window.confirmReply('${commentId}')" class="text-xs font-bold bg-primary text-white px-3 py-1 rounded-md hover:bg-sky-600">Trả lời</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            document.getElementById(`reply-input-${commentId}`).focus();
+        };
+
+        window.confirmReply = (commentId) => {
+            const val = document.getElementById(`reply-input-${commentId}`).value.trim();
+            window.submitComment(commentId, val);
+        };
+
+        // --- READ MODE ---
+        window.readPost = async (id, updateHistory = true) => {
+            const post = posts.find(p => p.id === id);
+            if(!post) return;
+            currentViewingPostId = id;
+
+            if(updateHistory) {
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('id', id);
+                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+            }
+
+            document.getElementById('read-title').innerText = post.title;
+            document.getElementById('read-date').innerText = formatDateTime(post.timestamp);
+            document.getElementById('read-category').innerText = post.category || 'Tin tức';
+            document.getElementById('read-author').innerText = post.authorName;
+            document.getElementById('read-cover').src = post.coverUrl;
+            document.getElementById('read-content').innerHTML = post.content;
+            
+            updateModalStats(post);
+            checkLoginForComments();
+
+            // Load Comments Realtime
+            if(unsubscribeComments) unsubscribeComments();
+            const q = query(collection(db, "comments"), where("postId", "==", id), orderBy("timestamp", "asc"));
+            unsubscribeComments = onSnapshot(q, (snap) => {
+                const allComments = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                renderComments(allComments);
+            });
+
+            try { await updateDoc(doc(db, "posts", id), { views: increment(1) }); } catch (e) {}
+
+            const actionDiv = document.getElementById('read-admin-actions');
+            if(isAdmin) {
+                actionDiv.classList.remove('hidden');
+                document.getElementById('btn-edit-post').onclick = () => { window.closeReadModal(); window.editPost(id); };
+                document.getElementById('btn-delete-post').onclick = () => { if(confirm("Xóa bài viết này?")) window.deletePost(id, post.coverPath, post.coverSha); };
+            } else { actionDiv.classList.add('hidden'); }
+
+            document.getElementById('modal-read').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+        };
+
+        function renderComments(comments) {
+            const list = document.getElementById('comments-list');
+            const rootComments = comments.filter(c => !c.parentId).reverse(); // Newest top
+            
+            const renderNode = (c, level = 0) => {
+                const replies = comments.filter(r => r.parentId === c.id);
+                const isReply = level > 0;
+                
+                return `
+                    <div class="relative ${isReply ? 'ml-10 mt-3' : 'border-b dark:border-white/5 pb-6 last:border-0'}">
+                        ${isReply ? '<div class="comment-reply-line"></div>' : ''}
+                        <div class="flex gap-3">
+                            <img src="${c.userPhoto}" class="w-8 h-8 rounded-full shadow-sm">
+                            <div class="flex-1">
+                                <div class="bg-slate-100 dark:bg-slate-800/50 p-3 rounded-xl inline-block min-w-[200px]">
+                                    <div class="flex items-center justify-between gap-4 mb-1">
+                                        <span class="font-bold text-sm text-slate-800 dark:text-slate-200">${c.userName}</span>
+                                        <span class="text-[10px] text-slate-400">${timeAgo(c.timestamp)}</span>
+                                    </div>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">${c.content}</p>
+                                </div>
+                                <div class="mt-1 ml-1 flex items-center gap-4">
+                                    <button onclick="window.toggleReplyForm('${c.id}')" class="text-xs font-bold text-slate-500 hover:text-primary transition">Trả lời</button>
+                                </div>
+                                <div id="reply-container-${c.id}"></div>
+                            </div>
+                        </div>
+                        <!-- Recursion for Replies -->
+                        <div>
+                            ${replies.map(r => renderNode(r, level + 1)).join('')}
+                        </div>
+                    </div>
+                `;
+            };
+
+            list.innerHTML = rootComments.length ? rootComments.map(c => renderNode(c)).join('') : '<p class="text-center text-sm text-slate-400 italic">Chưa có bình luận nào. Hãy là người đầu tiên!</p>';
+        }
+
+        function updateModalStats(post) {
+            document.getElementById('read-views').innerText = post.views || 0;
+            document.getElementById('count-like').innerText = post.likes || 0;
+            document.getElementById('count-share').innerText = post.shares || 0;
+        }
+
+        window.closeReadModal = () => {
+            if(unsubscribeComments) unsubscribeComments();
+            document.getElementById('modal-read').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentViewingPostId = null;
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.delete('id');
+            if(newUrl.href !== window.location.href) window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+        };
+
+        // --- INTERACTIONS ---
+        window.handleLike = async () => {
+            if(!currentViewingPostId) return;
+            
+            // CHECK LOGIN
+            if(!currentUser) {
+                // Hiển thị modal login hoặc focus vào phần login dưới comment
+                document.getElementById('login-to-comment').scrollIntoView({behavior: "smooth"});
+                showToast("Vui lòng đăng nhập để thả tim!", true);
+                return;
+            }
+
+            const icon = document.getElementById('icon-like');
+            icon.classList.add('fill-red-500', 'text-red-500', 'animate-heart');
+            setTimeout(() => icon.classList.remove('animate-heart'), 300);
+
+            try {
+                const postRef = doc(db, "posts", currentViewingPostId);
+                await updateDoc(postRef, { likes: increment(1) });
+            } catch (e) { console.error(e); }
+        };
+
+        window.handleShare = async () => {
+            if(!currentViewingPostId) return;
+            const post = posts.find(p => p.id === currentViewingPostId);
+            try {
+                const postRef = doc(db, "posts", currentViewingPostId);
+                await updateDoc(postRef, { shares: increment(1) });
+            } catch (e) { console.error(e); }
+            const shareUrl = window.location.origin + window.location.pathname + '?id=' + currentViewingPostId;
+            if (navigator.share) {
+                try { await navigator.share({ title: post.title, text: post.title + ' - Xem chi tiết tại TYT Hiệp Thành', url: shareUrl }); } catch (err) {}
+            } else {
+                navigator.clipboard.writeText(shareUrl);
+                showToast("Đã sao chép liên kết!");
+            }
+        };
+
+        // --- OTHER UTILS ---
         window.saveGithubConfig = async () => {
             if (!isAdmin) return;
             const token = document.getElementById('gh-token').value.trim();
@@ -549,10 +737,8 @@
             showToast("Đã lưu cấu hình!");
         };
 
-        // --- POST ACTIONS (CREATE/EDIT) ---
         window.openPostModal = () => {
             if(!ghConfig.token) { showToast("Vui lòng cấu hình GitHub!", true); window.toggleAdminSidebar(); return; }
-            
             document.getElementById('post-form').reset();
             document.getElementById('post-id').value = '';
             document.getElementById('editor-title-label').innerText = "Soạn thảo tin bài";
@@ -560,13 +746,8 @@
             document.getElementById('cover-preview').classList.add('hidden');
             document.getElementById('upload-placeholder').classList.remove('hidden');
             document.getElementById('post-category').value = 'Thông báo';
-            
-            // Clear Editor
             if(quill) quill.setContents([]);
-
-            currentUploadSHA = null;
-            currentCoverPath = null;
-            
+            currentUploadSHA = null; currentCoverPath = null;
             document.getElementById('modal-post').classList.remove('hidden');
         };
 
@@ -586,194 +767,51 @@
             }
         });
 
+        const toBase64 = file => new Promise((resolve) => {
+            const reader = new FileReader(); reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+        });
+
         document.getElementById('post-form').onsubmit = async (e) => {
             e.preventDefault();
             const postId = document.getElementById('post-id').value;
             const title = document.getElementById('post-title').value;
-            
-            // Get HTML from Quill
             const content = quill.root.innerHTML; 
-            
             const category = document.getElementById('post-category').value;
             const fileInput = document.getElementById('cover-input');
-            
             setLoading(true);
-
             try {
                 let coverUrl = document.getElementById('cover-preview').src;
                 let coverPath = currentCoverPath;
                 let coverSha = currentUploadSHA;
-
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const base64 = await toBase64(file);
                     const fileName = `tyt_posts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-                    
                     const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${fileName}`;
-                    const res = await fetch(url, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Upload banner tyt", content: base64, branch: 'main' })
-                    });
-                    
+                    const res = await fetch(url, { method: 'PUT', headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: "Upload banner tyt", content: base64, branch: 'main' }) });
                     if(!res.ok) throw new Error("Lỗi upload ảnh GitHub");
                     const data = await res.json();
-                    
-                    coverUrl = data.content.download_url;
-                    coverPath = fileName;
-                    coverSha = data.content.sha;
+                    coverUrl = data.content.download_url; coverPath = fileName; coverSha = data.content.sha;
                 }
-
-                const postData = {
-                    title, content, category, coverUrl, coverPath, coverSha,
-                    updatedAt: new Date().toISOString(),
-                    authorName: currentUser.displayName,
-                    authorPhoto: currentUser.photoURL,
-                };
-
-                if(postId) {
-                    await updateDoc(doc(db, "posts", postId), postData);
-                    showToast("Cập nhật thành công!");
-                } else {
-                    postData.timestamp = new Date().toISOString();
-                    postData.views = 0;
-                    postData.likes = 0;
-                    postData.shares = 0;
-                    await addDoc(collection(db, "posts"), postData);
-                    showToast("Đăng tin thành công!");
-                }
-
+                const postData = { title, content, category, coverUrl, coverPath, coverSha, updatedAt: new Date().toISOString(), authorName: currentUser.displayName, authorPhoto: currentUser.photoURL };
+                if(postId) { await updateDoc(doc(db, "posts", postId), postData); showToast("Cập nhật thành công!"); }
+                else { postData.timestamp = new Date().toISOString(); postData.views = 0; postData.likes = 0; postData.shares = 0; await addDoc(collection(db, "posts"), postData); showToast("Đăng tin thành công!"); }
                 window.closePostModal();
-
-            } catch (err) {
-                console.error(err);
-                showToast("Lỗi: " + err.message, true);
-            } finally {
-                setLoading(false);
-            }
+            } catch (err) { console.error(err); showToast("Lỗi: " + err.message, true); } finally { setLoading(false); }
         };
 
-        // --- READ MODE (WITH URL UPDATE) ---
-        window.readPost = async (id, updateHistory = true) => {
-            const post = posts.find(p => p.id === id);
-            if(!post) return;
-            
-            currentViewingPostId = id;
-
-            // Update URL query param without reload
-            if(updateHistory) {
-                const newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('id', id);
-                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
-            }
-
-            document.getElementById('read-title').innerText = post.title;
-            document.getElementById('read-date').innerText = formatDateTime(post.timestamp);
-            document.getElementById('read-category').innerText = post.category || 'Tin tức';
-            document.getElementById('read-author').innerText = post.authorName;
-            document.getElementById('read-cover').src = post.coverUrl;
-            
-            // Inject Rich HTML Content
-            document.getElementById('read-content').innerHTML = post.content;
-            
-            updateModalStats(post);
-
-            try {
-                const postRef = doc(db, "posts", id);
-                await updateDoc(postRef, { views: increment(1) });
-            } catch (e) { console.log("View err", e); }
-
-            const actionDiv = document.getElementById('read-admin-actions');
-            if(isAdmin) {
-                actionDiv.classList.remove('hidden');
-                document.getElementById('btn-edit-post').onclick = () => { window.closeReadModal(); window.editPost(id); };
-                document.getElementById('btn-delete-post').onclick = () => { if(confirm("Xóa bài viết này?")) window.deletePost(id, post.coverPath, post.coverSha); };
-            } else {
-                actionDiv.classList.add('hidden');
-            }
-
-            document.getElementById('modal-read').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-        };
-
-        function updateModalStats(post) {
-            document.getElementById('read-views').innerText = post.views || 0;
-            document.getElementById('count-like').innerText = post.likes || 0;
-            document.getElementById('count-share').innerText = post.shares || 0;
-        }
-
-        window.closeReadModal = () => {
-            document.getElementById('modal-read').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            currentViewingPostId = null;
-
-            // Remove ID from URL
-            const newUrl = new URL(window.location.href);
-            newUrl.searchParams.delete('id');
-            // Use replaceState to avoid cluttering history when closing
-            if(newUrl.href !== window.location.href) {
-                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
-            }
-        };
-
-        // --- INTERACTIONS ---
-        window.handleLike = async () => {
-            if(!currentViewingPostId) return;
-            const icon = document.getElementById('icon-like');
-            icon.classList.add('fill-red-500', 'text-red-500', 'animate-heart');
-            setTimeout(() => icon.classList.remove('animate-heart'), 300);
-
-            try {
-                const postRef = doc(db, "posts", currentViewingPostId);
-                await updateDoc(postRef, { likes: increment(1) });
-            } catch (e) { console.error(e); }
-        };
-
-        window.handleShare = async () => {
-            if(!currentViewingPostId) return;
-            const post = posts.find(p => p.id === currentViewingPostId);
-            try {
-                const postRef = doc(db, "posts", currentViewingPostId);
-                await updateDoc(postRef, { shares: increment(1) });
-            } catch (e) { console.error(e); }
-
-            // Construct specific URL
-            const shareUrl = window.location.origin + window.location.pathname + '?id=' + currentViewingPostId;
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: post.title,
-                        text: post.title + ' - Xem chi tiết tại TYT Hiệp Thành',
-                        url: shareUrl 
-                    });
-                } catch (err) { console.log('Share canceled'); }
-            } else {
-                navigator.clipboard.writeText(shareUrl);
-                showToast("Đã sao chép liên kết!");
-            }
-        };
-
-        // --- EDIT/DELETE ---
         window.editPost = (id) => {
             const post = posts.find(p => p.id === id);
             window.openPostModal();
             document.getElementById('post-id').value = id;
             document.getElementById('editor-title-label').innerText = "Chỉnh sửa tin bài";
             document.getElementById('post-title').value = post.title;
-            
-            // Set content to Quill
             quill.root.innerHTML = post.content;
-            
             document.getElementById('post-category').value = post.category || 'Thông báo';
-            
             if(post.coverUrl) {
-                const img = document.getElementById('cover-preview');
-                img.src = post.coverUrl;
-                img.classList.remove('hidden');
-                document.getElementById('upload-placeholder').classList.add('hidden');
-                currentCoverPath = post.coverPath;
-                currentUploadSHA = post.coverSha;
+                const img = document.getElementById('cover-preview'); img.src = post.coverUrl; img.classList.remove('hidden'); document.getElementById('upload-placeholder').classList.add('hidden');
+                currentCoverPath = post.coverPath; currentUploadSHA = post.coverSha;
             }
         };
 
@@ -782,20 +820,11 @@
             try {
                 if(path && sha) {
                     const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
-                    await fetch(url, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Delete post banner", sha: sha, branch: 'main' })
-                    });
+                    await fetch(url, { method: 'DELETE', headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: "Delete post banner", sha: sha, branch: 'main' }) });
                 }
                 await deleteDoc(doc(db, "posts", id));
-                showToast("Đã xóa tin bài!");
-                window.closeReadModal();
-            } catch (err) {
-                showToast("Lỗi xóa: " + err.message, true);
-            } finally {
-                setLoading(false);
-            }
+                showToast("Đã xóa tin bài!"); window.closeReadModal();
+            } catch (err) { showToast("Lỗi xóa: " + err.message, true); } finally { setLoading(false); }
         };
 
         function showToast(msg, isError = false) {
@@ -809,25 +838,13 @@
             setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
 
-        function setLoading(active) {
-            const l = document.getElementById('global-loading');
-            active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none');
-        }
+        function setLoading(active) { const l = document.getElementById('global-loading'); active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none'); }
 
-        // --- HANDLE BROWSER BACK BUTTON ---
         window.addEventListener('popstate', (event) => {
             const urlParams = new URLSearchParams(window.location.search);
             const postId = urlParams.get('id');
-
-            if (postId) {
-                // If Back/Forward brings us to a URL with ID, open post
-                window.readPost(postId, false); // false to avoid pushing another state
-            } else {
-                // If Back brings us to homepage, close modal
-                document.getElementById('modal-read').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                currentViewingPostId = null;
-            }
+            if (postId) window.readPost(postId, false);
+            else { document.getElementById('modal-read').classList.add('hidden'); document.body.style.overflow = 'auto'; currentViewingPostId = null; }
         });
 
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
