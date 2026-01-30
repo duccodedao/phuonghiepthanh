@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Thông Tin - Đơn vị Tùy chỉnh</title>
+    <title>Cổng Thông Tin - Trạm Y tế Phường Hiệp Thành</title>
     <link rel="icon" href="https://hdd.io.vn/img/bmassloadings.png" type="image/png">
     
     <!-- Tailwind CSS -->
@@ -30,9 +30,15 @@
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .dark .glass { background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); }
         
-        .admin-sidebar { width: 28rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        .admin-sidebar { width: 30rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
         .admin-sidebar.open { transform: translateX(0); }
         
+        /* Custom Scrollbar for admin */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .dark .custom-scroll::-webkit-scrollbar-thumb { background-color: #334155; }
+
         .loader { width: 48px; height: 48px; border: 5px solid #0ea5e9; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -83,39 +89,44 @@
 
     <!-- Admin Sidebar -->
     <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 bg-white dark:bg-slate-900 border-l dark:border-white/10 shadow-2xl z-[200] flex flex-col h-screen">
-        <div class="p-6 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
-            <h3 class="font-black uppercase text-sm tracking-widest text-primary">Cấu hình Hệ thống</h3>
+        <!-- Header Sidebar -->
+        <div class="p-6 border-b dark:border-white/5 flex justify-between items-center bg-slate-100 dark:bg-slate-800 shrink-0">
+            <h3 class="font-black uppercase text-sm tracking-widest text-primary">Cấu hình Admin</h3>
             <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-6 space-y-8">
-            <!-- 1. General Info -->
-            <div class="space-y-4">
-                <h4 class="text-xs font-black uppercase tracking-widest text-slate-500 border-b pb-2">Thông tin Đơn vị</h4>
+        <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-8">
+            <!-- 1. General Info (Luôn hiển thị đầu tiên) -->
+            <div class="space-y-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border dark:border-white/5">
+                <h4 class="text-xs font-black uppercase tracking-widest text-primary border-b pb-2 flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i> Thông tin Đơn vị
+                </h4>
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Tên đơn vị (Dòng 1)</label>
-                    <input type="text" id="cfg-title1" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    <input type="text" id="cfg-title1" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Tên đơn vị (Dòng 2)</label>
-                    <input type="text" id="cfg-title2" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    <input type="text" id="cfg-title2" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Slogan / Thông điệp</label>
-                    <textarea id="cfg-slogan" rows="2" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary"></textarea>
+                    <textarea id="cfg-slogan" rows="2" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary"></textarea>
                 </div>
-                <button onclick="window.saveGeneralConfig()" class="w-full py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white rounded-lg text-xs font-bold uppercase hover:bg-slate-300 transition">Lưu thông tin</button>
+                <button onclick="window.saveGeneralConfig()" class="w-full py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-lg text-xs font-bold uppercase hover:bg-slate-300 transition shadow-sm">
+                    <i data-lucide="save" class="w-3 h-3 inline mr-1"></i> Lưu thông tin
+                </button>
             </div>
 
             <!-- 2. Module List -->
             <div class="space-y-4">
                 <div class="flex items-center justify-between border-b pb-2">
                     <h4 class="text-xs font-black uppercase tracking-widest text-slate-500">Danh sách Modules</h4>
-                    <button onclick="window.openModuleModal()" class="flex items-center gap-1 text-xs font-bold text-primary hover:underline">
-                        <i data-lucide="plus-circle" class="w-3 h-3"></i> Thêm
+                    <button onclick="window.openModuleModal()" class="flex items-center gap-1 text-xs font-bold text-white bg-primary px-3 py-1.5 rounded-lg hover:bg-sky-600 shadow-lg shadow-primary/30 transition">
+                        <i data-lucide="plus-circle" class="w-3 h-3"></i> Thêm mới
                     </button>
                 </div>
-                <div id="admin-module-list" class="space-y-3">
+                <div id="admin-module-list" class="space-y-3 pb-10">
                     <!-- Modules injected here -->
                 </div>
             </div>
@@ -123,35 +134,55 @@
     </div>
 
     <!-- Add/Edit Module Modal -->
-    <div id="modal-module" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-            <div class="p-5 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
-                <h3 class="font-bold uppercase text-sm tracking-widest" id="modal-title">Thêm Module</h3>
-                <button onclick="window.closeModuleModal()" class="p-2 rounded-lg hover:bg-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="modal-module" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg shadow-2xl relative">
+            
+            <div class="p-5 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800 rounded-t-3xl">
+                <h3 class="font-bold uppercase text-sm tracking-widest flex items-center gap-2" id="modal-title">
+                    <span class="bg-primary text-white p-1 rounded"><i data-lucide="layout-grid" class="w-4 h-4"></i></span>
+                    Thiết lập Module
+                </h3>
+                <button onclick="window.closeModuleModal()" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <form id="module-form" class="p-6 space-y-4">
+
+            <form id="module-form" class="p-6 space-y-5 max-h-[80vh] overflow-y-auto custom-scroll">
                 <input type="hidden" id="mod-id">
                 
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Tên hiển thị <span class="text-red-500">*</span></label>
-                    <input type="text" id="mod-name" required class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                </div>
-                
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Mô tả ngắn</label>
-                    <input type="text" id="mod-desc" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    <input type="text" id="mod-name" required class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary placeholder:text-slate-300">
                 </div>
 
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Link liên kết (URL) <span class="text-red-500">*</span></label>
-                    <input type="text" id="mod-link" required placeholder="vd: portal.html hoặc https://google.com" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    <div class="flex">
+                        <span class="inline-flex items-center px-3 text-sm text-slate-500 bg-slate-100 border border-r-0 border-slate-300 rounded-l-md dark:bg-slate-700 dark:border-slate-600">
+                            <i data-lucide="link" class="w-3 h-3"></i>
+                        </span>
+                        <input type="text" id="mod-link" required placeholder="https://..." class="rounded-none rounded-r-lg bg-slate-50 border text-slate-900 focus:ring-primary focus:border-primary block flex-1 min-w-0 w-full text-sm border-slate-300 p-2.5  dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- ICON SELECTION SECTION -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold uppercase text-slate-400 block">Chọn Icon hiển thị</label>
+                    <div id="icon-selector-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                        <!-- Icons will be injected by JS -->
+                    </div>
+                    <div class="flex gap-2 pt-2">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                                <i data-lucide="search" class="w-3 h-3"></i>
+                            </div>
+                            <input type="text" id="mod-icon" placeholder="Hoặc nhập mã icon (vd: star)..." class="pl-8 w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-xs border dark:border-white/5 outline-none focus:border-primary">
+                        </div>
+                        <a href="https://lucide.dev/icons" target="_blank" class="flex items-center gap-1 px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase rounded-lg hover:bg-slate-200 transition whitespace-nowrap">
+                            Nguồn Icon <i data-lucide="external-link" class="w-3 h-3"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold uppercase text-slate-400">Icon (Lucide)</label>
-                        <input type="text" id="mod-icon" placeholder="vd: home, file..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold uppercase text-slate-400">Màu sắc</label>
                         <select id="mod-color" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary cursor-pointer">
@@ -164,20 +195,24 @@
                             <option value="slate">Slate (Xám)</option>
                         </select>
                     </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Mô tả ngắn</label>
+                        <input type="text" id="mod-desc" placeholder="Tùy chọn..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    </div>
                 </div>
 
                 <div class="space-y-1 pt-2 border-t dark:border-white/5">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Quyền truy cập</label>
                     <div class="grid grid-cols-2 gap-4">
                         <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50 dark:border-white/10 dark:hover:bg-white/5">
-                            <input type="radio" name="mod-visibility" value="public" checked class="accent-primary">
+                            <input type="radio" name="mod-visibility" value="public" checked class="accent-primary w-4 h-4">
                             <div>
                                 <span class="block text-xs font-bold">Công khai</span>
                                 <span class="block text-[9px] text-slate-400">Mọi người đều thấy</span>
                             </div>
                         </label>
                         <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50 dark:border-white/10 dark:hover:bg-white/5">
-                            <input type="radio" name="mod-visibility" value="admin" class="accent-red-500">
+                            <input type="radio" name="mod-visibility" value="admin" class="accent-red-500 w-4 h-4">
                             <div>
                                 <span class="block text-xs font-bold text-red-500">Nội bộ Admin</span>
                                 <span class="block text-[9px] text-slate-400">Chỉ Admin mới thấy</span>
@@ -186,7 +221,9 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-sky-600 transition">Lưu Module</button>
+                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-sky-600 transition flex justify-center items-center gap-2">
+                    <i data-lucide="check" class="w-4 h-4"></i> Lưu Thay Đổi
+                </button>
             </form>
         </div>
     </div>
@@ -198,6 +235,7 @@
             <span id="toast-msg">Thông báo</span>
         </div>
     </div>
+
 
     <!-- Firebase Script -->
     <script type="module">
@@ -221,13 +259,27 @@
         const provider = new GoogleAuthProvider();
 
         let isAdmin = false;
-        // Dữ liệu mặc định (TRỐNG MODULES)
         let configData = {
             title1: "TÊN ĐƠN VỊ",
             title2: "ĐƠN VỊ TRỰC THUỘC",
             slogan: "Khẩu hiệu hoặc mô tả ngắn về đơn vị của bạn.",
-            modules: [] // Mảng rỗng, admin tự thêm
+            modules: [] 
         };
+
+        const presetIcons = [
+            { id: 'home', label: 'Trang chủ' },
+            { id: 'newspaper', label: 'Tin tức' },
+            { id: 'users', label: 'Nhân sự' },
+            { id: 'file-text', label: 'Văn bản' },
+            { id: 'calendar-days', label: 'Lịch' },
+            { id: 'bar-chart-3', label: 'Thống kê' },
+            { id: 'book-open', label: 'Thư viện' },
+            { id: 'mail', label: 'Email' },
+            { id: 'phone', label: 'Danh bạ' },
+            { id: 'settings', label: 'Hệ thống' },
+            { id: 'globe', label: 'Cổng Web' },
+            { id: 'folder-open', label: 'Dữ liệu' }
+        ];
 
         // --- AUTH & INIT ---
         onAuthStateChanged(auth, async (user) => {
@@ -244,12 +296,17 @@
                 isAdmin = false;
                 document.getElementById('admin-toggle-btn').classList.add('hidden');
             }
-            // Re-render to update visibility based on role
+            
             renderHomepage(); 
-            if(isAdmin) renderAdminModuleList();
+            
+            // --- SỬA LỖI TẠI ĐÂY ---
+            if(isAdmin) {
+                fillAdminForm(); // <--- Thêm dòng này để điền dữ liệu vào ô nhập
+                renderAdminModuleList();
+            }
+            // -----------------------
         });
 
-        // Realtime Listener
         onSnapshot(doc(db, "settings", "homepage"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -268,18 +325,14 @@
             document.getElementById('global-loading').classList.add('opacity-0', 'pointer-events-none');
         });
 
-        // --- RENDER MAIN PAGE ---
+        // --- RENDER FUNCTIONS ---
         function renderHomepage() {
-            // Header Info
             document.getElementById('header-title').innerText = configData.title1;
             document.getElementById('header-subtitle').innerText = configData.title2;
             document.getElementById('footer-text').innerText = `© ${new Date().getFullYear()} ${configData.title2}. All rights reserved.`;
 
-            // Filter Modules based on Role
-            // Nếu là Admin: Thấy tất cả. Nếu là Khách: Chỉ thấy 'public'
             const visibleModules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
 
-            // Hero Section
             let html = `
             <section class="relative pt-20 pb-24 px-6 overflow-hidden bg-slate-50 dark:bg-slate-900">
                 <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50"></div>
@@ -298,13 +351,12 @@
                     </p>
             `;
 
-            // Nếu không có module nào (hoặc không có quyền xem)
             if (visibleModules.length === 0) {
                 html += `
                     <div class="flex flex-col items-center justify-center py-10 opacity-50">
                         <i data-lucide="layers" class="w-16 h-16 text-slate-400 mb-4"></i>
                         <p class="text-slate-500 font-bold">Chưa có module nào được hiển thị.</p>
-                        ${isAdmin ? '<p class="text-xs text-primary mt-2">Vào Cấu hình > Thêm Module để bắt đầu.</p>' : ''}
+                        ${isAdmin ? '<p class="text-xs text-primary mt-2">Vào Setup > Thêm Module để bắt đầu.</p>' : ''}
                     </div>
                 </div></section>`;
             } else {
@@ -314,20 +366,17 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">`;
 
                 visibleModules.forEach(m => {
-                    // Dynamic Colors
                     const bgIcon = `bg-${m.color}-50 dark:bg-${m.color}-900/20`;
                     const textIcon = `text-${m.color}-500`;
                     const hoverGroup = `group-hover:bg-${m.color}-500 group-hover:text-white`;
-                    
-                    // Admin Lock Indicator
                     const lockIcon = (m.visibility === 'admin') 
-                        ? `<div class="absolute top-4 right-4 text-red-500 bg-red-100 dark:bg-red-900/50 p-1.5 rounded-lg" title="Chỉ Admin thấy"><i data-lucide="lock" class="w-3 h-3"></i></div>` 
+                        ? `<div class="absolute top-4 right-4 text-red-500 bg-red-100 dark:bg-red-900/50 p-1.5 rounded-lg z-10" title="Chỉ Admin thấy"><i data-lucide="lock" class="w-3 h-3"></i></div>` 
                         : '';
 
                     html += `
-                    <a href="${m.link}" class="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-100 dark:border-white/5 flex flex-col items-start hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+                    <a href="${m.link}" target="_blank" class="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-100 dark:border-white/5 flex flex-col items-start hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
                         ${lockIcon}
-                        <div class="w-14 h-14 rounded-2xl ${bgIcon} flex items-center justify-center mb-6 ${textIcon} ${hoverGroup} transition-colors duration-300">
+                        <div class="w-14 h-14 rounded-2xl ${bgIcon} flex items-center justify-center mb-6 ${textIcon} ${hoverGroup} transition-colors duration-300 shadow-sm">
                             <i data-lucide="${m.icon || 'box'}" class="w-7 h-7"></i>
                         </div>
                         <h3 class="text-xl font-black text-slate-800 dark:text-white mb-2 line-clamp-1">${m.name}</h3>
@@ -340,60 +389,101 @@
 
                 html += `</div></div></section>`;
             }
-
             document.getElementById('main-content').innerHTML = html;
             lucide.createIcons();
         }
 
-        // --- ADMIN: LOGIC ---
+        // --- ADMIN FUNCTIONS ---
+        // Sửa hàm này để đảm bảo dữ liệu được điền đúng
         function fillAdminForm() {
-            document.getElementById('cfg-title1').value = configData.title1;
-            document.getElementById('cfg-title2').value = configData.title2;
-            document.getElementById('cfg-slogan').value = configData.slogan;
+            if(document.getElementById('cfg-title1')) document.getElementById('cfg-title1').value = configData.title1 || '';
+            if(document.getElementById('cfg-title2')) document.getElementById('cfg-title2').value = configData.title2 || '';
+            if(document.getElementById('cfg-slogan')) document.getElementById('cfg-slogan').value = configData.slogan || '';
         }
 
         function renderAdminModuleList() {
             const list = document.getElementById('admin-module-list');
             if (configData.modules.length === 0) {
-                list.innerHTML = `<p class="text-center text-xs text-slate-400 py-4 italic">Chưa có module nào. Bấm "Thêm" để tạo.</p>`;
+                list.innerHTML = `<div class="text-center py-6 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
+                    <i data-lucide="ghost" class="w-6 h-6 text-slate-400 mx-auto mb-2"></i>
+                    <p class="text-xs text-slate-400 italic">Chưa có module nào</p>
+                </div>`;
+                lucide.createIcons();
                 return;
             }
 
             list.innerHTML = configData.modules.map(m => {
                 const badge = m.visibility === 'admin' 
-                    ? `<span class="text-[9px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase">Admin Only</span>`
-                    : `<span class="text-[9px] bg-green-100 text-green-600 px-2 py-0.5 rounded font-bold uppercase">Public</span>`;
+                    ? `<span class="text-[9px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Admin</span>`
+                    : `<span class="text-[9px] bg-green-100 text-green-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Public</span>`;
 
                 return `
-                <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border dark:border-white/5 flex items-center justify-between gap-2 group">
+                <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm hover:shadow-md transition group">
                     <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-8 h-8 rounded bg-${m.color}-100 dark:bg-${m.color}-900/50 text-${m.color}-500 flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="${m.icon || 'box'}" class="w-4 h-4"></i>
+                        <div class="w-10 h-10 rounded-lg bg-${m.color}-100 dark:bg-${m.color}-900/50 text-${m.color}-500 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="${m.icon || 'box'}" class="w-5 h-5"></i>
                         </div>
                         <div class="min-w-0">
-                            <div class="flex items-center gap-2">
-                                <p class="text-sm font-bold truncate">${m.name}</p>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <p class="text-sm font-bold truncate text-slate-700 dark:text-slate-200">${m.name}</p>
                                 ${badge}
                             </div>
-                            <p class="text-[10px] text-slate-400 truncate">${m.link}</p>
+                            <p class="text-[10px] text-slate-400 truncate flex items-center gap-1">
+                                <i data-lucide="link" class="w-3 h-3"></i> ${m.link}
+                            </p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-1 flex-shrink-0">
-                        <button onclick="window.editModule('${m.id}')" class="p-2 text-indigo-500 hover:bg-indigo-100 rounded-lg" title="Sửa"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button onclick="window.deleteModule('${m.id}')" class="p-2 text-red-500 hover:bg-red-100 rounded-lg" title="Xóa"><i data-lucide="trash" class="w-4 h-4"></i></button>
+                    <div class="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.editModule('${m.id}')" class="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-white/5 rounded-lg transition" title="Sửa"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        <button onclick="window.deleteModule('${m.id}')" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-white/5 rounded-lg transition" title="Xóa"><i data-lucide="trash" class="w-4 h-4"></i></button>
                     </div>
                 </div>`;
             }).join('');
             lucide.createIcons();
         }
 
-        // --- ADMIN: ACTIONS ---
+        // --- ICON SELECTOR LOGIC ---
+        window.renderIconGrid = (selectedIcon) => {
+            const grid = document.getElementById('icon-selector-grid');
+            grid.innerHTML = presetIcons.map(icon => {
+                const isSelected = icon.id === selectedIcon;
+                const activeClass = isSelected 
+                    ? 'bg-primary text-white ring-2 ring-primary ring-offset-1 dark:ring-offset-slate-900' 
+                    : 'bg-slate-100 dark:bg-white/5 text-slate-500 hover:bg-slate-200 dark:hover:bg-white/10';
+                
+                return `
+                <div onclick="window.selectIcon('${icon.id}')" 
+                     class="cursor-pointer rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all ${activeClass}" 
+                     title="${icon.label}">
+                    <i data-lucide="${icon.id}" class="w-5 h-5"></i>
+                    <span class="text-[8px] font-bold uppercase truncate max-w-full">${icon.label}</span>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+            document.getElementById('mod-icon').value = selectedIcon || '';
+        };
+
+        window.selectIcon = (iconId) => {
+            document.getElementById('mod-icon').value = iconId;
+            window.renderIconGrid(iconId);
+        };
+        
+        document.getElementById('mod-icon').addEventListener('input', (e) => {
+            window.renderIconGrid(e.target.value);
+        });
+
+        // --- ACTION HANDLERS ---
         window.saveGeneralConfig = async () => {
             if (!isAdmin) return;
+            // Kiểm tra kỹ giá trị trước khi lưu để tránh lưu chuỗi rỗng nếu chưa load kịp
+            const t1 = document.getElementById('cfg-title1').value;
+            const t2 = document.getElementById('cfg-title2').value;
+            const sl = document.getElementById('cfg-slogan').value;
+
             const updates = {
-                title1: document.getElementById('cfg-title1').value,
-                title2: document.getElementById('cfg-title2').value,
-                slogan: document.getElementById('cfg-slogan').value
+                title1: t1,
+                title2: t2,
+                slogan: sl
             };
             await updateFirestore(updates);
             showToast("Đã lưu thông tin chung!");
@@ -402,9 +492,10 @@
         window.openModuleModal = () => {
             document.getElementById('module-form').reset();
             document.getElementById('mod-id').value = '';
-            document.getElementById('modal-title').innerText = "Thêm Module Mới";
+            document.getElementById('modal-title').innerHTML = '<span class="bg-primary text-white p-1 rounded"><i data-lucide="plus" class="w-4 h-4"></i></span> Thêm Module Mới';
             document.getElementById('mod-color').value = 'indigo';
             document.querySelector('input[name="mod-visibility"][value="public"]').checked = true;
+            window.renderIconGrid('home'); 
             document.getElementById('modal-module').classList.remove('hidden');
         };
 
@@ -417,14 +508,10 @@
             document.getElementById('mod-name').value = m.name;
             document.getElementById('mod-desc').value = m.desc || '';
             document.getElementById('mod-link').value = m.link;
-            document.getElementById('mod-icon').value = m.icon || '';
             document.getElementById('mod-color').value = m.color || 'indigo';
-            
-            // Set visibility radio
-            const vis = m.visibility || 'public';
-            document.querySelector(`input[name="mod-visibility"][value="${vis}"]`).checked = true;
-
-            document.getElementById('modal-title').innerText = "Chỉnh sửa Module";
+            document.querySelector(`input[name="mod-visibility"][value="${m.visibility || 'public'}"]`).checked = true;
+            window.renderIconGrid(m.icon || 'box');
+            document.getElementById('modal-title').innerHTML = '<span class="bg-indigo-500 text-white p-1 rounded"><i data-lucide="edit-3" class="w-4 h-4"></i></span> Chỉnh sửa Module';
             document.getElementById('modal-module').classList.remove('hidden');
         };
 
@@ -447,18 +534,16 @@
                 link: document.getElementById('mod-link').value,
                 icon: document.getElementById('mod-icon').value || 'box',
                 color: document.getElementById('mod-color').value,
-                visibility: visibility // 'public' or 'admin'
+                visibility: visibility
             };
 
             let newModules = [...configData.modules];
             const existingIdx = newModules.findIndex(x => x.id === id);
-            
             if(existingIdx >= 0) {
                 newModules[existingIdx] = newMod;
             } else {
                 newModules.push(newMod);
             }
-
             await updateFirestore({ modules: newModules });
             showToast("Đã lưu module thành công!");
             window.closeModuleModal();
@@ -469,21 +554,24 @@
                 await setDoc(doc(db, "settings", "homepage"), data, { merge: true });
             } catch (e) {
                 console.error(e);
-                showToast("Lỗi lưu dữ liệu!", true);
+                showToast("Lỗi lưu dữ liệu! Kiểm tra quyền.", true);
             }
         }
 
-        // --- AUTH & HELPERS ---
+        // --- AUTH UI ---
         function renderAuthUI(user) {
             const container = document.getElementById('auth-section');
             if (user) {
                 container.innerHTML = `
-                    <div class="flex items-center gap-2 pl-3 pr-1 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border dark:border-white/10 shadow-sm cursor-pointer group" onclick="window.logout()">
-                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300 hidden sm:block">${user.displayName}</span>
-                        <img src="${user.photoURL}" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-700">
+                    <div class="flex items-center gap-2 pl-3 pr-1 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border dark:border-white/10 shadow-sm cursor-pointer group hover:bg-slate-200 dark:hover:bg-slate-700 transition" onclick="window.logout()">
+                        <div class="text-right hidden sm:block">
+                            <span class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 leading-none">${user.displayName}</span>
+                            <span class="text-[8px] text-slate-400 uppercase">Đăng xuất</span>
+                        </div>
+                        <img src="${user.photoURL}" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-700 group-hover:border-primary transition">
                     </div>`;
             } else {
-                container.innerHTML = `<button onclick="window.login()" class="px-5 py-2.5 bg-primary text-white rounded-xl text-xs font-bold uppercase shadow-lg hover:bg-sky-600 transition">Đăng nhập</button>`;
+                container.innerHTML = `<button onclick="window.login()" class="px-5 py-2.5 bg-primary text-white rounded-xl text-xs font-bold uppercase shadow-lg shadow-primary/30 hover:bg-sky-600 hover:scale-105 transition">Đăng nhập</button>`;
             }
         }
 
@@ -498,6 +586,12 @@
         function showToast(msg, isError = false) {
             const t = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
+            const icon = t.querySelector('svg');
+            if (isError) {
+                icon.classList.replace('text-green-500', 'text-red-500');
+            } else {
+                icon.classList.replace('text-red-500', 'text-green-500');
+            }
             t.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
@@ -505,5 +599,6 @@
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
         lucide.createIcons();
     </script>
+
 </body>
 </html>
