@@ -1,575 +1,307 @@
 <!DOCTYPE html>
-<html lang="vi" class="light">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Blog - Chia sẻ kiến thức</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { 
-                extend: { 
-                    colors: { primary: '#2563eb', secondary: '#f43f5e', dark: '#0f172a' },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'], // Font cho nội dung bài viết
-                    }
-                } 
-            }
-        }
-    </script>
+    <title>Tra cứu Lịch sử KCB BHYT (Demo)</title>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; transition: background 0.3s; } 
-        .dark body { background-color: #0f172a; color: #e2e8f0; }
-        
-        /* Typography cho bài viết */
-        .prose { max-width: 65ch; line-height: 1.8; font-family: 'Merriweather', serif; }
-        .prose p { margin-bottom: 1.5em; font-size: 1.1rem; color: #334155; }
-        .dark .prose p { color: #cbd5e1; }
-        .prose h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.5rem; margin-top: 2em; margin-bottom: 1em; color: #0f172a; }
-        .dark .prose h2 { color: #f1f5f9; }
-        .prose img { border-radius: 0.75rem; margin: 2rem 0; width: 100%; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        
-        .admin-sidebar { width: 20rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
-        .admin-sidebar.open { transform: translateX(0); }
-        
-        .loader { width: 24px; height: 24px; border: 3px solid #e2e8f0; border-bottom-color: #2563eb; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Line Clamp cho mô tả ngắn */
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        :root {
+            --primary-color: #0056b3;
+            --bg-color: #f4f4f9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="password"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Đảm bảo padding không làm vỡ layout */
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #resultArea {
+            margin-top: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap; /* Giữ định dạng JSON */
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        .error { color: red; }
+        .success { color: green; }
+        .note {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .proxy-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ffeeba;
+        }
+        .proxy-toggle input {
+            margin-right: 10px;
+            width: auto;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-    <!-- Loading Overlay -->
-    <div id="global-loading" class="fixed inset-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm z-[900] flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
-        <span class="loader mb-4"></span>
-        <span id="loading-text" class="text-sm font-bold text-slate-600 dark:text-slate-300">Đang tải...</span>
+<div class="container">
+    <h2>Tra cứu thông tin thẻ BHYT</h2>
+    
+    <div class="proxy-toggle">
+        <input type="checkbox" id="useProxy" checked>
+        <label for="useProxy" style="margin:0; display:inline;">
+            Sử dụng Proxy trung gian (Khắc phục lỗi CORS khi chạy trên trình duyệt).<br>
+            <span style="color:red; font-size:0.8em">Lưu ý: Chỉ dùng để test, không dùng proxy công cộng cho dữ liệu thật quan trọng.</span>
+        </label>
     </div>
 
-    <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-white/5">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                    <i data-lucide="feather" class="w-5 h-5"></i>
-                </div>
-                <h1 class="text-lg font-black tracking-tight">MY BLOG</h1>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <button onclick="window.toggleAdminSidebar()" id="admin-btn" class="hidden px-3 py-2 text-xs font-bold uppercase bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-                    Admin
-                </button>
-                <button onclick="window.toggleTheme()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-400">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
-                </button>
-                <div id="auth-section"></div>
-            </div>
+    <!-- Cấu hình tài khoản (Đã điền sẵn theo yêu cầu) -->
+    <div class="section">
+        <div class="section-title">1. Thông tin tài khoản kết nối (API)</div>
+        <div class="form-group">
+            <label>Username (Tài khoản cơ sở KCB):</label>
+            <input type="text" id="apiUser" value="038071013534">
         </div>
-    </header>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="apiPass" value="Ldhiep11061971@@">
+        </div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="flex-1 max-w-6xl mx-auto px-6 py-10 w-full">
+    <!-- Thông tin bệnh nhân cần tra cứu -->
+    <div class="section">
+        <div class="section-title">2. Thông tin bệnh nhân</div>
+        <div class="form-group">
+            <label>Mã thẻ BHYT (15 ký tự):</label>
+            <input type="text" id="maThe" placeholder="Ví dụ: DN4797912345678">
+        </div>
+        <div class="form-group">
+            <label>Họ và tên:</label>
+            <input type="text" id="hoTen" placeholder="Ví dụ: NGUYEN VAN A">
+        </div>
+        <div class="form-group">
+            <label>Ngày sinh:</label>
+            <!-- Input date trả về YYYY-MM-DD, ta sẽ cần convert sang DD/MM/YYYY -->
+            <input type="date" id="ngaySinh"> 
+            <div class="note">Hoặc nhập năm sinh nếu chỉ có năm (VD: 1990)</div>
+        </div>
+    </div>
+
+    <button id="btnSearch" onclick="handleSearch()">Tra cứu ngay</button>
+    <div id="statusMessage" style="text-align: center; margin-top: 10px;"></div>
+
+    <div id="resultArea"></div>
+</div>
+
+<script>
+    // --- CẤU HÌNH URL API ---
+    // URL gốc của BHXH
+    const BASE_URL = "http://egw.baohiemxahoi.gov.vn"; 
+    
+    // Proxy công cộng để bypass CORS (Dùng corsproxy.io làm ví dụ)
+    const PROXY_URL = "https://corsproxy.io/?";
+
+    // Hàm tiện ích: Tạo MD5 (Vì JS thuần không có sẵn MD5 ngắn gọn, đây là bản minified của thuật toán MD5)
+    var MD5=function(d){var r=M(V(Y(X(d),8*d.length)));return r.toLowerCase()};function M(d){for(var _,m="0123456789ABCDEF",f="",r=0;r<d.length;r++)_=d.charCodeAt(r),f+=m.charAt(_>>>4&15)+m.charAt(15&_);return f}function X(d){for(var _=Array(d.length>>2),m=0;m<_.length;m++)_[m]=0;for(m=0;m<8*d.length;m+=8)_[m>>5]|=(255&d.charCodeAt(m/8))<<m%32;return _}function V(d,_){d[_>>5]|=128<<_%32,d[14+(_+64>>>9<<4)]=_;for(var m=1732584193,f=-271733879,r=-1732584194,i=271733878,n=0;n<d.length;n+=16){var h=m,t=f,g=r,e=i;m=md5_ii(m=md5_ii(m=md5_ii(m=md5_ii(m=md5_hh(m=md5_hh(m=md5_hh(m=md5_hh(m=md5_gg(m=md5_gg(m=md5_gg(m=md5_gg(m=md5_ff(m=md5_ff(m=md5_ff(m=md5_ff(m,f,r,i,d[n+0],7,-680876936),f,r,i,d[n+1],12,-389564586),f,r,i,d[n+2],17,606105819),f,r,i,d[n+3],22,-1044525330),f,r,i,d[n+4],7,-176418897),f,r,i,d[n+5],12,1200080426),f,r,i,d[n+6],17,-1473231341),f,r,i,d[n+7],22,-45705983),f,r,i,d[n+8],7,1770035416),f,r,i,d[n+9],12,-1958414417),f,r,i,d[n+10],17,-42063),f,r,i,d[n+11],22,-1990404162),f,r,i,d[n+12],7,1804112514),f,r,i,d[n+13],12,-2004318071),f,r,i,d[n+14],17,-1797288840),f,r,i,d[n+15],22,1236535329),i=md5_ii(i=md5_ii(i=md5_ii(i=md5_ii(i=md5_hh(i=md5_hh(i=md5_hh(i=md5_hh(i=md5_gg(i=md5_gg(i=md5_gg(i=md5_gg(i=md5_ff(i=md5_ff(i=md5_ff(i=md5_ff(i,m,f,r,d[n+1],5,-165796510),m,f,r,d[n+6],9,-1069501632),m,f,r,d[n+11],14,643717713),m,f,r,d[n+0],20,-373897302),m,f,r,d[n+5],5,-701558691),m,f,r,d[n+10],9,38016083),m,f,r,d[n+15],14,-660478335),m,f,r,d[n+4],20,-405537848),m,f,r,d[n+9],5,568446438),m,f,r,d[n+14],9,-1019803690),m,f,r,d[n+3],14,-187363961),m,f,r,d[n+8],20,1163531501),m,f,r,d[n+13],5,-1444681467),m,f,r,d[n+2],9,-51403784),m,f,r,d[n+7],14,1735328473),m,f,r,d[n+12],20,-1926607734),r=md5_ii(r=md5_ii(r=md5_ii(r=md5_ii(r=md5_hh(r=md5_hh(r=md5_hh(r=md5_hh(r=md5_gg(r=md5_gg(r=md5_gg(r=md5_gg(r=md5_ff(r=md5_ff(r=md5_ff(r=md5_ff(r,i,m,f,d[n+5],4,-57434055),i,m,f,d[n+8],11,-2054922799),i,m,f,d[n+11],16,1873313359),i,m,f,d[n+14],23,-30611744),i,m,f,d[n+1],4,-1530992060),i,m,f,d[n+4],11,1272893353),i,m,f,d[n+7],16,-155497632),i,m,f,d[n+10],23,-1094730640),i,m,f,d[n+13],4,681279174),i,m,f,d[n+0],11,-358537222),i,m,f,d[n+3],16,-722521979),i,m,f,d[n+6],23,76029189),i,m,f,d[n+9],4,-640364487),i,m,f,d[n+12],11,-421815835),i,m,f,d[n+15],16,530742520),i,m,f,d[n+2],23,-995338651),m=cmn(m,h),f=cmn(f,t),r=cmn(r,g),i=cmn(e,i)}return""+L(m)+L(f)+L(r)+L(i)}function cmn(d,_){var m=(65535&d)+(65535&_);return(d>>16)+(_>>16)+(m>>16)<<16|65535&m}function md5_ff(d,_,m,f,r,i,n){return cmn(_&m|~_&f,d,_,r,i,n)}function md5_gg(d,_,m,f,r,i,n){return cmn(_&f|m&~f,d,_,r,i,n)}function md5_hh(d,_,m,f,r,i,n){return cmn(_^m^f,d,_,r,i,n)}function md5_ii(d,_,m,f,r,i,n){return cmn(m^(_|~f),d,_,r,i,n)}function Y(d,_){d[_>>5]|=128<<_%32,d[14+(_+64>>>9<<4)]=_;for(var m=1732584193,f=-271733879,r=-1732584194,i=271733878,n=0;n<d.length;n+=16){var h=m,t=f,g=r,e=i;m=md5_ii(m=md5_ii(m=md5_ii(m=md5_ii(m=md5_hh(m=md5_hh(m=md5_hh(m=md5_hh(m=md5_gg(m=md5_gg(m=md5_gg(m=md5_gg(m=md5_ff(m=md5_ff(m=md5_ff(m=md5_ff(m,f,r,i,d[n+0],7,-680876936),f,r,i,d[n+1],12,-389564586),f,r,i,d[n+2],17,606105819),f,r,i,d[n+3],22,-1044525330),f,r,i,d[n+4],7,-176418897),f,r,i,d[n+5],12,1200080426),f,r,i,d[n+6],17,-1473231341),f,r,i,d[n+7],22,-45705983),f,r,i,d[n+8],7,1770035416),f,r,i,d[n+9],12,-1958414417),f,r,i,d[n+10],17,-42063),f,r,i,d[n+11],22,-1990404162),f,r,i,d[n+12],7,1804112514),f,r,i,d[n+13],12,-2004318071),f,r,i,d[n+14],17,-1797288840),f,r,i,d[n+15],22,1236535329),i=md5_ii(i=md5_ii(i=md5_ii(i=md5_ii(i=md5_hh(i=md5_hh(i=md5_hh(i=md5_hh(i=md5_gg(i=md5_gg(i=md5_gg(i=md5_gg(i=md5_ff(i=md5_ff(i=md5_ff(i=md5_ff(i,m,f,r,d[n+1],5,-165796510),m,f,r,d[n+6],9,-1069501632),m,f,r,d[n+11],14,643717713),m,f,r,d[n+0],20,-373897302),m,f,r,d[n+5],5,-701558691),m,f,r,d[n+10],9,38016083),m,f,r,d[n+15],14,-660478335),m,f,r,d[n+4],20,-405537848),m,f,r,d[n+9],5,568446438),m,f,r,d[n+14],9,-1019803690),m,f,r,d[n+3],14,-187363961),m,f,r,d[n+8],20,1163531501),m,f,r,d[n+13],5,-1444681467),m,f,r,d[n+2],9,-51403784),m,f,r,d[n+7],14,1735328473),m,f,r,d[n+12],20,-1926607734),r=md5_ii(r=md5_ii(r=md5_ii(r=md5_ii(r=md5_hh(r=md5_hh(r=md5_hh(r=md5_hh(r=md5_gg(r=md5_gg(r=md5_gg(r=md5_gg(r=md5_ff(r=md5_ff(r=md5_ff(r=md5_ff(r,i,m,f,d[n+5],4,-57434055),i,m,f,d[n+8],11,-2054922799),i,m,f,d[n+11],16,1873313359),i,m,f,d[n+14],23,-30611744),i,m,f,d[n+1],4,-1530992060),i,m,f,d[n+4],11,1272893353),i,m,f,d[n+7],16,-155497632),i,m,f,d[n+10],23,-1094730640),i,m,f,d[n+13],4,681279174),i,m,f,d[n+0],11,-358537222),i,m,f,d[n+3],16,-722521979),i,m,f,d[n+6],23,76029189),i,m,f,d[n+9],4,-640364487),i,m,f,d[n+12],11,-421815835),i,m,f,d[n+15],16,530742520),i,m,f,d[n+2],23,-995338651),m=cmn(m,h),f=cmn(f,t),r=cmn(r,g),i=cmn(e,i)}return""+L(m)+L(f)+L(r)+L(i)}function L(d){for(var _="",m=0;m<4;m++)_+=String.fromCharCode(255&d>>(8*m));return _}
+
+    // Helper: Format ngày từ YYYY-MM-DD (HTML input) sang DD/MM/YYYY (API yêu cầu)
+    function formatDate(dateString) {
+        if(!dateString) return "";
+        const parts = dateString.split("-");
+        if(parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return dateString;
+    }
+
+    // Helper: Fetch with wrapper for Proxy
+    async function fetchAPI(endpoint, method, body = null, queryParams = {}) {
+        let url = BASE_URL + endpoint;
+        const useProxy = document.getElementById('useProxy').checked;
+
+        // Xây dựng Query String
+        const queryString = Object.keys(queryParams)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+            .join('&');
         
-        <!-- Hero / Featured (Optional) -->
-        <div class="mb-12 text-center max-w-2xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-black mb-4 text-slate-800 dark:text-white">Chia sẻ kiến thức & Trải nghiệm</h2>
-            <p class="text-slate-500 dark:text-slate-400 text-lg">Nơi lưu trữ những bài viết, hình ảnh và khoảnh khắc đáng nhớ.</p>
-        </div>
-
-        <!-- Create Post Button (Mobile Floating) -->
-        <button onclick="window.openPostModal()" id="fab-create" class="hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-600 transition z-40">
-            <i data-lucide="plus" class="w-6 h-6"></i>
-        </button>
-
-        <!-- Blog Grid -->
-        <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Posts rendered here -->
-        </div>
-
-        <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
-            <i data-lucide="coffee" class="w-16 h-16 mb-4 opacity-50"></i>
-            <p class="font-medium">Chưa có bài viết nào.</p>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t dark:border-white/5 py-8 text-center text-sm text-slate-500 dark:text-slate-500">
-        <p>&copy; 2026 My Blog. Built with Firebase & GitHub.</p>
-    </footer>
-
-    <!-- Reading Modal (Full Screen) -->
-    <div id="modal-read" class="fixed inset-0 bg-white dark:bg-slate-900 z-[100] hidden overflow-y-auto">
-        <div class="max-w-3xl mx-auto px-6 py-12 relative">
-            <button onclick="window.closeReadModal()" class="fixed top-6 right-6 lg:left-6 lg:right-auto p-3 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition z-50">
-                <i data-lucide="arrow-left" class="w-6 h-6"></i>
-            </button>
-            
-            <article>
-                <div class="mb-8 text-center">
-                    <span id="read-date" class="text-xs font-bold text-primary uppercase tracking-widest"></span>
-                    <h1 id="read-title" class="text-3xl md:text-5xl font-black mt-3 mb-6 leading-tight text-slate-900 dark:text-white"></h1>
-                    <div class="flex items-center justify-center gap-2">
-                        <img id="read-avatar" src="" class="w-8 h-8 rounded-full">
-                        <span id="read-author" class="text-sm font-bold text-slate-600 dark:text-slate-400"></span>
-                    </div>
-                </div>
-
-                <div class="w-full aspect-video rounded-2xl overflow-hidden mb-10 shadow-2xl">
-                    <img id="read-cover" src="" class="w-full h-full object-cover">
-                </div>
-
-                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg">
-                    <!-- Content HTML -->
-                </div>
-            </article>
-
-            <!-- Admin Actions inside Article -->
-            <div id="read-admin-actions" class="mt-12 pt-8 border-t dark:border-white/10 flex justify-end gap-3 hidden">
-                <button id="btn-edit-post" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm font-bold hover:bg-slate-200 transition">Sửa bài</button>
-                <button id="btn-delete-post" class="px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition">Xóa bài</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Sidebar (Settings) -->
-    <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 bg-white dark:bg-slate-900 border-l dark:border-white/10 shadow-2xl z-[200] flex flex-col">
-        <div class="p-6 border-b dark:border-white/5 flex justify-between items-center">
-            <h3 class="font-black uppercase text-sm tracking-widest text-primary">Cấu hình Hệ thống</h3>
-            <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-
-        <div class="p-6 space-y-6">
-            <button onclick="window.openPostModal()" class="w-full py-3 bg-primary text-white rounded-xl font-bold uppercase text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-blue-600 transition">
-                <i data-lucide="pen-tool" class="w-4 h-4"></i> Viết bài mới
-            </button>
-
-            <!-- Github Settings -->
-            <div class="space-y-4 pt-4 border-t dark:border-white/5">
-                <h4 class="text-xs font-black uppercase tracking-widest text-slate-500">GitHub (Lưu trữ ảnh)</h4>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Token</label>
-                    <input type="password" id="gh-token" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-xs border dark:border-white/5 outline-none">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Owner</label>
-                    <input type="text" id="gh-owner" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-xs border dark:border-white/5 outline-none">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Repository</label>
-                    <input type="text" id="gh-repo" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-xs border dark:border-white/5 outline-none">
-                </div>
-                <button onclick="window.saveGithubConfig()" class="w-full py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white rounded-lg text-xs font-bold uppercase">Lưu cấu hình</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Post Editor Modal (Create/Edit) -->
-    <div id="modal-post" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b dark:border-white/5 flex justify-between items-center shrink-0">
-                <h3 class="font-bold uppercase text-sm tracking-widest text-primary" id="editor-title-label">Viết bài mới</h3>
-                <button onclick="window.closePostModal()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            
-            <form id="post-form" class="flex-1 overflow-y-auto p-6 space-y-6">
-                <input type="hidden" id="post-id">
-                
-                <!-- Title -->
-                <div>
-                    <input type="text" id="post-title" required placeholder="Tiêu đề bài viết..." class="w-full text-2xl font-black bg-transparent border-b border-transparent focus:border-slate-200 dark:focus:border-white/10 outline-none pb-2 placeholder-slate-300 dark:placeholder-slate-600 transition">
-                </div>
-
-                <!-- Cover Image Upload -->
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase text-slate-400">Ảnh bìa</label>
-                    <div id="drop-zone" class="relative group h-40 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition overflow-hidden">
-                        <input type="file" id="cover-input" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                        <div id="upload-placeholder" class="text-center">
-                            <i data-lucide="image" class="w-8 h-8 text-slate-400 mx-auto mb-2"></i>
-                            <span class="text-xs font-bold text-slate-500">Tải ảnh bìa (GitHub)</span>
-                        </div>
-                        <img id="cover-preview" src="" class="absolute inset-0 w-full h-full object-cover hidden">
-                    </div>
-                </div>
-
-                <!-- Content -->
-                <div class="space-y-2 flex-1">
-                    <label class="text-xs font-bold uppercase text-slate-400">Nội dung (HTML/Text)</label>
-                    <textarea id="post-content" required placeholder="Viết nội dung tại đây... (Hỗ trợ thẻ HTML đơn giản <p>, <b>, <img>)" class="w-full h-64 p-4 bg-slate-50 dark:bg-white/5 rounded-xl text-lg outline-none focus:ring-2 ring-primary/50 resize-y font-serif leading-relaxed"></textarea>
-                    <p class="text-[10px] text-slate-400">* Mẹo: Sử dụng thẻ &lt;img src="..."&gt; để chèn ảnh vào bài viết.</p>
-                </div>
-            </form>
-
-            <div class="p-4 border-t dark:border-white/5 bg-slate-50 dark:bg-white/5 shrink-0 flex justify-end">
-                <button onclick="document.getElementById('post-form').requestSubmit()" class="px-6 py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Đăng bài</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 z-[500] translate-y-20 opacity-0 transition-all duration-300">
-        <div class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm">
-            <i id="toast-icon" data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
-            <span id="toast-msg">Thông báo</span>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // --- FIREBASE CONFIG (Thay bằng của bạn) ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
-            authDomain: "profile-d1214.firebaseapp.com",
-            projectId: "profile-d1214",
-            storageBucket: "profile-d1214.firebasestorage.app",
-            messagingSenderId: "914980131889",
-            appId: "1:914980131889:web:72f8da15c42dbee671b110"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
-        let currentUser = null;
-        let isAdmin = false;
-        let posts = [];
-        let ghConfig = { token: '', owner: '', repo: '' };
-        let currentUploadSHA = null; // Store SHA if we replace image
-        let currentCoverPath = null; // Store Path
-
-        // --- AUTH ---
-        onAuthStateChanged(auth, async (user) => {
-            currentUser = user;
-            renderAuthUI();
-            
-            if (user) {
-                const adminRef = doc(db, "settings", "admins");
-                const snap = await getDoc(adminRef);
-                if (snap.exists()) {
-                    const data = snap.data();
-                    isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
-                }
-                
-                if (isAdmin) {
-                    const ghRef = doc(db, "settings", "github_config");
-                    const ghSnap = await getDoc(ghRef);
-                    if (ghSnap.exists()) ghConfig = ghSnap.data();
-                    
-                    document.getElementById('gh-token').value = ghConfig.token || '';
-                    document.getElementById('gh-owner').value = ghConfig.owner || '';
-                    document.getElementById('gh-repo').value = ghConfig.repo || '';
-                    
-                    document.getElementById('admin-btn').classList.remove('hidden');
-                    document.getElementById('fab-create').classList.remove('hidden');
-                }
-            } else {
-                isAdmin = false;
-                document.getElementById('admin-btn').classList.add('hidden');
-                document.getElementById('fab-create').classList.add('hidden');
-            }
-            renderPosts();
-        });
-
-        // --- UI UTILS ---
-        function renderAuthUI() {
-            const container = document.getElementById('auth-section');
-            if (currentUser) {
-                container.innerHTML = `
-                    <div class="flex items-center gap-2 cursor-pointer" onclick="window.logout()">
-                        <img src="${currentUser.photoURL}" class="w-8 h-8 rounded-full border border-slate-200 dark:border-white/10">
-                    </div>`;
-            } else {
-                container.innerHTML = `<button onclick="window.login()" class="px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs uppercase shadow hover:bg-blue-600 transition">Đăng nhập</button>`;
-            }
+        if (queryString) {
+            url += `?${queryString}`;
         }
 
-        window.login = () => signInWithPopup(auth, provider);
-        window.logout = () => signOut(auth).then(() => location.reload());
-        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
-        window.toggleTheme = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        };
-
-        // --- DATA LOGIC ---
-        onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snap) => {
-            posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            renderPosts();
-        });
-
-        function renderPosts() {
-            const grid = document.getElementById('blog-grid');
-            if (posts.length === 0) {
-                grid.innerHTML = '';
-                document.getElementById('empty-state').classList.remove('hidden');
-                return;
-            }
-
-            document.getElementById('empty-state').classList.add('hidden');
-            grid.innerHTML = posts.map(post => {
-                const date = new Date(post.timestamp).toLocaleDateString('vi-VN', {day: 'numeric', month: 'long', year: 'numeric'});
-                // Strip HTML for excerpt
-                const tmp = document.createElement("DIV");
-                tmp.innerHTML = post.content;
-                const excerpt = tmp.textContent || tmp.innerText || "";
-                
-                return `
-                <article onclick="window.readPost('${post.id}')" class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition duration-300 cursor-pointer border dark:border-white/5 flex flex-col h-full">
-                    <div class="aspect-[16/9] bg-slate-100 dark:bg-slate-700 overflow-hidden relative">
-                        ${post.coverUrl 
-                            ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`
-                            : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`
-                        }
-                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                            ${post.category || 'Blog'}
-                        </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-1">
-                        <div class="flex items-center gap-2 mb-3">
-                            <img src="${post.authorPhoto}" class="w-6 h-6 rounded-full">
-                            <span class="text-xs font-bold text-slate-500">${post.authorName}</span>
-                            <span class="text-slate-300">•</span>
-                            <span class="text-xs text-slate-400">${date}</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-slate-800 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition">${post.title}</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 flex-1">${excerpt.substring(0, 150)}...</p>
-                        <div class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                            Đọc tiếp <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                </article>
-                `;
-            }).join('');
-            lucide.createIcons();
+        // Nếu dùng Proxy, thêm vào trước URL
+        if (useProxy) {
+            url = PROXY_URL + encodeURIComponent(url);
         }
 
-        // --- GITHUB UPLOAD ---
-        const toBase64 = file => new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-        });
-
-        window.saveGithubConfig = async () => {
-            if (!isAdmin) return;
-            const token = document.getElementById('gh-token').value.trim();
-            const owner = document.getElementById('gh-owner').value.trim();
-            const repo = document.getElementById('gh-repo').value.trim();
-            await setDoc(doc(db, "settings", "github_config"), { token, owner, repo });
-            ghConfig = { token, owner, repo };
-            showToast("Đã lưu cấu hình!");
-        };
-
-        // --- POST ACTIONS ---
-        window.openPostModal = () => {
-            if(!ghConfig.token) { showToast("Vui lòng cấu hình GitHub!", true); window.toggleAdminSidebar(); return; }
-            
-            document.getElementById('post-form').reset();
-            document.getElementById('post-id').value = '';
-            document.getElementById('editor-title-label').innerText = "Viết bài mới";
-            document.getElementById('cover-preview').src = '';
-            document.getElementById('cover-preview').classList.add('hidden');
-            document.getElementById('upload-placeholder').classList.remove('hidden');
-            
-            // Reset temp vars
-            currentUploadSHA = null;
-            currentCoverPath = null;
-            
-            document.getElementById('modal-post').classList.remove('hidden');
-        };
-
-        window.closePostModal = () => document.getElementById('modal-post').classList.add('hidden');
-
-        // Handle Image Select Preview
-        document.getElementById('cover-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.getElementById('cover-preview');
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    document.getElementById('upload-placeholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Submit Post
-        document.getElementById('post-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const postId = document.getElementById('post-id').value;
-            const title = document.getElementById('post-title').value;
-            const content = document.getElementById('post-content').value;
-            const fileInput = document.getElementById('cover-input');
-            
-            setLoading(true);
-
-            try {
-                let coverUrl = document.getElementById('cover-preview').src;
-                let coverPath = currentCoverPath;
-                let coverSha = currentUploadSHA;
-
-                // 1. Upload Image if new selected
-                if(fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    const base64 = await toBase64(file);
-                    const fileName = `posts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-                    
-                    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${fileName}`;
-                    const res = await fetch(url, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Upload blog cover", content: base64, branch: 'main' })
-                    });
-                    
-                    if(!res.ok) throw new Error("Lỗi upload ảnh GitHub");
-                    const data = await res.json();
-                    
-                    coverUrl = data.content.download_url;
-                    coverPath = fileName;
-                    coverSha = data.content.sha;
-                }
-
-                // 2. Save Firestore
-                const postData = {
-                    title, content, coverUrl, coverPath, coverSha,
-                    updatedAt: new Date().toISOString(),
-                    authorName: currentUser.displayName,
-                    authorPhoto: currentUser.photoURL
-                };
-
-                if(postId) {
-                    // Update
-                    await updateDoc(doc(db, "posts", postId), postData);
-                    showToast("Cập nhật bài viết thành công!");
-                } else {
-                    // Create
-                    postData.timestamp = new Date().toISOString();
-                    await addDoc(collection(db, "posts"), postData);
-                    showToast("Đăng bài thành công!");
-                }
-
-                window.closePostModal();
-
-            } catch (err) {
-                console.error(err);
-                showToast("Lỗi: " + err.message, true);
-            } finally {
-                setLoading(false);
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             }
         };
 
-        // --- READ MODE ---
-        window.readPost = (id) => {
-            const post = posts.find(p => p.id === id);
-            if(!post) return;
-
-            document.getElementById('read-title').innerText = post.title;
-            document.getElementById('read-date').innerText = new Date(post.timestamp).toLocaleDateString('vi-VN', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-            document.getElementById('read-author').innerText = post.authorName;
-            document.getElementById('read-avatar').src = post.authorPhoto;
-            document.getElementById('read-cover').src = post.coverUrl;
-            document.getElementById('read-content').innerHTML = post.content.replace(/\n/g, '<br>');
-
-            // Show Admin Actions
-            const actionDiv = document.getElementById('read-admin-actions');
-            if(isAdmin) {
-                actionDiv.classList.remove('hidden');
-                document.getElementById('btn-edit-post').onclick = () => { window.closeReadModal(); window.editPost(id); };
-                document.getElementById('btn-delete-post').onclick = () => { if(confirm("Xóa bài này?")) window.deletePost(id, post.coverPath, post.coverSha); };
-            } else {
-                actionDiv.classList.add('hidden');
-            }
-
-            document.getElementById('modal-read').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent body scroll
-        };
-
-        window.closeReadModal = () => {
-            document.getElementById('modal-read').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        };
-
-        // --- EDIT/DELETE ---
-        window.editPost = (id) => {
-            const post = posts.find(p => p.id === id);
-            window.openPostModal();
-            document.getElementById('post-id').value = id;
-            document.getElementById('editor-title-label').innerText = "Chỉnh sửa bài viết";
-            document.getElementById('post-title').value = post.title;
-            document.getElementById('post-content').value = post.content;
-            
-            if(post.coverUrl) {
-                const img = document.getElementById('cover-preview');
-                img.src = post.coverUrl;
-                img.classList.remove('hidden');
-                document.getElementById('upload-placeholder').classList.add('hidden');
-                
-                // Store existing path to keep if not changed
-                currentCoverPath = post.coverPath;
-                currentUploadSHA = post.coverSha;
-            }
-        };
-
-        window.deletePost = async (id, path, sha) => {
-            setLoading(true);
-            try {
-                // Delete image from GitHub if exists
-                if(path && sha) {
-                    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
-                    await fetch(url, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Delete post cover", sha: sha, branch: 'main' })
-                    });
-                }
-                await deleteDoc(doc(db, "posts", id));
-                showToast("Đã xóa bài viết!");
-                window.closeReadModal();
-            } catch (err) {
-                showToast("Lỗi xóa: " + err.message, true);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        // --- UTILS ---
-        function showToast(msg, isError = false) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            const icon = document.getElementById('toast-icon');
-            icon.setAttribute('data-lucide', isError ? 'alert-triangle' : 'check-circle');
-            icon.className = isError ? 'w-5 h-5 text-red-500' : 'w-5 h-5 text-green-500';
-            lucide.createIcons();
-            t.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+        if (body) {
+            options.body = JSON.stringify(body);
         }
 
-        function setLoading(active) {
-            const l = document.getElementById('global-loading');
-            active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none');
+        console.log(`Calling API: ${url}`);
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+        return await response.json();
+    }
+
+    async function handleSearch() {
+        const btn = document.getElementById('btnSearch');
+        const status = document.getElementById('statusMessage');
+        const resultArea = document.getElementById('resultArea');
+        const username = document.getElementById('apiUser').value;
+        const password = document.getElementById('apiPass').value;
+        const maThe = document.getElementById('maThe').value;
+        const hoTen = document.getElementById('hoTen').value;
+        const ngaySinhRaw = document.getElementById('ngaySinh').value;
+
+        if (!maThe || !hoTen || !ngaySinhRaw) {
+            alert("Vui lòng nhập đầy đủ thông tin bệnh nhân!");
+            return;
         }
 
-        if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
-        lucide.createIcons();
-    </script>
+        btn.disabled = true;
+        resultArea.style.display = 'none';
+        resultArea.innerHTML = "";
+        status.innerHTML = "Đang kết nối... (Bước 1: Lấy Token)";
+        status.className = "";
+
+        try {
+            // --- BƯỚC 1: LẤY TOKEN ---
+            // Theo tài liệu (Page 4, 10): POST /api/token/take với body {username, password}
+            const tokenData = await fetchAPI('/api/token/take', 'POST', {
+                username: username,
+                password: password
+            });
+
+            if (!tokenData || !tokenData.APIKey) {
+                throw new Error("Không lấy được Token. Kiểm tra lại tài khoản/mật khẩu.");
+            }
+
+            const { access_token, id_token } = tokenData.APIKey;
+            
+            status.innerHTML = "Đã có Token. Đang tra cứu thông tin... (Bước 2)";
+
+            // --- BƯỚC 2: TRA CỨU ---
+            // Theo tài liệu (Page 7): POST /api/egw/NhanLichSuKCB2018
+            // Query Params: token, id_token, username, password (dạng MD5)
+            // Body: maThe, hoTen, ngaySinh
+            
+            // Theo hướng dẫn Code (Page 8), password trong query params phải MD5
+            const passwordMD5 = MD5(password);
+
+            const queryParams = {
+                token: access_token,
+                id_token: id_token,
+                username: username,
+                password: passwordMD5
+            };
+
+            const bodyData = {
+                maThe: maThe,
+                hoTen: hoTen,
+                ngaySinh: formatDate(ngaySinhRaw) // Chuyển về DD/MM/YYYY
+            };
+
+            const resultData = await fetchAPI('/api/egw/NhanLichSuKCB2018', 'POST', bodyData, queryParams);
+
+            // Hiển thị kết quả
+            status.innerHTML = "Tra cứu thành công!";
+            status.className = "success";
+            
+            // Format JSON cho đẹp
+            resultArea.style.display = 'block';
+            resultArea.textContent = JSON.stringify(resultData, null, 4);
+
+        } catch (error) {
+            console.error(error);
+            status.innerHTML = `Lỗi: ${error.message}`;
+            status.className = "error";
+            if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
+                 status.innerHTML += "<br>Lỗi CORS. Hãy chắc chắn bạn đã tick chọn 'Sử dụng Proxy trung gian' hoặc cài Extension tắt CORS.";
+            }
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+
 </body>
 </html>
