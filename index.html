@@ -3,8 +3,8 @@
 <html lang="vi" class="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Thông Tin - Trạm Y tế Phường Hiệp Thành</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cổng Thông Tin - Đơn vị Tùy chỉnh</title>
     <link rel="icon" href="https://hdd.io.vn/img/bmassloadings.png" type="image/png">
     
     <!-- Tailwind CSS -->
@@ -19,18 +19,19 @@
             darkMode: 'class',
             theme: { 
                 extend: { 
-                    colors: { primary: '#0ea5e9', secondary: '#ef4444', dark: '#0f172a' } 
+                    colors: { primary: '#0ea5e9', secondary: '#ef4444', dark: '#0f172a' },
+                    screens: { 'xs': '400px' }
                 } 
             }
         }
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; transition: background 0.3s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; transition: background 0.3s; overflow-x: hidden; }
         .dark body { background-color: #0f172a; color: #e2e8f0; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .dark .glass { background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); }
         
-        .admin-sidebar { width: 30rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        .admin-sidebar { width: 100%; max-width: 32rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
         .admin-sidebar.open { transform: translateX(0); }
         
         /* Custom Scrollbar */
@@ -52,23 +53,23 @@
     </div>
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 glass px-6 py-4">
+    <header class="sticky top-0 z-50 glass px-4 md:px-6 py-3 md:py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="https://hdd.io.vn/img/bmassloadings.png" alt="Logo" class="w-10 h-10 object-contain">
-                <div>
-                    <h1 class="text-sm font-black tracking-widest uppercase text-primary leading-none" id="header-title">LOADING...</h1>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight" id="header-subtitle">LOADING...</span>
+            <div class="flex items-center gap-2 md:gap-3 overflow-hidden">
+                <img src="https://hdd.io.vn/img/bmassloadings.png" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain flex-shrink-0">
+                <div class="min-w-0">
+                    <h1 class="text-xs md:text-sm font-black tracking-widest uppercase text-primary leading-none truncate" id="header-title">LOADING...</h1>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-tight truncate block" id="header-subtitle">LOADING...</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold uppercase hover:bg-slate-200 transition">
-                    <i data-lucide="settings" class="w-4 h-4 inline mr-1"></i> Setup
+            <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
+                <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-2 md:px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-[10px] md:text-xs font-bold uppercase hover:bg-slate-200 transition">
+                    <i data-lucide="settings" class="w-4 h-4 inline md:mr-1"></i> <span class="hidden md:inline">Setup</span>
                 </button>
-                <button onclick="window.toggleTheme()" class="p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-400">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
-                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                <button onclick="window.toggleTheme()" class="p-2 md:p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-400">
+                    <i data-lucide="sun" class="w-4 h-4 md:w-5 md:h-5 hidden dark:block text-amber-400"></i>
+                    <i data-lucide="moon" class="w-4 h-4 md:w-5 md:h-5 dark:hidden"></i>
                 </button>
                 <div id="auth-section"></div>
             </div>
@@ -81,16 +82,16 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white dark:bg-slate-900 border-t dark:border-white/5 mt-12 pt-12 pb-8 px-6">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 mb-12" id="footer-content">
+    <footer class="bg-white dark:bg-slate-900 border-t dark:border-white/5 mt-12 pt-12 pb-8 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-12" id="footer-content">
             <!-- Rendered by JS -->
         </div>
         
         <div class="max-w-7xl mx-auto border-t dark:border-white/5 pt-8 text-center">
-            <p class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-4" id="footer-text">© 2024. All rights reserved.</p>
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-full border dark:border-white/5">
-                <i data-lucide="globe-2" class="w-3 h-3 text-slate-400"></i>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400" id="user-system-info">
+            <p class="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 mb-4" id="footer-text">© 2024. All rights reserved.</p>
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-full border dark:border-white/5 max-w-full">
+                <i data-lucide="globe-2" class="w-3 h-3 text-slate-400 flex-shrink-0"></i>
+                <p class="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 truncate" id="user-system-info">
                     Đang quét thông tin hệ thống...
                 </p>
             </div>
@@ -121,20 +122,34 @@
             <!-- 1. General Info -->
             <div class="space-y-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border dark:border-white/5">
                 <h4 class="text-xs font-black uppercase tracking-widest text-primary border-b pb-2 flex items-center gap-2">
-                    <i data-lucide="info" class="w-4 h-4"></i> Thông tin Đơn vị
+                    <i data-lucide="info" class="w-4 h-4"></i> Thông tin Chung
                 </h4>
                 <div class="space-y-2">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Tên đơn vị (Dòng 1)</label>
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Tên Cổng (Dòng 1)</label>
                     <input type="text" id="cfg-title1" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                 </div>
                 <div class="space-y-2">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Tên đơn vị (Dòng 2)</label>
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Tên Cổng (Dòng 2)</label>
                     <input type="text" id="cfg-title2" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Slogan / Thông điệp</label>
                     <textarea id="cfg-slogan" rows="2" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary"></textarea>
                 </div>
+            </div>
+
+            <!-- NEW: UNIT MANAGEMENT -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b pb-2">
+                    <h4 class="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                        <i data-lucide="building-2" class="w-4 h-4"></i> Quản lý Đơn vị
+                    </h4>
+                    <button onclick="window.openUnitModal()" class="flex items-center gap-1 text-[10px] font-bold text-white bg-secondary px-2 py-1 rounded hover:bg-red-600 transition">
+                        <i data-lucide="plus" class="w-3 h-3"></i> Thêm
+                    </button>
+                </div>
+                <p class="text-[10px] text-slate-400 italic">Quản lý trụ sở chính và các chi nhánh trực thuộc.</p>
+                <div id="admin-unit-list" class="space-y-3"></div>
             </div>
 
             <!-- 2. Social & Contact -->
@@ -146,25 +161,32 @@
                     <label class="text-[10px] font-bold uppercase text-slate-400">Facebook URL</label>
                     <div class="flex items-center gap-2">
                         <i data-lucide="facebook" class="w-4 h-4 text-blue-600"></i>
-                        <input type="text" id="cfg-fb" placeholder="https://facebook.com/..." class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                        <input type="text" id="cfg-fb" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                     </div>
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold uppercase text-slate-400">Zalo URL</label>
                     <div class="flex items-center gap-2">
                         <i data-lucide="message-circle" class="w-4 h-4 text-blue-500"></i>
-                        <input type="text" id="cfg-zalo" placeholder="https://zalo.me/..." class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                        <input type="text" id="cfg-zalo" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Số Điện thoại</label>
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Email (Gmail)</label>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="mail" class="w-4 h-4 text-red-500"></i>
+                        <input type="text" id="cfg-email" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Hotline</label>
                     <div class="flex items-center gap-2">
                         <i data-lucide="phone" class="w-4 h-4 text-green-500"></i>
-                        <input type="text" id="cfg-phone" placeholder="0909xxxxxx" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                        <input type="text" id="cfg-phone" class="w-full px-4 py-2 bg-white dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
                     </div>
                 </div>
                 <button onclick="window.saveGeneralConfig()" class="w-full mt-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-lg text-xs font-bold uppercase hover:bg-slate-300 transition shadow-sm">
-                    <i data-lucide="save" class="w-3 h-3 inline mr-1"></i> Lưu toàn bộ Cấu hình
+                    <i data-lucide="save" class="w-3 h-3 inline mr-1"></i> Lưu Cấu hình
                 </button>
             </div>
 
@@ -181,28 +203,59 @@
         </div>
     </div>
 
-    <!-- INBOX MODAL (QUẢN LÝ Ý KIẾN) -->
+    <!-- INBOX MODAL -->
     <div id="modal-inbox" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[400] hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-3xl shadow-2xl relative flex flex-col max-h-[90vh]">
             <div class="p-5 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800 rounded-t-3xl shrink-0">
                 <h3 class="font-bold uppercase text-sm tracking-widest flex items-center gap-2">
                     <span class="bg-primary text-white p-1 rounded"><i data-lucide="inbox" class="w-4 h-4"></i></span>
-                    Hộp thư Góp ý / Liên hệ
+                    Hộp thư Góp ý
                 </h3>
                 <button onclick="document.getElementById('modal-inbox').classList.add('hidden')" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
-            <div id="inbox-content" class="p-6 overflow-y-auto custom-scroll space-y-4 flex-1 bg-slate-50/50 dark:bg-black/20">
-                <!-- Inbox items injected here -->
-                <div class="flex flex-col items-center justify-center py-10 opacity-50">
-                    <span class="loader w-6 h-6 border-2 mb-2"></span>
-                    <p class="text-xs">Đang tải tin nhắn...</p>
-                </div>
-            </div>
+            <div id="inbox-content" class="p-6 overflow-y-auto custom-scroll space-y-4 flex-1 bg-slate-50/50 dark:bg-black/20"></div>
         </div>
     </div>
 
-    <!-- Add/Edit Module Modal -->
+    <!-- UNIT MODAL (ADD/EDIT) -->
+    <div id="modal-unit" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[350] hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-md shadow-2xl relative">
+            <div class="p-5 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800 rounded-t-3xl">
+                <h3 class="font-bold uppercase text-sm tracking-widest flex items-center gap-2" id="unit-modal-title">
+                    <i data-lucide="building" class="w-4 h-4"></i> Đơn vị
+                </h3>
+                <button onclick="document.getElementById('modal-unit').classList.add('hidden')" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="unit-form" class="p-6 space-y-4">
+                <input type="hidden" id="unit-id">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Tên Đơn vị <span class="text-red-500">*</span></label>
+                    <input type="text" id="unit-name" required class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Địa chỉ <span class="text-red-500">*</span></label>
+                    <input type="text" id="unit-addr" required class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Vĩ độ (Lat)</label>
+                        <input type="text" id="unit-lat" placeholder="10.xxxx" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-400">Kinh độ (Lng)</label>
+                        <input type="text" id="unit-lng" placeholder="106.xxxx" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 pt-2">
+                    <input type="checkbox" id="unit-isMain" class="w-4 h-4 accent-primary">
+                    <label for="unit-isMain" class="text-xs font-bold text-slate-600 dark:text-slate-300">Đây là Trụ sở chính</label>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-primary text-white rounded-xl font-bold uppercase text-xs hover:bg-sky-600 transition shadow-lg">Lưu Đơn Vị</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODULE MODAL -->
     <div id="modal-module" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg shadow-2xl relative">
             <div class="p-5 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800 rounded-t-3xl">
@@ -212,7 +265,6 @@
                 </h3>
                 <button onclick="window.closeModuleModal()" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-
             <form id="module-form" class="p-6 space-y-5 max-h-[80vh] overflow-y-auto custom-scroll">
                 <input type="hidden" id="mod-id">
                 <div class="space-y-1">
@@ -274,9 +326,9 @@
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 z-[500] translate-y-20 opacity-0 transition-all duration-300">
+    <div id="toast" class="fixed bottom-5 right-5 z-[500] translate-y-20 opacity-0 transition-all duration-300 w-[90%] md:w-auto">
         <div class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm">
-            <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+            <i data-lucide="check-circle" class="w-5 h-5 text-green-500 flex-shrink-0"></i>
             <span id="toast-msg">Thông báo</span>
         </div>
     </div>
@@ -307,23 +359,17 @@
             title1: "TÊN ĐƠN VỊ",
             title2: "ĐƠN VỊ TRỰC THUỘC",
             slogan: "Khẩu hiệu hoặc mô tả ngắn về đơn vị của bạn.",
-            socials: { facebook: '', zalo: '', phone: '' },
+            socials: { facebook: '', zalo: '', phone: '', email: '' },
+            units: [], // Stores multiple units: {id, name, addr, lat, lng, isMain}
             modules: [] 
         };
+        let userLocation = null; // Store user lat/lng
 
         const presetIcons = [
-            { id: 'home', label: 'Trang chủ' },
-            { id: 'newspaper', label: 'Tin tức' },
-            { id: 'users', label: 'Nhân sự' },
-            { id: 'file-text', label: 'Văn bản' },
-            { id: 'calendar-days', label: 'Lịch' },
-            { id: 'bar-chart-3', label: 'Thống kê' },
-            { id: 'book-open', label: 'Thư viện' },
-            { id: 'mail', label: 'Email' },
-            { id: 'phone', label: 'Danh bạ' },
-            { id: 'settings', label: 'Hệ thống' },
-            { id: 'globe', label: 'Cổng Web' },
-            { id: 'folder-open', label: 'Dữ liệu' }
+            { id: 'home', label: 'Trang chủ' }, { id: 'newspaper', label: 'Tin tức' }, { id: 'users', label: 'Nhân sự' },
+            { id: 'file-text', label: 'Văn bản' }, { id: 'calendar-days', label: 'Lịch' }, { id: 'bar-chart-3', label: 'Thống kê' },
+            { id: 'book-open', label: 'Thư viện' }, { id: 'mail', label: 'Email' }, { id: 'phone', label: 'Danh bạ' },
+            { id: 'settings', label: 'Hệ thống' }, { id: 'globe', label: 'Cổng Web' }, { id: 'folder-open', label: 'Dữ liệu' }
         ];
 
         // --- AUTH & INIT ---
@@ -345,6 +391,7 @@
             if(isAdmin) {
                 fillAdminForm();
                 renderAdminModuleList();
+                renderAdminUnitList();
             }
         });
 
@@ -354,123 +401,194 @@
                 configData.title1 = data.title1 || configData.title1;
                 configData.title2 = data.title2 || configData.title2;
                 configData.slogan = data.slogan || configData.slogan;
-                configData.socials = data.socials || { facebook: '', zalo: '', phone: '' };
-                if(data.modules && Array.isArray(data.modules)) {
-                    configData.modules = data.modules;
-                }
+                configData.socials = data.socials || { facebook: '', zalo: '', phone: '', email: '' };
+                if(data.modules && Array.isArray(data.modules)) configData.modules = data.modules;
+                if(data.units && Array.isArray(data.units)) configData.units = data.units;
             }
             renderHomepage();
             if(isAdmin) {
                 fillAdminForm();
                 renderAdminModuleList();
+                renderAdminUnitList();
             }
             document.getElementById('global-loading').classList.add('opacity-0', 'pointer-events-none');
         });
 
-        // --- RENDER HOME & FOOTER ---
+        // --- DISTANCE & MAP LOGIC ---
+        function haversineDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        window.getUserLocation = () => {
+            if (!navigator.geolocation) {
+                showToast("Trình duyệt không hỗ trợ định vị.", true);
+                return;
+            }
+            showToast("Đang xác định vị trí của bạn...");
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    renderHomepage(); // Re-render to show distances
+                    showToast("Đã định vị. Đang tìm đơn vị gần nhất!");
+                },
+                (error) => {
+                    showToast("Không thể lấy vị trí. Hãy bật GPS.", true);
+                }
+            );
+        };
+
+        window.openMapToUnit = (lat, lng, label) => {
+            if(!lat || !lng) {
+                showToast("Đơn vị này chưa có tọa độ bản đồ!", true);
+                return;
+            }
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if(isIOS) window.open(`http://maps.apple.com/?ll=${lat},${lng}&q=${encodeURIComponent(label)}`, '_blank');
+            else window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+        };
+
+        // --- RENDER MAIN PAGE ---
         function renderHomepage() {
             document.getElementById('header-title').innerText = configData.title1;
             document.getElementById('header-subtitle').innerText = configData.title2;
             document.getElementById('footer-text').innerText = `© ${new Date().getFullYear()} ${configData.title2}. All rights reserved.`;
 
-            const socials = configData.socials || {};
+            // Prepare Footer Socials
+            const s = configData.socials || {};
+            let footerSocials = '';
+            if(s.facebook) footerSocials += `<a href="${s.facebook}" target="_blank" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 group transition"><div class="bg-blue-600 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="facebook" class="w-4 h-4"></i></div><span class="text-sm font-bold text-slate-600 dark:text-slate-300">Facebook Fanpage</span></a>`;
+            if(s.zalo) footerSocials += `<a href="${s.zalo}" target="_blank" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 group transition"><div class="bg-blue-500 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="message-circle" class="w-4 h-4"></i></div><span class="text-sm font-bold text-slate-600 dark:text-slate-300">Zalo Official</span></a>`;
+            if(s.email) footerSocials += `<a href="mailto:${s.email}" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 group transition"><div class="bg-red-500 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="mail" class="w-4 h-4"></i></div><span class="text-sm font-bold text-slate-600 dark:text-slate-300">Email Hỗ trợ</span></a>`;
+            if(s.phone) footerSocials += `<a href="tel:${s.phone}" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/30 group transition"><div class="bg-green-600 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="phone" class="w-4 h-4"></i></div><span class="text-sm font-bold text-slate-600 dark:text-slate-300">Hotline: ${s.phone}</span></a>`;
+            
             const footerHTML = `
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider">Về Đơn Vị</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">${configData.slogan}</p>
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm font-semibold">
-                         <i data-lucide="map-pin" class="w-4 h-4"></i>
-                         <span>Trụ sở chính đơn vị</span>
-                    </div>
+                    <h3 class="font-bold text-base md:text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider">Về Đơn Vị</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4 text-justify">${configData.slogan}</p>
                 </div>
-
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider">Kết Nối & Hỗ Trợ</h3>
-                    <div class="flex flex-col gap-3">
-                        ${socials.facebook ? `
-                            <a href="${socials.facebook}" target="_blank" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 group transition">
-                                <div class="bg-blue-600 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="facebook" class="w-4 h-4"></i></div>
-                                <span class="text-sm font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">Facebook Fanpage</span>
-                            </a>` : ''}
-                        
-                        ${socials.zalo ? `
-                            <a href="${socials.zalo}" target="_blank" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 group transition">
-                                <div class="bg-blue-500 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="message-circle" class="w-4 h-4"></i></div>
-                                <span class="text-sm font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-500 dark:group-hover:text-blue-400">Zalo Official</span>
-                            </a>` : ''}
-
-                        ${socials.phone ? `
-                            <a href="tel:${socials.phone}" class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/30 group transition">
-                                <div class="bg-green-600 text-white p-2 rounded-lg group-hover:scale-110 transition"><i data-lucide="phone" class="w-4 h-4"></i></div>
-                                <span class="text-sm font-bold text-slate-600 dark:text-slate-300 group-hover:text-green-600 dark:group-hover:text-green-400">Hotline: ${socials.phone}</span>
-                            </a>` : ''}
-                        
-                        ${!socials.facebook && !socials.zalo && !socials.phone ? '<p class="text-sm italic text-slate-400">Chưa cấu hình liên hệ.</p>' : ''}
-                    </div>
+                    <h3 class="font-bold text-base md:text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider">Kết Nối & Hỗ Trợ</h3>
+                    <div class="flex flex-col gap-3">${footerSocials || '<p class="text-sm italic text-slate-400">Chưa cấu hình liên hệ.</p>'}</div>
                 </div>
-
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider">Gửi Ý Kiến / Liên Hệ</h3>
+                    <h3 class="font-bold text-base md:text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider">Gửi Ý Kiến / Liên Hệ</h3>
                     <form id="contact-form" onsubmit="window.handleContactSubmit(event)" class="space-y-3">
-                        <input type="text" id="contact-name" placeholder="Họ và tên của bạn" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border dark:border-white/10 rounded-lg text-sm outline-none focus:border-primary">
-                        <input type="text" id="contact-contact" placeholder="Email hoặc SĐT liên lạc" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border dark:border-white/10 rounded-lg text-sm outline-none focus:border-primary">
-                        <textarea id="contact-msg" rows="3" placeholder="Nội dung cần trao đổi..." required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border dark:border-white/10 rounded-lg text-sm outline-none focus:border-primary"></textarea>
+                        <input type="text" id="contact-name" placeholder="Họ tên" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border dark:border-white/10 rounded-lg text-sm outline-none focus:border-primary">
+                        <input type="text" id="contact-contact" placeholder="Email/SĐT" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border dark:border-white/10 rounded-lg text-sm outline-none focus:border-primary">
+                        <textarea id="contact-msg" rows="3" placeholder="Nội dung..." required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border dark:border-white/10 rounded-lg text-sm outline-none focus:border-primary"></textarea>
                         <button type="submit" class="w-full py-2 bg-primary text-white rounded-lg text-sm font-bold uppercase shadow-lg hover:bg-sky-600 transition">Gửi tin nhắn</button>
                     </form>
-                </div>
-            `;
+                </div>`;
             document.getElementById('footer-content').innerHTML = footerHTML;
 
+            // --- HERO SECTION & UNITS ---
+            // Sort units: Main unit first, then by distance if userLocation exists
+            let displayUnits = [...(configData.units || [])];
+            if (userLocation) {
+                displayUnits.forEach(u => {
+                    u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, u.lat, u.lng) : 99999;
+                });
+                // Sort by distance (Main unit still prioritized if desired, or pure distance)
+                // Let's keep Main Unit at top, then sort others by distance
+                displayUnits.sort((a, b) => {
+                    if(a.isMain) return -1;
+                    if(b.isMain) return 1;
+                    return a.distance - b.distance;
+                });
+            } else {
+                 displayUnits.sort((a, b) => (b.isMain ? 1 : 0) - (a.isMain ? 1 : 0));
+            }
 
-            // --- RENDER MAIN GRID ---
-            const visibleModules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
+            let unitsHtml = '';
+            if (displayUnits.length > 0) {
+                unitsHtml = `
+                <div class="mt-8 md:mt-12 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-white/5 p-4 md:p-6 rounded-3xl max-w-5xl mx-auto shadow-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                        <h2 class="text-sm font-black uppercase tracking-widest text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                            <i data-lucide="map" class="w-4 h-4"></i> Hệ thống Đơn vị trực thuộc
+                        </h2>
+                        <button onclick="window.getUserLocation()" class="px-3 py-1.5 bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 text-xs font-bold rounded-lg flex items-center gap-2 hover:bg-sky-200 transition">
+                            <i data-lucide="navigation" class="w-3 h-3"></i> Tìm gần tôi
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+                
+                displayUnits.forEach(u => {
+                    const distInfo = (userLocation && u.distance < 9000) 
+                        ? `<span class="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded ml-2">Cách bạn ${u.distance.toFixed(1)} km</span>` 
+                        : '';
+                    const mainBadge = u.isMain 
+                        ? `<span class="text-[10px] font-black bg-red-500 text-white px-2 py-0.5 rounded uppercase tracking-wider">Trạm chính</span>` 
+                        : `<span class="text-[10px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded uppercase tracking-wider">Điểm Trạm</span>`;
+                    
+                    unitsHtml += `
+                    <div class="group relative bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-white/5 hover:shadow-lg transition cursor-pointer" onclick="window.openMapToUnit(${u.lat}, ${u.lng}, '${u.name}')">
+                        <div class="flex justify-between items-start mb-2">
+                            ${mainBadge}
+                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-400 group-hover:text-primary transition"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 dark:text-white text-base mb-1">${u.name}</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-2">${u.addr}</p>
+                        ${distInfo}
+                        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-primary flex items-center gap-1">
+                            Chỉ đường <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                        </div>
+                    </div>`;
+                });
+                unitsHtml += `</div></div>`;
+            }
+
+            // Hero HTML
             let html = `
-            <section class="relative pt-20 pb-24 px-6 overflow-hidden bg-slate-50 dark:bg-slate-900">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50"></div>
-                <div class="absolute bottom-0 left-0 w-80 h-80 bg-secondary/10 rounded-full blur-3xl opacity-50"></div>
-                <div class="max-w-4xl mx-auto text-center relative z-10">
-                    <span class="inline-block py-1 px-3 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-[10px] font-black uppercase tracking-widest text-primary mb-6 shadow-sm">
+            <section class="relative pt-12 md:pt-24 pb-16 md:pb-24 px-4 md:px-6 overflow-hidden bg-slate-50 dark:bg-slate-900">
+                <div class="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-primary/10 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute bottom-0 left-0 w-52 md:w-80 h-52 md:h-80 bg-secondary/10 rounded-full blur-3xl opacity-50"></div>
+                <div class="max-w-6xl mx-auto text-center relative z-10">
+                    <span class="inline-block py-1 px-3 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary mb-4 md:mb-6 shadow-sm">
                         Cổng thông tin điện tử
                     </span>
-                    <h1 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 leading-tight tracking-tight">
-                        ${configData.title1} <br>
+                    <h1 class="text-2xl xs:text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 md:leading-snug tracking-tight break-words">
+                        <span class="block mb-1 md:mb-2">${configData.title1}</span>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-sky-400">${configData.title2}</span>
                     </h1>
-                    <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    <p class="text-sm md:text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed px-2">
                         ${configData.slogan}
                     </p>
+                    ${unitsHtml}
+                </div>
+            </section>
             `;
 
+            // Modules Grid
+            const visibleModules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
             if (visibleModules.length === 0) {
-                html += `
-                    <div class="flex flex-col items-center justify-center py-10 opacity-50">
-                        <i data-lucide="layers" class="w-16 h-16 text-slate-400 mb-4"></i>
-                        <p class="text-slate-500 font-bold">Chưa có module nào được hiển thị.</p>
-                        ${isAdmin ? '<p class="text-xs text-primary mt-2">Vào Setup > Thêm Module để bắt đầu.</p>' : ''}
-                    </div>
-                </div></section>`;
+                 html += `<div class="py-12 text-center text-slate-400 text-sm font-bold">Chưa có module nào.</div>`;
             } else {
-                html += `</div></section>
-                <section class="px-6 -mt-16 relative z-20 pb-20">
+                html += `
+                <section class="px-4 md:px-6 -mt-8 relative z-20 pb-20">
                     <div class="max-w-7xl mx-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">`;
-
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">`;
                 visibleModules.forEach(m => {
-                    const bgIcon = `bg-${m.color}-50 dark:bg-${m.color}-900/20`;
-                    const textIcon = `text-${m.color}-500`;
-                    const lockIcon = (m.visibility === 'admin') 
-                        ? `<div class="absolute top-4 right-4 text-red-500 bg-red-100 dark:bg-red-900/50 p-1.5 rounded-lg z-10" title="Chỉ Admin thấy"><i data-lucide="lock" class="w-3 h-3"></i></div>` 
-                        : '';
-
+                    const lockIcon = (m.visibility === 'admin') ? `<div class="absolute top-4 right-4 text-red-500 bg-red-100 p-1 rounded"><i data-lucide="lock" class="w-3 h-3"></i></div>` : '';
                     html += `
-                    <a href="${m.link}" target="_blank" class="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-100 dark:border-white/5 flex flex-col items-start hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+                    <a href="${m.link}" target="_blank" class="group bg-white dark:bg-slate-800 p-6 md:p-8 rounded-3xl shadow-xl border border-slate-100 dark:border-white/5 flex flex-col items-start hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
                         ${lockIcon}
-                        <div class="w-14 h-14 rounded-2xl ${bgIcon} flex items-center justify-center mb-6 ${textIcon} group-hover:bg-${m.color}-500 group-hover:text-white transition-colors duration-300 shadow-sm">
-                            <i data-lucide="${m.icon || 'box'}" class="w-7 h-7"></i>
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-${m.color}-50 dark:bg-${m.color}-900/20 flex items-center justify-center mb-4 md:mb-6 text-${m.color}-500 group-hover:bg-${m.color}-500 group-hover:text-white transition-colors duration-300 shadow-sm">
+                            <i data-lucide="${m.icon || 'box'}" class="w-6 h-6 md:w-7 md:h-7"></i>
                         </div>
-                        <h3 class="text-xl font-black text-slate-800 dark:text-white mb-2 line-clamp-1">${m.name}</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 flex-1 line-clamp-2">${m.desc || ''}</p>
-                        <div class="flex items-center gap-2 ${textIcon} text-xs font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                        <h3 class="text-lg md:text-xl font-black text-slate-800 dark:text-white mb-2 line-clamp-1">${m.name}</h3>
+                        <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 mb-4 md:mb-6 flex-1 line-clamp-2">${m.desc || ''}</p>
+                        <div class="flex items-center gap-2 text-${m.color}-500 text-xs font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform">
                             Truy cập <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </div>
                     </a>`;
@@ -481,70 +599,6 @@
             lucide.createIcons();
         }
 
-        // --- ADMIN: INBOX LOGIC (NEW) ---
-        window.openInboxModal = async () => {
-            if(!isAdmin) return;
-            const contentDiv = document.getElementById('inbox-content');
-            document.getElementById('modal-inbox').classList.remove('hidden');
-            contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-50"><span class="loader w-6 h-6 border-2 mb-2"></span><p class="text-xs">Đang tải tin nhắn...</p></div>`;
-
-            try {
-                // Fetch from Firestore
-                const q = query(collection(db, "inbox"), orderBy("timestamp", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    contentDiv.innerHTML = `
-                        <div class="flex flex-col items-center justify-center py-12 text-slate-400">
-                            <i data-lucide="inbox" class="w-12 h-12 mb-3 opacity-50"></i>
-                            <p class="text-sm font-bold">Hộp thư trống</p>
-                            <p class="text-xs">Chưa có ý kiến nào được gửi đến.</p>
-                        </div>`;
-                } else {
-                    let html = '';
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const time = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('vi-VN') : 'Không rõ';
-                        html += `
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm hover:shadow-md transition">
-                            <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <h5 class="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                                        ${data.name} 
-                                        <span class="text-[10px] font-normal text-slate-500 bg-slate-100 dark:bg-white/10 px-2 py-0.5 rounded-full">${time}</span>
-                                    </h5>
-                                    <p class="text-xs text-primary font-medium mt-0.5">${data.contact}</p>
-                                </div>
-                                <button onclick="window.deleteInboxMsg('${doc.id}')" class="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition" title="Xóa tin nhắn">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                            <div class="p-3 bg-slate-50 dark:bg-black/20 rounded-lg text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                                ${data.message}
-                            </div>
-                        </div>`;
-                    });
-                    contentDiv.innerHTML = html;
-                }
-                lucide.createIcons();
-            } catch (e) {
-                console.error(e);
-                contentDiv.innerHTML = `<p class="text-red-500 text-center text-sm">Lỗi tải dữ liệu!</p>`;
-            }
-        };
-
-        window.deleteInboxMsg = async (id) => {
-            if(!confirm("Bạn có chắc chắn muốn xóa tin nhắn này không?")) return;
-            try {
-                await deleteDoc(doc(db, "inbox", id));
-                showToast("Đã xóa tin nhắn.");
-                window.openInboxModal(); // Reload list
-            } catch (e) {
-                console.error(e);
-                showToast("Lỗi xóa tin nhắn!", true);
-            }
-        };
-
         // --- ADMIN: FILL & SAVE ---
         function fillAdminForm() {
             if(document.getElementById('cfg-title1')) document.getElementById('cfg-title1').value = configData.title1 || '';
@@ -552,9 +606,10 @@
             if(document.getElementById('cfg-slogan')) document.getElementById('cfg-slogan').value = configData.slogan || '';
             
             const s = configData.socials || {};
-            if(document.getElementById('cfg-fb')) document.getElementById('cfg-fb').value = s.facebook || '';
-            if(document.getElementById('cfg-zalo')) document.getElementById('cfg-zalo').value = s.zalo || '';
-            if(document.getElementById('cfg-phone')) document.getElementById('cfg-phone').value = s.phone || '';
+            document.getElementById('cfg-fb').value = s.facebook || '';
+            document.getElementById('cfg-zalo').value = s.zalo || '';
+            document.getElementById('cfg-phone').value = s.phone || '';
+            document.getElementById('cfg-email').value = s.email || '';
         }
 
         window.saveGeneralConfig = async () => {
@@ -566,226 +621,245 @@
                 socials: {
                     facebook: document.getElementById('cfg-fb').value,
                     zalo: document.getElementById('cfg-zalo').value,
-                    phone: document.getElementById('cfg-phone').value
+                    phone: document.getElementById('cfg-phone').value,
+                    email: document.getElementById('cfg-email').value
                 }
             };
             await updateFirestore(updates);
             showToast("Đã lưu Cấu hình & Liên hệ!");
         };
 
-        // --- CONTACT FORM HANDLER ---
-        window.handleContactSubmit = async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('contact-name').value;
-            const contact = document.getElementById('contact-contact').value;
-            const msg = document.getElementById('contact-msg').value;
-
-            try {
-                await addDoc(collection(db, "inbox"), {
-                    name: name,
-                    contact: contact,
-                    message: msg,
-                    timestamp: new Date(),
-                    read: false
-                });
-                showToast("Đã gửi tin nhắn thành công!");
-                document.getElementById('contact-form').reset();
-            } catch (err) {
-                console.error(err);
-                showToast("Lỗi gửi tin! Vui lòng thử lại.", true);
-            }
-        };
-
-        function renderAdminModuleList() {
-            const list = document.getElementById('admin-module-list');
-            if (configData.modules.length === 0) {
-                list.innerHTML = `<div class="text-center py-6 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
-                    <i data-lucide="ghost" class="w-6 h-6 text-slate-400 mx-auto mb-2"></i>
-                    <p class="text-xs text-slate-400 italic">Chưa có module nào</p>
-                </div>`;
-                lucide.createIcons();
+        // --- ADMIN: UNIT MANAGEMENT ---
+        function renderAdminUnitList() {
+            const list = document.getElementById('admin-unit-list');
+            if (!configData.units || configData.units.length === 0) {
+                list.innerHTML = `<p class="text-[10px] text-slate-400 italic text-center border p-2 rounded border-dashed">Chưa có đơn vị nào.</p>`;
                 return;
             }
-
-            list.innerHTML = configData.modules.map(m => {
-                const badge = m.visibility === 'admin' 
-                    ? `<span class="text-[9px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Admin</span>`
-                    : `<span class="text-[9px] bg-green-100 text-green-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Public</span>`;
-
-                return `
-                <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm hover:shadow-md transition group">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-lg bg-${m.color}-100 dark:bg-${m.color}-900/50 text-${m.color}-500 flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="${m.icon || 'box'}" class="w-5 h-5"></i>
+            list.innerHTML = configData.units.map(u => `
+                <div class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-white/5 flex justify-between items-center group">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-xs text-slate-700 dark:text-slate-200 truncate">${u.name}</span>
+                            ${u.isMain ? '<span class="text-[9px] bg-red-100 text-red-600 px-1.5 rounded font-bold">HQ</span>' : ''}
                         </div>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-2 mb-0.5">
-                                <p class="text-sm font-bold truncate text-slate-700 dark:text-slate-200">${m.name}</p>
-                                ${badge}
-                            </div>
-                            <p class="text-[10px] text-slate-400 truncate flex items-center gap-1">
-                                <i data-lucide="link" class="w-3 h-3"></i> ${m.link}
-                            </p>
-                        </div>
+                        <p class="text-[10px] text-slate-400 truncate">${u.addr}</p>
                     </div>
-                    <div class="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="window.editModule('${m.id}')" class="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-white/5 rounded-lg transition" title="Sửa"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button onclick="window.deleteModule('${m.id}')" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-white/5 rounded-lg transition" title="Xóa"><i data-lucide="trash" class="w-4 h-4"></i></button>
+                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.editUnit('${u.id}')" class="p-1.5 bg-slate-100 dark:bg-white/10 rounded hover:text-primary"><i data-lucide="edit-2" class="w-3 h-3"></i></button>
+                        <button onclick="window.deleteUnit('${u.id}')" class="p-1.5 bg-slate-100 dark:bg-white/10 rounded hover:text-red-500"><i data-lucide="trash" class="w-3 h-3"></i></button>
                     </div>
-                </div>`;
-            }).join('');
+                </div>
+            `).join('');
             lucide.createIcons();
         }
 
-        // --- ICON & HELPERS ---
-        window.renderIconGrid = (selectedIcon) => {
-            const grid = document.getElementById('icon-selector-grid');
-            grid.innerHTML = presetIcons.map(icon => {
-                const isSelected = icon.id === selectedIcon;
-                const activeClass = isSelected 
-                    ? 'bg-primary text-white ring-2 ring-primary ring-offset-1 dark:ring-offset-slate-900' 
-                    : 'bg-slate-100 dark:bg-white/5 text-slate-500 hover:bg-slate-200 dark:hover:bg-white/10';
-                
-                return `
-                <div onclick="window.selectIcon('${icon.id}')" 
-                     class="cursor-pointer rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all ${activeClass}" 
-                     title="${icon.label}">
-                    <i data-lucide="${icon.id}" class="w-5 h-5"></i>
-                    <span class="text-[8px] font-bold uppercase truncate max-w-full">${icon.label}</span>
-                </div>`;
-            }).join('');
-            lucide.createIcons();
-            document.getElementById('mod-icon').value = selectedIcon || '';
+        window.openUnitModal = () => {
+            document.getElementById('unit-form').reset();
+            document.getElementById('unit-id').value = '';
+            document.getElementById('unit-modal-title').innerHTML = '<i data-lucide="plus" class="w-4 h-4"></i> Thêm Đơn vị';
+            document.getElementById('modal-unit').classList.remove('hidden');
         };
 
-        window.selectIcon = (iconId) => {
-            document.getElementById('mod-icon').value = iconId;
-            window.renderIconGrid(iconId);
+        window.editUnit = (id) => {
+            const u = configData.units.find(x => x.id === id);
+            if(!u) return;
+            document.getElementById('unit-id').value = u.id;
+            document.getElementById('unit-name').value = u.name;
+            document.getElementById('unit-addr').value = u.addr;
+            document.getElementById('unit-lat').value = u.lat || '';
+            document.getElementById('unit-lng').value = u.lng || '';
+            document.getElementById('unit-isMain').checked = u.isMain || false;
+            document.getElementById('unit-modal-title').innerHTML = '<i data-lucide="edit" class="w-4 h-4"></i> Sửa Đơn vị';
+            document.getElementById('modal-unit').classList.remove('hidden');
         };
-        
-        document.getElementById('mod-icon').addEventListener('input', (e) => {
-            window.renderIconGrid(e.target.value);
-        });
+
+        window.deleteUnit = async (id) => {
+            if(!confirm("Xóa đơn vị này?")) return;
+            const newUnits = configData.units.filter(x => x.id !== id);
+            await updateFirestore({ units: newUnits });
+            showToast("Đã xóa đơn vị.");
+        };
+
+        document.getElementById('unit-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('unit-id').value || 'unit_' + Date.now();
+            const newUnit = {
+                id: id,
+                name: document.getElementById('unit-name').value,
+                addr: document.getElementById('unit-addr').value,
+                lat: document.getElementById('unit-lat').value,
+                lng: document.getElementById('unit-lng').value,
+                isMain: document.getElementById('unit-isMain').checked
+            };
+            
+            let newUnits = [...(configData.units || [])];
+            // If new is main, remove main flag from others
+            if(newUnit.isMain) newUnits.forEach(u => u.isMain = false);
+
+            const existingIdx = newUnits.findIndex(x => x.id === id);
+            if(existingIdx >= 0) newUnits[existingIdx] = newUnit;
+            else newUnits.push(newUnit);
+
+            await updateFirestore({ units: newUnits });
+            showToast("Đã lưu thông tin đơn vị!");
+            document.getElementById('modal-unit').classList.add('hidden');
+        };
+
+        // --- ADMIN: INBOX & CONTACT ---
+        window.openInboxModal = async () => {
+            if(!isAdmin) return;
+            const contentDiv = document.getElementById('inbox-content');
+            document.getElementById('modal-inbox').classList.remove('hidden');
+            contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-50"><span class="loader w-6 h-6 border-2 mb-2"></span><p class="text-xs">Đang tải...</p></div>`;
+
+            const q = query(collection(db, "inbox"), orderBy("timestamp", "desc"));
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                contentDiv.innerHTML = `<p class="text-center text-slate-400 text-sm">Hộp thư trống.</p>`;
+            } else {
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const time = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString('vi-VN') : 'Unknown';
+                    html += `
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h5 class="text-sm font-bold text-slate-800 dark:text-white">${data.name} <span class="text-[10px] font-normal text-slate-400 ml-1">${time}</span></h5>
+                            <button onclick="window.deleteInboxMsg('${doc.id}')" class="text-slate-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-xs text-primary font-medium mb-2">${data.contact}</p>
+                        <div class="p-2 bg-slate-50 dark:bg-black/20 rounded text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap">${data.message}</div>
+                    </div>`;
+                });
+                contentDiv.innerHTML = html;
+                lucide.createIcons();
+            }
+        };
+
+        window.deleteInboxMsg = async (id) => {
+            if(confirm("Xóa tin nhắn này?")) {
+                await deleteDoc(doc(db, "inbox", id));
+                window.openInboxModal();
+            }
+        };
+
+        window.handleContactSubmit = async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "inbox"), {
+                    name: document.getElementById('contact-name').value,
+                    contact: document.getElementById('contact-contact').value,
+                    message: document.getElementById('contact-msg').value,
+                    timestamp: new Date()
+                });
+                showToast("Đã gửi tin nhắn!");
+                document.getElementById('contact-form').reset();
+            } catch (err) { console.error(err); showToast("Lỗi gửi tin!", true); }
+        };
+
+        // --- MODULE LOGIC (Keep existing) ---
+        function renderAdminModuleList() {
+            const list = document.getElementById('admin-module-list');
+            list.innerHTML = configData.modules.map(m => `
+                <div class="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm group">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-8 h-8 rounded bg-${m.color}-100 dark:bg-${m.color}-900/50 text-${m.color}-500 flex items-center justify-center"><i data-lucide="${m.icon || 'box'}" class="w-4 h-4"></i></div>
+                        <span class="text-sm font-bold truncate dark:text-slate-200">${m.name}</span>
+                    </div>
+                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                        <button onclick="window.editModule('${m.id}')" class="p-2 text-indigo-500 hover:bg-indigo-50 rounded"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        <button onclick="window.deleteModule('${m.id}')" class="p-2 text-red-500 hover:bg-red-50 rounded"><i data-lucide="trash" class="w-4 h-4"></i></button>
+                    </div>
+                </div>`).join('');
+            lucide.createIcons();
+        }
 
         window.openModuleModal = () => {
             document.getElementById('module-form').reset();
             document.getElementById('mod-id').value = '';
-            document.getElementById('modal-title').innerHTML = '<span class="bg-primary text-white p-1 rounded"><i data-lucide="plus" class="w-4 h-4"></i></span> Thêm Module Mới';
-            document.getElementById('mod-color').value = 'indigo';
-            document.querySelector('input[name="mod-visibility"][value="public"]').checked = true;
-            window.renderIconGrid('home'); 
+            document.getElementById('modal-title').innerText = 'Thêm Module';
+            window.renderIconGrid('home');
             document.getElementById('modal-module').classList.remove('hidden');
         };
-
         window.closeModuleModal = () => document.getElementById('modal-module').classList.add('hidden');
-
         window.editModule = (id) => {
             const m = configData.modules.find(x => x.id === id);
-            if(!m) return;
-            document.getElementById('mod-id').value = m.id;
-            document.getElementById('mod-name').value = m.name;
-            document.getElementById('mod-desc').value = m.desc || '';
-            document.getElementById('mod-link').value = m.link;
-            document.getElementById('mod-color').value = m.color || 'indigo';
-            document.querySelector(`input[name="mod-visibility"][value="${m.visibility || 'public'}"]`).checked = true;
-            window.renderIconGrid(m.icon || 'box');
-            document.getElementById('modal-title').innerHTML = '<span class="bg-indigo-500 text-white p-1 rounded"><i data-lucide="edit-3" class="w-4 h-4"></i></span> Chỉnh sửa Module';
-            document.getElementById('modal-module').classList.remove('hidden');
+            if(m) {
+                document.getElementById('mod-id').value = m.id;
+                document.getElementById('mod-name').value = m.name;
+                document.getElementById('mod-link').value = m.link;
+                document.getElementById('mod-color').value = m.color;
+                document.getElementById('mod-desc').value = m.desc || '';
+                window.renderIconGrid(m.icon || 'box');
+                document.getElementById('modal-module').classList.remove('hidden');
+            }
         };
-
         window.deleteModule = async (id) => {
-            if(!confirm("Bạn có chắc muốn xóa module này không?")) return;
-            const newModules = configData.modules.filter(x => x.id !== id);
-            await updateFirestore({ modules: newModules });
-            showToast("Đã xóa module!");
+            if(confirm("Xóa module này?")) {
+                const newMods = configData.modules.filter(x => x.id !== id);
+                await updateFirestore({ modules: newMods });
+                showToast("Đã xóa module.");
+            }
         };
-
         document.getElementById('module-form').onsubmit = async (e) => {
             e.preventDefault();
             const id = document.getElementById('mod-id').value || 'mod_' + Date.now();
-            const visibility = document.querySelector('input[name="mod-visibility"]:checked').value;
             const newMod = {
-                id: id,
-                name: document.getElementById('mod-name').value,
-                desc: document.getElementById('mod-desc').value,
+                id, name: document.getElementById('mod-name').value,
                 link: document.getElementById('mod-link').value,
                 icon: document.getElementById('mod-icon').value || 'box',
                 color: document.getElementById('mod-color').value,
-                visibility: visibility
+                desc: document.getElementById('mod-desc').value,
+                visibility: document.querySelector('input[name="mod-visibility"]:checked').value
             };
             let newModules = [...configData.modules];
-            const existingIdx = newModules.findIndex(x => x.id === id);
-            if(existingIdx >= 0) newModules[existingIdx] = newMod;
-            else newModules.push(newMod);
-
+            const idx = newModules.findIndex(x => x.id === id);
+            if(idx >= 0) newModules[idx] = newMod; else newModules.push(newMod);
             await updateFirestore({ modules: newModules });
-            showToast("Đã lưu module thành công!");
+            showToast("Đã lưu module!");
             window.closeModuleModal();
         };
 
+        // --- HELPERS ---
+        window.renderIconGrid = (sel) => {
+            document.getElementById('icon-selector-grid').innerHTML = presetIcons.map(i => `
+                <div onclick="window.selectIcon('${i.id}')" class="cursor-pointer rounded p-2 flex flex-col items-center gap-1 ${i.id===sel?'bg-primary text-white':'bg-slate-100 dark:bg-white/5 text-slate-500'}">
+                    <i data-lucide="${i.id}" class="w-4 h-4"></i><span class="text-[8px] uppercase">${i.label}</span>
+                </div>`).join('');
+            document.getElementById('mod-icon').value = sel;
+            lucide.createIcons();
+        };
+        window.selectIcon = (id) => window.renderIconGrid(id);
         async function updateFirestore(data) {
-            try {
-                await setDoc(doc(db, "settings", "homepage"), data, { merge: true });
-            } catch (e) {
-                console.error(e);
-                showToast("Lỗi lưu dữ liệu!", true);
-            }
+            try { await setDoc(doc(db, "settings", "homepage"), data, { merge: true }); } 
+            catch (e) { console.error(e); showToast("Lỗi lưu dữ liệu!", true); }
         }
-
         function renderAuthUI(user) {
-            const container = document.getElementById('auth-section');
-            if (user) {
-                container.innerHTML = `
-                    <div class="flex items-center gap-2 pl-3 pr-1 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border dark:border-white/10 shadow-sm cursor-pointer group hover:bg-slate-200 dark:hover:bg-slate-700 transition" onclick="window.logout()">
-                        <div class="text-right hidden sm:block">
-                            <span class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 leading-none">${user.displayName}</span>
-                            <span class="text-[8px] text-slate-400 uppercase">Đăng xuất</span>
-                        </div>
-                        <img src="${user.photoURL}" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-700 group-hover:border-primary transition">
-                    </div>`;
-            } else {
-                container.innerHTML = `<button onclick="window.login()" class="px-5 py-2.5 bg-primary text-white rounded-xl text-xs font-bold uppercase shadow-lg shadow-primary/30 hover:bg-sky-600 hover:scale-105 transition">Đăng nhập</button>`;
-            }
+            const c = document.getElementById('auth-section');
+            if(user) c.innerHTML = `<div class="flex items-center gap-2 pl-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer" onclick="window.logout()"><span class="hidden sm:block text-[10px] font-bold text-slate-600 dark:text-slate-300">${user.displayName}</span><img src="${user.photoURL}" class="w-8 h-8 rounded-full border-2 border-white"></div>`;
+            else c.innerHTML = `<button onclick="window.login()" class="px-3 py-2 bg-primary text-white rounded-lg text-xs font-bold uppercase shadow-lg">Login</button>`;
         }
-
         window.login = () => signInWithPopup(auth, provider);
         window.logout = () => signOut(auth).then(() => location.reload());
         window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
-        window.toggleTheme = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        };
-
-        function showToast(msg, isError = false) {
+        window.toggleTheme = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
+        function showToast(msg, isErr=false) {
             const t = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
-            const icon = t.querySelector('svg');
-            if (isError) icon.classList.replace('text-green-500', 'text-red-500');
-            else icon.classList.replace('text-red-500', 'text-green-500');
+            t.querySelector('svg').classList.replace(isErr?'text-green-500':'text-red-500', isErr?'text-red-500':'text-green-500');
             t.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
-
-        function getDeviceType() {
-            const ua = navigator.userAgent;
-            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "Máy tính bảng (Tablet)";
-            if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)os|Opera M(obi|ini)/.test(ua)) return "Điện thoại (Mobile)";
-            return "Máy tính (PC/Laptop)";
-        }
-
         async function fetchSystemInfo() {
-            const device = getDeviceType();
-            const el = document.getElementById('user-system-info');
             try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                el.innerHTML = `Bạn đang truy cập bằng <b>${device}</b> • IP: <b>${data.ip}</b>`;
-            } catch (error) {
-                el.innerHTML = `Bạn đang truy cập bằng <b>${device}</b>`;
-            }
+                const res = await fetch('https://api.ipify.org?format=json');
+                const d = await res.json();
+                document.getElementById('user-system-info').innerHTML = `IP: <b>${d.ip}</b>`;
+            } catch(e) {}
         }
         fetchSystemInfo();
-
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
         lucide.createIcons();
     </script>
