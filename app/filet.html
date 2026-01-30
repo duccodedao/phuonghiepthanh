@@ -43,6 +43,21 @@
         .loader { width: 24px; height: 24px; border: 3px solid #e2e8f0; border-bottom-color: #2563eb; border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* Highlight Animation for Shared Link */
+        @keyframes flashHighlight {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px 0 rgba(37, 99, 235, 0.2); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        .target-doc {
+            animation: flashHighlight 1.5s ease-in-out infinite;
+            border-color: #2563eb !important;
+            background-color: #eff6ff !important; /* light blue */
+        }
+        .dark .target-doc {
+            background-color: rgba(37, 99, 235, 0.2) !important;
+        }
+
         /* Drag Zone */
         .drag-active { border-color: #2563eb !important; background-color: rgba(37, 99, 235, 0.05) !important; }
 
@@ -395,8 +410,8 @@
             document.getElementById('stat-total').innerText = documents.length;
             renderDocs();
             
-            // CHECK & OPEN LINK FROM URL
-            checkAndOpenDirectLink();
+            // Highlight card logic
+            highlightDirectLinkDoc();
         });
 
         window.filterDocs = renderDocs; // Bind filter change
@@ -405,6 +420,10 @@
             const container = document.getElementById('doc-container');
             const search = document.getElementById('search-input').value.toLowerCase();
             const catFilter = document.getElementById('category-filter').value;
+            
+            // Get URL param for highlighting
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewId = urlParams.get('view');
 
             const filtered = documents.filter(d => {
                 const matchSearch = d.name.toLowerCase().includes(search) || (d.note && d.note.toLowerCase().includes(search));
@@ -425,6 +444,10 @@
                 const fileExt = doc.fileName.split('.').pop().toUpperCase();
                 const category = doc.category || 'Khác';
                 
+                // Styling based on link match
+                const isTarget = viewId === doc.id;
+                const cardClass = isTarget ? 'target-doc ring-2 ring-primary/50' : 'bg-white dark:bg-slate-800';
+                
                 let iconColor = 'text-slate-500';
                 if(['DOC','DOCX'].includes(fileExt)) iconColor = 'text-blue-500';
                 if(['XLS','XLSX'].includes(fileExt)) iconColor = 'text-green-500';
@@ -437,7 +460,7 @@
                 const docStr = encodeURIComponent(JSON.stringify(doc));
 
                 return `
-                <div class="group bg-white dark:bg-slate-800 p-4 rounded-xl border dark:border-white/5 shadow-sm hover:shadow-md transition flex items-center gap-4 relative overflow-hidden">
+                <div id="doc-${doc.id}" class="group ${cardClass} p-4 rounded-xl border dark:border-white/5 shadow-sm hover:shadow-md transition flex items-center gap-4 relative overflow-hidden">
                     <div class="w-12 h-12 bg-slate-50 dark:bg-slate-700 rounded-lg flex items-center justify-center flex-shrink-0">
                         <span class="text-[10px] font-black ${iconColor}">${fileExt}</span>
                     </div>
@@ -453,7 +476,7 @@
                     </div>
                     <div class="flex items-center gap-1">
                         
-                        <!-- SHARE BUTTON (NEW) -->
+                        <!-- SHARE BUTTON -->
                         <button onclick="window.copyDirectLink('${doc.id}')" class="p-2 text-teal-600 hover:bg-teal-50 dark:hover:bg-slate-700 rounded-lg transition" title="Sao chép liên kết">
                             <i data-lucide="share-2" class="w-5 h-5"></i>
                         </button>
@@ -768,21 +791,23 @@
             });
         };
 
-        // 2. Check and Open from URL
-        let hasOpenedFromLink = false;
-        function checkAndOpenDirectLink() {
-            if (hasOpenedFromLink) return;
+        // 2. Highlight and Scroll to Element
+        let hasScrolledToLink = false;
+
+        function highlightDirectLinkDoc() {
+            // Chỉ chạy khi chưa scroll
+            if (hasScrolledToLink) return;
 
             const urlParams = new URLSearchParams(window.location.search);
             const viewId = urlParams.get('view');
 
-            if (viewId && documents.length > 0) {
-                const targetDoc = documents.find(d => d.id === viewId);
-                
-                if (targetDoc) {
-                    hasOpenedFromLink = true;
-                    const ext = targetDoc.fileName.split('.').pop().toUpperCase();
-                    window.previewDoc(targetDoc.downloadUrl, ext, targetDoc.name);
+            if (viewId) {
+                // Kiểm tra xem phần tử đã được render chưa
+                const el = document.getElementById(`doc-${viewId}`);
+                if (el) {
+                    // Scroll tới phần tử
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    hasScrolledToLink = true;
                 }
             }
         }
