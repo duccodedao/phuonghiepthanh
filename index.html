@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trạm Y tế Phường Hiệp Thành</title>
+    <title>Hệ Thống Quản Lý Thông Tin</title>
     <link rel="icon" href="https://hdd.io.vn/img/bmassloadings.png" type="image/png">
     
     <!-- Tailwind CSS -->
@@ -26,28 +26,18 @@
                         dark: '#030712',
                     },
                     animation: {
-                        'float': 'float 6s ease-in-out infinite',
                         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'aurora': 'aurora 20s linear infinite',
-                        'scroll-bounce': 'scrollBounce 2s infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
                         slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px) scale(0.98)' },
-                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                            '0%': { opacity: '0', transform: 'translateY(20px)' }, 
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
                         aurora: {
                             '0%': { backgroundPosition: '50% 50%, 50% 50%' },
                             '100%': { backgroundPosition: '350% 50%, 350% 50%' },
-                        },
-                        scrollBounce: {
-                            '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-                            '40%': { transform: 'translateY(-10px)' },
-                            '60%': { transform: 'translateY(-5px)' }
                         }
                     }
                 } 
@@ -58,14 +48,15 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
         .dark body { background-color: #030712; color: #e2e8f0; }
         
-        /* Noise Texture */
+        .break-words { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
+        .hyphens-auto { -webkit-hyphens: auto; hyphens: auto; }
+
+        /* Background Effects */
         .bg-noise {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0; opacity: 0.03;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
-
-        /* Grid Background */
         .bg-grid {
             background-size: 40px 40px;
             background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
@@ -106,32 +97,18 @@
         }
         .spotlight-card:hover .spotlight-bg { opacity: 1; }
 
-        /* Custom Scroll */
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 20px; }
-
-        .loader { width: 48px; height: 48px; border-radius: 50%; display: inline-block; position: relative; border: 3px solid; border-color: #3b82f6 #3b82f6 transparent transparent; box-sizing: border-box; animation: rotation 1s linear infinite; }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Admin Sidebar */
         .admin-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); }
         .admin-sidebar.open { transform: translateX(0); }
 
-        /* SCROLL REVEAL CLASSES */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* Stagger delays */
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 0.1s; }
         .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -144,29 +121,32 @@
     </div>
     <div class="fixed inset-0 z-[-1] bg-gradient-to-b from-transparent via-transparent to-white/80 dark:to-black/80 pointer-events-none"></div>
 
-    <!-- Loading Overlay -->
+    <!-- Loading Screen (Logo) -->
     <div id="global-loading" class="fixed inset-0 bg-white dark:bg-black z-[900] flex flex-col items-center justify-center transition-opacity duration-700">
-        <span class="loader mb-8"></span>
+        <div class="relative w-24 h-24 flex items-center justify-center mb-6">
+            <div class="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+            <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-16 h-16 object-contain relative z-10 animate-bounce" alt="Loading Logo">
+        </div>
         <div class="flex flex-col items-center gap-1">
-            <span class="text-sm font-extrabold tracking-[0.2em] text-slate-900 dark:text-white uppercase animate-pulse">System Boot</span>
+            <span class="text-sm font-extrabold tracking-[0.2em] text-slate-900 dark:text-white uppercase">System Boot</span>
             <span class="text-[10px] font-mono text-slate-400">Loading modules...</span>
         </div>
     </div>
 
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 pt-4 px-4 flex justify-center">
-        <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg shadow-black/5 px-4 py-2.5 flex justify-between items-center transition-all duration-300 hover:shadow-xl hover:bg-white/90 dark:hover:bg-black/80">
+    <header class="fixed top-0 left-0 right-0 z-50 pt-3 px-4 flex justify-center">
+        <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg shadow-black/5 px-4 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-xl hover:bg-white/90 dark:hover:bg-black/80">
             
-            <div class="flex items-center gap-3 cursor-pointer group" onclick="location.reload()">
-                <div class="w-9 h-9 flex items-center justify-center bg-slate-900 dark:bg-white rounded-full text-white dark:text-black group-hover:scale-110 transition-transform duration-300">
-                    <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-5 h-5 object-contain invert dark:invert-0">
+            <div class="flex items-center gap-2 cursor-pointer group flex-1 min-w-0" onclick="location.reload()">
+                <div class="w-8 h-8 shrink-0 flex items-center justify-center bg-slate-900 dark:bg-white rounded-full text-white dark:text-black group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-4 h-4 object-contain invert dark:invert-0">
                 </div>
-                <div class="flex flex-col">
-                    <h1 class="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white" id="header-title">LOADING</h1>
+                <div class="flex flex-col min-w-0 pr-2">
+                    <h1 class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white truncate" id="header-title">LOADING</h1>
                 </div>
             </div>
 
-            <div class="flex items-center gap-1 md:gap-2">
+            <div class="flex items-center gap-1 md:gap-2 shrink-0">
                  <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-2">
                     <i data-lucide="settings-2" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Admin</span>
                 </button>
@@ -186,18 +166,17 @@
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 pb-6 px-4 pt-10">
-        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2.5rem] border border-white/50 dark:border-white/5 shadow-2xl p-8 md:p-12 overflow-hidden relative reveal">
-            <!-- Footer Glow -->
+    <footer class="relative z-10 pb-6 px-4 pt-6">
+        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2rem] border border-white/50 dark:border-white/5 shadow-2xl p-6 md:p-10 overflow-hidden relative reveal">
             <div class="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-10" id="footer-content"></div>
+            <div id="footer-content"></div>
             
-            <div class="border-t border-slate-200/50 dark:border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-[11px] font-medium text-slate-500 dark:text-slate-500 uppercase tracking-widest">© 2024 Enterprise System.</p>
+            <div class="border-t border-slate-200/50 dark:border-white/5 pt-4 mt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-center">
+                <p class="text-[10px] font-medium text-slate-500 dark:text-slate-500 uppercase tracking-widest">© 2024 Enterprise System.</p>
                 <div class="flex items-center gap-2 px-3 py-1 bg-white/50 dark:bg-black/20 rounded-full border border-white/20 dark:border-white/5 backdrop-blur-sm">
                     <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">OPERATIONAL</span>
+                    <span class="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">OPERATIONAL</span>
                 </div>
             </div>
         </div>
@@ -542,7 +521,7 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // --- FETCH USER INFO FOR FOOTER ---
+        // --- FETCH USER INFO FOR FOOTER (DETAILED LOCATION) ---
         async function fetchUserInfo() {
             let info = { ip: 'Checking...', city: 'Unknown', device: 'Unknown' };
             
@@ -554,29 +533,41 @@
             else if (/Mac/i.test(ua)) info.device = "Macintosh";
             else info.device = "Web Browser";
 
-            // 2. Get IP (Free API)
+            // 2. Get IP
             try {
                 const ipRes = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipRes.json();
                 info.ip = ipData.ip;
             } catch (e) { info.ip = 'N/A'; }
 
-            // 3. Get Location Name (Reverse Geocoding)
+            // 3. Get Detailed Location (Khóm/Ấp, Xã/Phường, Huyện, Tỉnh)
             if (userLocation) {
                 try {
                     const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json`);
                     const geoData = await geoRes.json();
                     const addr = geoData.address || {};
-                    // Construct precise location
                     const parts = [];
-                    if(addr.quarter) parts.push(addr.quarter);
-                    if(addr.suburb) parts.push(addr.suburb);
-                    if(addr.village) parts.push(addr.village);
+                    
+                    // Cấp nhỏ: Khóm, Ấp, Làng, Khu phố
+                    if(addr.hamlet) parts.push(addr.hamlet); 
+                    else if(addr.village) parts.push(addr.village);
+                    else if(addr.neighbourhood) parts.push(addr.neighbourhood);
+                    else if(addr.quarter) parts.push(addr.quarter);
+
+                    // Cấp Phường/Xã
+                    if(addr.ward) parts.push(addr.ward);
+                    else if(addr.suburb) parts.push(addr.suburb); // OSM thường map phường vào suburb
+
+                    // Cấp Quận/Huyện
                     if(addr.city_district) parts.push(addr.city_district);
+                    else if(addr.district) parts.push(addr.district);
+                    else if(addr.town) parts.push(addr.town);
+
+                    // Cấp Tỉnh/Thành
                     if(addr.city) parts.push(addr.city);
                     else if(addr.state) parts.push(addr.state);
                     
-                    info.city = parts.slice(0, 3).join(', ') || 'Đang định vị...';
+                    info.city = parts.join(', ') || 'Đang định vị...';
                 } catch (e) { info.city = 'Không thể lấy tên địa điểm'; }
             } else {
                 info.city = 'Chưa cấp quyền vị trí';
@@ -586,70 +577,86 @@
 
         // --- RENDER UI ---
         async function renderHomepage() {
-            // Update Header (Title 2 is main system name)
+            // Update Header
             document.getElementById('header-title').innerText = configData.title2;
             document.title = `${configData.title2} - ${configData.title1}`;
 
-            // 1. Socials in Footer
+            // Socials Row
             const s = configData.socials || {};
             let footerSocials = '';
             const socialBtn = (link, icon, color, label) => `
-                <a href="${link}" target="_blank" class="flex items-center gap-3 p-4 bg-white/40 dark:bg-white/5 rounded-2xl hover:bg-white dark:hover:bg-white/10 border border-white/20 dark:border-white/5 transition-all duration-300 group">
-                    <div class="bg-gradient-to-br from-${color}-400 to-${color}-600 text-white p-2.5 rounded-xl shadow-lg shadow-${color}-500/30 group-hover:scale-110 transition-transform">
-                        <i data-lucide="${icon}" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">${label}</span>
-                        <span class="block text-sm font-bold text-slate-800 dark:text-white">Kết nối</span>
-                    </div>
+                <a href="${link}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-white/10 rounded-full border border-white/20 dark:border-white/5 hover:bg-white dark:hover:bg-white/20 hover:scale-105 transition-all shadow-sm">
+                    <i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i>
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-200">${label}</span>
                 </a>`;
             
-            if(s.facebook) footerSocials += socialBtn(s.facebook, 'facebook', 'blue', 'Facebook');
-            if(s.zalo) footerSocials += socialBtn(s.zalo, 'message-circle', 'sky', 'Zalo Chat');
-            if(s.email) footerSocials += socialBtn(`mailto:${s.email}`, 'mail', 'red', 'Email');
-            if(s.phone) footerSocials += socialBtn(`tel:${s.phone}`, 'phone', 'emerald', 'Hotline');
+            let socialBtnsHtml = '';
+            if(s.facebook) socialBtnsHtml += socialBtn(s.facebook, 'facebook', 'blue', 'Facebook');
+            if(s.zalo) socialBtnsHtml += socialBtn(s.zalo, 'message-circle', 'sky', 'Zalo');
+            if(s.email) socialBtnsHtml += socialBtn(`mailto:${s.email}`, 'mail', 'red', 'Email');
+            if(s.phone) socialBtnsHtml += socialBtn(`tel:${s.phone}`, 'phone', 'emerald', 'Hotline');
 
             // Get Info
             const uInfo = await fetchUserInfo();
 
             // Footer Layout
             const footerHTML = `
-                <div class="col-span-1 md:col-span-5 space-y-6">
-                    <div>
-                        <span class="inline-block py-1 px-3 rounded-md bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest mb-4 border border-blue-500/20">Hệ thống thông tin</span>
-                        <h3 class="font-black text-2xl mb-4 text-slate-900 dark:text-white uppercase tracking-tight">${configData.title2}</h3>
-                        <p class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-2">${configData.title1}</p>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed text-justify opacity-90">${configData.slogan}</p>
+                <div class="space-y-6">
+                    <div class="text-center">
+                         <span class="inline-block py-1 px-3 rounded-md bg-blue-500/10 text-blue-500 text-[9px] font-black uppercase tracking-widest mb-3 border border-blue-500/20">Hệ thống thông tin</span>
+                        <h3 class="font-black text-xl md:text-2xl mb-2 text-slate-900 dark:text-white uppercase tracking-tight break-words">${configData.title2}</h3>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">${configData.title1}</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-2xl mx-auto opacity-90">${configData.slogan}</p>
                     </div>
                     
                     <!-- USER INFO BOX -->
-                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 space-y-2">
-                        <div class="flex items-center justify-between text-xs">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                         <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
                             <span class="text-slate-500"><i data-lucide="monitor" class="w-3 h-3 inline mr-1"></i> Thiết bị:</span>
-                            <span class="font-bold text-slate-700 dark:text-slate-300">${uInfo.device}</span>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-right">${uInfo.device}</span>
                         </div>
-                        <div class="flex items-center justify-between text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
                             <span class="text-slate-500"><i data-lucide="globe" class="w-3 h-3 inline mr-1"></i> IP:</span>
-                            <span class="font-mono font-bold text-slate-700 dark:text-slate-300">${uInfo.ip}</span>
+                            <span class="font-mono font-bold text-slate-700 dark:text-slate-300 text-right">${uInfo.ip}</span>
                         </div>
-                         <div class="flex items-center justify-between text-xs">
+                         <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
                             <span class="text-slate-500"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> Vị trí:</span>
-                            <span class="font-bold text-slate-700 dark:text-slate-300 text-right max-w-[150px] truncate">${uInfo.city}</span>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-right truncate">${uInfo.city}</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">${footerSocials}</div>
-                </div>
-                
-                <div class="col-span-1 md:col-span-5 md:col-start-8">
-                    <div class="glass-card bg-white/50 dark:bg-white/5 p-6 rounded-3xl border border-white/30 dark:border-white/5 relative overflow-hidden group">
-                        <div class="absolute -right-10 -top-10 bg-gradient-to-br from-indigo-500 to-purple-600 w-32 h-32 blur-3xl opacity-20 group-hover:opacity-40 transition duration-700"></div>
-                        <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-white uppercase tracking-wider relative z-10 flex items-center gap-2"><i data-lucide="send" class="w-4 h-4 text-indigo-500"></i> Gửi góp ý</h3>
-                        <form id="contact-form" onsubmit="window.handleContactSubmit(event)" class="space-y-3 relative z-10">
-                            <input type="text" id="contact-name" placeholder="Tên của bạn" required class="w-full px-4 py-3 bg-white/70 dark:bg-black/30 border border-white/30 dark:border-white/10 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
-                            <input type="text" id="contact-contact" placeholder="Email/SĐT liên hệ" required class="w-full px-4 py-3 bg-white/70 dark:bg-black/30 border border-white/30 dark:border-white/10 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
-                            <textarea id="contact-msg" rows="2" placeholder="Nội dung..." required class="w-full px-4 py-3 bg-white/70 dark:bg-black/30 border border-white/30 dark:border-white/10 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/50 transition"></textarea>
-                            <button type="submit" class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg hover:-translate-y-0.5 transition">Gửi đi</button>
+                    <!-- SOCIALS ROW -->
+                    <div class="flex flex-wrap justify-center gap-3 pt-2">
+                        ${socialBtnsHtml}
+                    </div>
+
+                    <!-- FEEDBACK FORM (FULL FIELDS REVERTED) -->
+                    <div class="mt-8 pt-6 border-t border-slate-200/50 dark:border-white/5">
+                        <div class="flex items-center justify-center gap-2 mb-4 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
+                            <i data-lucide="send" class="w-3 h-3"></i> Gửi góp ý
+                        </div>
+                        <form id="contact-form" onsubmit="window.handleContactSubmit(event)" class="max-w-md mx-auto space-y-3 bg-white/40 dark:bg-white/5 p-5 rounded-2xl border border-white/40 dark:border-white/5">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Họ tên</label>
+                                <input type="text" id="contact-name" placeholder="Nhập họ tên của bạn..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Số điện thoại</label>
+                                    <input type="text" id="contact-phone" placeholder="SĐT..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-xs outline-none focus:border-blue-500 transition">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Email</label>
+                                    <input type="email" id="contact-email" placeholder="Email..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-xs outline-none focus:border-blue-500 transition">
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold uppercase text-slate-400 ml-1">Nội dung</label>
+                                <textarea id="contact-msg" rows="3" placeholder="Nội dung góp ý..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-xs outline-none focus:border-blue-500 transition"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl text-xs font-bold uppercase shadow-lg hover:-translate-y-0.5 transition flex items-center justify-center gap-2">
+                                <i data-lucide="send" class="w-3 h-3"></i> Gửi ngay
+                            </button>
                         </form>
                     </div>
                 </div>`;
@@ -658,30 +665,34 @@
             // --- BUILD MAIN CONTENT ---
             let html = '';
 
-            // 1. SMART HERO SECTION (Full Height)
-            const heroHeight = isUserLoggedIn ? 'py-10' : 'min-h-[90vh] flex flex-col justify-center';
+            const heroHeight = isUserLoggedIn ? 'py-6' : 'min-h-[70vh] flex flex-col justify-center'; 
             const loginBtn = !isUserLoggedIn ? 
-                `<button onclick="window.login()" class="px-8 py-3.5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform shadow-lg shadow-blue-500/20">
+                `<button onclick="window.login()" class="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-xs tracking-widest uppercase hover:scale-105 transition-transform shadow-lg shadow-blue-500/20">
                     Đăng nhập hệ thống
                 </button>` : '';
             const scrollIndicator = !isUserLoggedIn ?
-                `<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 animate-bounce">
-                    <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500">Khám phá</span>
-                    <i data-lucide="mouse" class="w-5 h-5 text-slate-800 dark:text-slate-200"></i>
+                `<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-60 animate-bounce">
+                    <span class="text-[9px] uppercase font-bold tracking-widest text-slate-500">Khám phá</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-800 dark:text-slate-200"></i>
                 </div>` : '';
 
             html += `
-            <section class="relative px-4 ${heroHeight} mb-10">
+            <section class="relative px-4 ${heroHeight} mb-4 overflow-hidden">
                 <div class="max-w-5xl mx-auto text-center relative z-10 animate-slide-up">
-                    <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/80 dark:bg-white/5 border border-white/50 dark:border-white/10 text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 mb-8 shadow-sm backdrop-blur-md">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> Digital Portal
+                    <div class="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-white/80 dark:bg-white/5 border border-white/50 dark:border-white/10 text-[9px] md:text-xs font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 mb-4 md:mb-6 shadow-sm backdrop-blur-md">
+                        <span class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-500 animate-pulse"></span> Digital Portal
                     </div>
-                    <h1 class="text-4xl md:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
-                        <!-- Logic swap: Title 1 is subtitle, Title 2 is Main -->
-                        <span class="block text-2xl md:text-3xl text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-2">${configData.title1}</span>
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-500 animate-aurora bg-[length:200%_auto] pb-2">${configData.title2}</span>
+                    
+                    <h1 class="font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
+                        <span class="block text-sm sm:text-lg md:text-xl lg:text-2xl text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-2 px-2 break-words">
+                            ${configData.title1}
+                        </span>
+                        <span class="block text-2xl sm:text-3xl md:text-5xl lg:text-6xl leading-tight md:leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-500 animate-aurora bg-[length:200%_auto] pb-2 px-2 break-words">
+                            ${configData.title2}
+                        </span>
                     </h1>
-                    <p class="text-base md:text-xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+
+                    <p class="text-xs md:text-base lg:text-lg text-slate-600 dark:text-slate-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed font-medium px-4">
                         ${configData.slogan}
                     </p>
                     ${loginBtn}
@@ -690,21 +701,19 @@
             </section>
             `;
 
-            // 2. MODULES / PUBLIC SERVICES
             const visibleModules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
-            
             if (visibleModules.length > 0) {
                 html += `
-                <section class="px-4 pb-20 relative z-20">
+                <section class="px-4 pb-12 relative z-20">
                     <div class="max-w-6xl mx-auto">
-                        <div class="flex items-center justify-center md:justify-start gap-3 mb-10 reveal">
-                            <span class="w-1.5 h-8 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></span>
-                            <h3 class="text-2xl font-black uppercase text-slate-900 dark:text-white tracking-tight">Dịch vụ & Tiện ích</h3>
+                        <div class="flex items-center justify-center gap-2 mb-6 reveal">
+                             <span class="w-1 h-6 bg-blue-500 rounded-full"></span>
+                            <h3 class="text-lg md:text-xl font-black uppercase text-slate-900 dark:text-white tracking-tight">Dịch vụ & Tiện ích</h3>
                         </div>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">`;
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">`;
                 
                 visibleModules.forEach((m, idx) => {
-                    const lockIcon = (m.visibility === 'admin') ? `<div class="absolute top-4 right-4 text-slate-400 dark:text-slate-500"><i data-lucide="lock" class="w-3 h-3"></i></div>` : '';
+                    const lockIcon = (m.visibility === 'admin') ? `<div class="absolute top-3 right-3 text-slate-400 dark:text-slate-500"><i data-lucide="lock" class="w-3 h-3"></i></div>` : '';
                     const colorMap = {
                         indigo: 'from-indigo-500 to-violet-600', emerald: 'from-emerald-500 to-teal-600', 
                         sky: 'from-sky-500 to-blue-600', rose: 'from-rose-500 to-pink-600',
@@ -715,18 +724,22 @@
                     const delayClass = idx % 3 === 0 ? '' : (idx % 3 === 1 ? 'delay-100' : 'delay-200');
 
                     html += `
-                    <a href="${m.link}" target="_blank" class="spotlight-card reveal ${delayClass} group p-6 rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-${m.color}-500/10 hover:-translate-y-1 block h-full">
+                    <a href="${m.link}" target="_blank" class="spotlight-card reveal ${delayClass} group p-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-${m.color}-500/10 hover:-translate-y-1 block h-full flex flex-col">
                         <div class="spotlight-bg"></div>
                         ${lockIcon}
                         <div class="relative z-10 flex flex-col h-full">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${grad} flex items-center justify-center mb-5 text-white shadow-lg shadow-${m.color}-500/30 group-hover:scale-110 transition-transform duration-300">
-                                <i data-lucide="${m.icon || 'box'}" class="w-7 h-7"></i>
+                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${grad} flex items-center justify-center mb-3 text-white shadow-lg shadow-${m.color}-500/30 group-hover:scale-110 transition-transform duration-300 shrink-0">
+                                <i data-lucide="${m.icon || 'box'}" class="w-5 h-5 md:w-6 md:h-6"></i>
                             </div>
                             
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-${m.color}-600 dark:group-hover:text-${m.color}-400 transition-colors">${m.name}</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 line-clamp-2 leading-relaxed flex-1 font-medium">${m.desc || 'Module chức năng.'}</p>
+                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-1 leading-snug break-words hyphens-auto group-hover:text-${m.color}-600 dark:group-hover:text-${m.color}-400 transition-colors">
+                                ${m.name}
+                            </h3>
+                            <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-2 leading-relaxed flex-1 font-medium">
+                                ${m.desc || 'Module chức năng.'}
+                            </p>
                             
-                            <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-${m.color}-600 dark:group-hover:text-${m.color}-400 transition-colors">
+                            <div class="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-${m.color}-600 dark:group-hover:text-${m.color}-400 transition-colors mt-auto">
                                 Truy cập <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
                             </div>
                         </div>
@@ -735,7 +748,6 @@
                 html += `</div></div></section>`;
             }
 
-            // 3. UNITS / NETWORK GRID
             let displayUnits = [...(configData.units || [])];
             if (userLocation) {
                 displayUnits.forEach(u => u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, u.lat, u.lng) : 99999);
@@ -749,49 +761,46 @@
 
             if (displayUnits.length > 0) {
                 html += `
-                <div class="w-full max-w-6xl mx-auto px-4 mb-20">
-                     <!-- CENTERED HEADER -->
-                    <div class="flex flex-col items-center justify-center text-center mb-10 gap-2 reveal">
-                        <span class="p-3 bg-blue-50 dark:bg-white/5 text-blue-600 rounded-full mb-2"><i data-lucide="map" class="w-6 h-6"></i></span>
-                        <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                <div class="w-full max-w-6xl mx-auto px-4 mb-16">
+                    <div class="flex flex-col items-center justify-center text-center mb-6 gap-2 reveal">
+                        <span class="p-2 bg-blue-50 dark:bg-white/5 text-blue-600 rounded-full mb-1"><i data-lucide="map" class="w-5 h-5"></i></span>
+                        <h2 class="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                              Mạng lưới hoạt động
                         </h2>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-lg mx-auto">Hệ thống các đơn vị trực thuộc trên toàn quốc.</p>
-                        <button onclick="window.getUserLocation()" class="mt-4 px-5 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm text-slate-600 dark:text-slate-300 text-[10px] font-bold rounded-full flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-white/10 transition uppercase tracking-widest">
+                        <button onclick="window.getUserLocation()" class="mt-2 px-4 py-1.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm text-slate-600 dark:text-slate-300 text-[9px] font-bold rounded-full flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-white/10 transition uppercase tracking-widest">
                             <i data-lucide="navigation" class="w-3 h-3 text-blue-500"></i> Tìm gần tôi
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">`;
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
                 
                 displayUnits.forEach((u, idx) => {
-                    // Logic tính khoảng cách (m hoặc km) và để cạnh tên
                     let distBadge = '';
                     if (userLocation && u.distance < 9000) {
                         const distStr = u.distance < 1 
                             ? `${Math.round(u.distance * 1000)}m` 
                             : `${u.distance.toFixed(1)}km`;
-                        distBadge = `<span class="ml-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"><i data-lucide="ruler" class="w-3 h-3"></i> ${distStr}</span>`;
+                        distBadge = `<span class="ml-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"><i data-lucide="ruler" class="w-3 h-3"></i> ${distStr}</span>`;
                     }
 
                     const mainBadge = u.isMain 
-                        ? `<span class="absolute top-4 right-4 text-[9px] font-black bg-slate-900 text-white dark:bg-white dark:text-black px-2 py-1 rounded uppercase tracking-wider z-10">HQ</span>` 
+                        ? `<span class="absolute top-3 right-3 text-[8px] font-black bg-slate-900 text-white dark:bg-white dark:text-black px-1.5 py-0.5 rounded uppercase tracking-wider z-10">HQ</span>` 
                         : '';
                     
                     html += `
-                    <div class="spotlight-card reveal group p-6 rounded-2xl cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="window.openMapToUnit(${u.lat}, ${u.lng}, '${u.name}')">
+                    <div class="spotlight-card reveal group p-4 rounded-2xl cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="window.openMapToUnit(${u.lat}, ${u.lng}, '${u.name}')">
                         <div class="spotlight-bg"></div>
                         ${mainBadge}
-                        <div class="relative z-10 flex items-start gap-4">
-                            <div class="shrink-0 w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                                <i data-lucide="building-2" class="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-white"></i>
+                        <div class="relative z-10 flex items-start gap-3">
+                            <div class="shrink-0 w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="building-2" class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-white"></i>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center flex-wrap">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-xs md:text-sm mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center flex-wrap break-words">
                                     ${u.name}
                                     ${distBadge}
                                 </h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed font-medium">${u.addr}</p>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed font-medium break-words">${u.addr}</p>
                             </div>
                         </div>
                     </div>`;
@@ -802,7 +811,6 @@
             document.getElementById('main-content').innerHTML = html;
             lucide.createIcons();
             
-            // Activate Spotlight & Scroll Observer
             const cards = document.querySelectorAll(".spotlight-card");
             cards.forEach(card => {
                 card.onmousemove = e => {
@@ -986,8 +994,9 @@
                             <div><h5 class="text-sm font-bold text-slate-800 dark:text-white">${d.name}</h5><p class="text-[10px] text-slate-400">${t}</p></div>
                             <button onclick="window.deleteInboxMsg('${doc.id}')" class="text-slate-300 hover:text-red-500 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
-                        <p class="text-[10px] text-blue-500 font-mono mb-2">${d.contact}</p>
-                        <div class="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">${d.message}</div>
+                        <p class="text-[10px] text-blue-500 font-mono mb-1 break-all"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i> ${d.phone || 'N/A'}</p>
+                        <p class="text-[10px] text-blue-500 font-mono mb-2 break-all"><i data-lucide="mail" class="w-3 h-3 inline mr-1"></i> ${d.email || 'N/A'}</p>
+                        <div class="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap leading-relaxed break-words border-t border-slate-100 dark:border-white/5 pt-2 mt-2">${d.message}</div>
                     </div>`;
                 });
                 lucide.createIcons();
@@ -997,9 +1006,11 @@
         window.handleContactSubmit = async (e) => {
             e.preventDefault();
             try {
+                // Update: Added Phone & Email fields
                 await addDoc(collection(db, "inbox"), {
                     name: document.getElementById('contact-name').value,
-                    contact: document.getElementById('contact-contact').value,
+                    phone: document.getElementById('contact-phone').value, 
+                    email: document.getElementById('contact-email').value,
                     message: document.getElementById('contact-msg').value,
                     timestamp: new Date()
                 });
