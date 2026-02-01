@@ -2,336 +2,313 @@
 <html lang="vi" class="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trạm Y tế Phường Hiệp Thành - Tin tức & Hoạt động</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trạm y tế Phường Hiệp Thành</title>
+    <link rel="icon" href="https://hdd.io.vn/img/bmassloadings.png" type="image/png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Quill Editor CSS -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: { 
                 extend: { 
-                    colors: { primary: '#0ea5e9', secondary: '#ef4444', dark: '#0f172a' },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { 
+                        primary: '#3b82f6', 
+                        accent: '#6366f1',
+                        dark: '#030712',
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'aurora': 'aurora 20s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' }, 
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        aurora: {
+                            '0%': { backgroundPosition: '50% 50%, 50% 50%' },
+                            '100%': { backgroundPosition: '350% 50%, 350% 50%' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translate3d(100vw, 0, 0)' }, 
+                            '100%': { transform: 'translate3d(-100%, 0, 0)' } 
+                        }
                     }
                 } 
             }
         }
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f9ff; transition: background 0.3s; } 
-        .dark body { background-color: #0f172a; color: #e2e8f0; }
-        
-        .prose { max-width: 65ch; line-height: 1.8; font-family: 'Merriweather', serif; }
-        .prose p { margin-bottom: 1.5em; font-size: 1.1rem; color: #334155; }
-        .dark .prose p { color: #cbd5e1; }
-        .prose h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.5rem; margin-top: 2em; margin-bottom: 1em; color: #0f172a; }
-        .dark .prose h2 { color: #f1f5f9; }
-        .prose img { border-radius: 0.75rem; margin: 2rem 0; width: 100%; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; }
-        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.5em; }
-        .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1em; font-style: italic; color: #64748b; }
-        
-        .admin-sidebar { width: 22rem; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
+        .dark body { background-color: #030712; color: #e2e8f0; }
+        .break-words { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
+        .hyphens-auto { -webkit-hyphens: auto; hyphens: auto; }
+
+        .bg-noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+        }
+        .dark .bg-grid {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+        }
+
+        .spotlight-card {
+            position: relative; overflow: hidden;
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .dark .spotlight-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .spotlight-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: inherit; padding: 1px;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.8), transparent 40%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+        .dark .spotlight-card::before {
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.3), transparent 40%);
+        }
+        .spotlight-card:hover::before { opacity: 1; }
+        .spotlight-bg {
+            position: absolute; inset: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.06), transparent 40%);
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+        .spotlight-card:hover .spotlight-bg { opacity: 1; }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 20px; }
+
+        .admin-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); }
         .admin-sidebar.open { transform: translateX(0); }
-        
-        .loader { width: 24px; height: 24px; border: 3px solid #e2e8f0; border-bottom-color: #0ea5e9; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* Animation cho Like */
-        @keyframes heart-beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-        .animate-heart { animation: heart-beat 0.3s ease-in-out; }
-
-        /* CUSTOM QUILL EDITOR STYLES FOR TAILWIND & DARK MODE */
-        .ql-toolbar {
-            border-top-left-radius: 0.75rem;
-            border-top-right-radius: 0.75rem;
-            background-color: #f8fafc;
-            border-color: #e2e8f0 !important;
-        }
-        .ql-container {
-            border-bottom-left-radius: 0.75rem;
-            border-bottom-right-radius: 0.75rem;
-            font-family: 'Merriweather', serif !important;
-            font-size: 1rem !important;
-            border-color: #e2e8f0 !important;
-            background-color: white;
-        }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
         
-        /* Dark mode overrides for Quill */
-        .dark .ql-toolbar {
-            background-color: #1e293b;
-            border-color: rgba(255,255,255,0.1) !important;
+        .marquee-wrapper { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 36px; 
+            z-index: 100; overflow: hidden; 
+            background: #3b82f6; color: white; display: flex; align-items: center; 
         }
-        .dark .ql-toolbar .ql-stroke { stroke: #cbd5e1; }
-        .dark .ql-toolbar .ql-fill { fill: #cbd5e1; }
-        .dark .ql-toolbar .ql-picker { color: #cbd5e1; }
-        
-        .dark .ql-container {
-            background-color: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.1) !important;
-            color: #e2e8f0;
+        .marquee-content { 
+            display: inline-block; white-space: nowrap; animation: marquee 25s linear infinite; 
+            font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;
+        }
+        @keyframes marquee {
+            0% { transform: translate3d(100vw, 0, 0); } 
+            100% { transform: translate3d(-100%, 0, 0); } 
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col pb-10">
+<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-    <!-- Loading Overlay -->
-    <div id="global-loading" class="fixed inset-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm z-[900] flex flex-col items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
-        <span class="loader mb-4"></span>
-        <span id="loading-text" class="text-sm font-bold text-slate-600 dark:text-slate-300">Đang tải dữ liệu...</span>
+    <div class="bg-noise z-0"></div>
+    <div class="fixed inset-0 z-[-1] bg-grid mask-gradient">
+        <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[60%] rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-indigo-400/20 blur-[100px] animate-aurora dark:from-blue-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 mix-blend-multiply dark:mix-blend-screen"></div>
     </div>
 
-    <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b dark:border-white/5 shadow-sm">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
-                <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-red-500/30">
-                    <i data-lucide="cross" class="w-6 h-6 fill-current"></i>
-                </div>
-                <div>
-                    <h1 class="text-sm font-black tracking-widest uppercase text-slate-400 leading-none">Cổng Thông Tin</h1>
-                    <h2 class="text-lg font-black tracking-tight text-primary uppercase">TYT PHƯỜNG HIỆP THÀNH</h2>
-                </div>
+    <div id="announcement-bar" class="hidden marquee-wrapper shadow-md border-b border-white/10">
+        <div id="marquee-text" class="marquee-content"></div>
+    </div>
+
+    <div id="global-loading" class="fixed inset-0 bg-white dark:bg-black z-[900] flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative w-24 h-24 flex items-center justify-center mb-6">
+            <div class="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+            <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-16 h-16 object-contain relative z-10 animate-bounce">
+        </div>
+        <span class="text-sm font-extrabold tracking-[0.2em] text-slate-900 dark:text-white uppercase">TYT Phường Hiệp Thành</span>
+    </div>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 pt-3 px-4 flex justify-center transition-all duration-300">
+        <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg px-4 py-2 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer group flex-1 min-w-0" onclick="location.reload()">
+                <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform">
+                <h1 class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white truncate" id="header-title">ĐANG TẢI...</h1>
             </div>
-            
-            <div class="flex items-center gap-2">
-                <button onclick="window.toggleAdminSidebar()" id="admin-btn" class="hidden px-3 py-2 text-xs font-bold uppercase bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-                    Quản trị
+            <div class="flex items-center gap-1 md:gap-2 shrink-0">
+                 <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-2">
+                    <i data-lucide="settings-2" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Admin</span>
                 </button>
-                <button onclick="window.toggleTheme()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-400">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                <button onclick="window.toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition text-slate-600 dark:text-slate-400">
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
                 </button>
                 <div id="auth-section"></div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 max-w-6xl mx-auto px-6 py-10 w-full">
-        
-        <!-- Hero Section -->
-        <div class="mb-12 text-center max-w-3xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-white/5">
-            <h2 class="text-2xl md:text-3xl font-black mb-3 text-slate-800 dark:text-white">Vì sức khỏe cộng đồng</h2>
-            <p class="text-slate-500 dark:text-slate-400">Cập nhật tin tức tiêm chủng, phòng chống dịch bệnh và các hoạt động y tế tại Phường Hiệp Thành.</p>
-        </div>
+    <main class="flex-1 w-full relative z-10 pt-20 md:pt-24 transition-all duration-300" id="main-content"></main>
 
-        <!-- Create Post Button -->
-        <button onclick="window.openPostModal()" id="fab-create" class="hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-sky-600 transition z-40">
-            <i data-lucide="plus" class="w-6 h-6"></i>
-        </button>
-
-        <!-- Blog Grid -->
-        <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Posts rendered here -->
-        </div>
-
-        <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
-            <i data-lucide="activity" class="w-16 h-16 mb-4 opacity-50 text-primary"></i>
-            <p class="font-medium">Chưa có bản tin nào được đăng.</p>
-        </div>
-
-    </main>
-
-    <!-- Reading Modal (Full Screen) -->
-    <div id="modal-read" class="fixed inset-0 bg-white dark:bg-slate-900 z-[100] hidden overflow-y-auto">
-        <div class="max-w-3xl mx-auto px-6 py-12 relative">
-            <button onclick="window.closeReadModal()" class="fixed top-6 right-6 lg:left-6 lg:right-auto p-3 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition z-50 shadow-lg">
-                <i data-lucide="arrow-left" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>
-            </button>
-            
-            <article>
-                <div class="mb-8 border-b pb-6 dark:border-white/10">
-                    <span id="read-category" class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold uppercase rounded-full mb-3"></span>
-                    <h1 id="read-title" class="text-3xl md:text-4xl font-black mb-4 leading-tight text-slate-900 dark:text-white"></h1>
-                    
-                    <div class="flex items-center justify-between flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-400">
-                        <div class="flex items-center gap-4">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                                <span id="read-date" class="font-bold"></span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="user" class="w-4 h-4"></i>
-                                <span id="read-author"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
-                            <i data-lucide="eye" class="w-4 h-4 text-primary"></i>
-                            <span id="read-views" class="font-bold text-slate-700 dark:text-slate-300">0</span>
-                            <span class="text-xs">lượt xem</span>
-                        </div>
-                    </div>
+    <footer class="relative z-10 pb-6 px-4 pt-6">
+        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2rem] border border-white/50 dark:border-white/5 shadow-2xl p-6 md:p-10 reveal">
+            <div id="footer-content"></div>
+            <div class="border-t border-slate-200/50 dark:border-white/5 pt-4 mt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-center">
+                <p class="text-[10px] font-medium text-slate-500 uppercase tracking-widest">© 2026 TRẠM Y TẾ PHƯỜNG HIỆP THÀNH.</p>
+                <div class="flex items-center gap-2 px-3 py-1 bg-white/50 dark:bg-black/20 rounded-full border border-white/20 dark:border-white/5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase">Đang hoạt động</span>
                 </div>
-
-                <div class="w-full aspect-video rounded-2xl overflow-hidden mb-10 shadow-lg bg-slate-100 dark:bg-slate-800">
-                    <img id="read-cover" src="" class="w-full h-full object-cover">
-                </div>
-
-                <!-- Content Area -->
-                <div id="read-content" class="prose dark:prose-invert mx-auto text-lg">
-                    <!-- Content HTML will be injected here -->
-                </div>
-
-                <div class="mt-10 py-6 border-t border-b dark:border-white/10 flex items-center justify-between">
-                    <div class="flex gap-4">
-                        <button onclick="window.handleLike()" id="btn-like" class="group flex items-center gap-2 px-5 py-3 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all border border-slate-200 dark:border-white/5">
-                            <i data-lucide="heart" class="w-5 h-5 text-slate-400 group-hover:text-red-500 transition-colors" id="icon-like"></i>
-                            <span class="font-bold text-slate-600 dark:text-slate-300 group-hover:text-red-500 transition-colors">Thích</span>
-                            <span id="count-like" class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs px-2 py-0.5 rounded-md font-bold ml-1">0</span>
-                        </button>
-                        
-                        <button onclick="window.handleShare()" class="group flex items-center gap-2 px-5 py-3 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all border border-slate-200 dark:border-white/5">
-                            <i data-lucide="share-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                            <span class="font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-500 transition-colors">Chia sẻ</span>
-                            <span id="count-share" class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs px-2 py-0.5 rounded-md font-bold ml-1">0</span>
-                        </button>
-                    </div>
-                </div>
-
-            </article>
-
-            <!-- Admin Actions inside Article -->
-            <div id="read-admin-actions" class="mt-6 flex justify-end gap-3 hidden">
-                <button id="btn-edit-post" class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-bold hover:bg-indigo-100 transition"><i data-lucide="edit"></i> Sửa bài</button>
-                <button id="btn-delete-post" class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition"><i data-lucide="trash"></i> Xóa bài</button>
             </div>
         </div>
-    </div>
+    </footer>
 
-    <!-- Admin Sidebar (Settings) -->
-    <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 bg-white dark:bg-slate-900 border-l dark:border-white/10 shadow-2xl z-[200] flex flex-col">
-        <div class="p-6 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
-            <h3 class="font-black uppercase text-sm tracking-widest text-primary">Hệ thống Quản trị</h3>
-            <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <!-- Admin Sidebar -->
+    <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 w-full max-w-sm bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl border-l border-slate-200 dark:border-white/10 shadow-2xl z-[200] flex flex-col h-screen">
+        <div class="p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center shrink-0">
+            <h3 class="font-bold text-sm tracking-wider uppercase text-slate-800 dark:text-white flex items-center gap-2">
+                <i data-lucide="command" class="w-4 h-4"></i> Control Panel
+            </h3>
+            <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
         </div>
 
-        <div class="p-6 space-y-6 overflow-y-auto">
-            <button onclick="window.openPostModal()" class="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-sky-600 transition">
-                <i data-lucide="pen-tool" class="w-4 h-4"></i> Soạn tin mới
-            </button>
-
-            <!-- Github Settings -->
-            <div class="space-y-4 pt-6 border-t dark:border-white/5">
-                <div class="flex items-center gap-2 text-slate-500 mb-2">
-                    <i data-lucide="github" class="w-4 h-4"></i>
-                    <h4 class="text-xs font-black uppercase tracking-widest">Cấu hình Lưu trữ Ảnh</h4>
+        <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-6">
+            <!-- Visitors Action Card -->
+            <div onclick="window.openVisitorsModal()" class="group relative overflow-hidden bg-gradient-to-br from-indigo-600 to-blue-700 p-5 rounded-2xl shadow-lg cursor-pointer transform hover:-translate-y-1 transition-all">
+                <div class="absolute right-0 top-0 opacity-10 translate-x-2 -translate-y-2"><i data-lucide="users" class="w-20 h-20 text-white"></i></div>
+                <div class="relative z-10 text-white">
+                    <div class="flex items-center gap-2 mb-1"><i data-lucide="monitor-smartphone" class="w-4 h-4"></i><h4 class="text-xs font-black uppercase tracking-widest">Người truy cập</h4></div>
+                    <p class="text-[10px] text-white/70 mb-4">Xem thiết bị & vị trí truy cập.</p>
+                    <div class="text-[10px] font-bold uppercase bg-white/20 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">Xem chi tiết <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
                 </div>
+            </div>
+
+            <!-- Inbox Card -->
+            <div onclick="window.openInboxModal()" class="group relative overflow-hidden bg-slate-900 dark:bg-white p-5 rounded-2xl shadow-lg cursor-pointer transform hover:-translate-y-1 transition-all">
+                <div class="relative z-10 text-white dark:text-black">
+                    <div class="flex items-center gap-2 mb-1"><i data-lucide="mail" class="w-4 h-4"></i><h4 class="text-xs font-black uppercase tracking-widest">Hộp thư</h4></div>
+                    <p class="text-[10px] opacity-70 mb-4">Quản lý phản hồi người dùng.</p>
+                    <div class="text-[10px] font-bold uppercase bg-white/10 dark:bg-black/10 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">Mở ngay <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
+                </div>
+            </div>
+
+            <!-- Configs -->
+            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-white/5">
+                <h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Cấu hình hệ thống</h4>
                 <div class="space-y-3">
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Token (Repo Scope)</label>
-                        <input type="password" id="gh-token" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Tên tài khoản (Owner)</label>
-                        <input type="text" id="gh-owner" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Tên Repository</label>
-                        <input type="text" id="gh-repo" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-lg text-sm border dark:border-white/5 outline-none focus:border-primary">
-                    </div>
+                    <input type="text" id="cfg-title1" placeholder="Đơn vị" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none focus:ring-1 ring-blue-500">
+                    <input type="text" id="cfg-title2" placeholder="Tên hệ thống" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none focus:ring-1 ring-blue-500">
+                    <textarea id="cfg-slogan" rows="2" placeholder="Slogan..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none focus:ring-1 ring-blue-500"></textarea>
                 </div>
-                <button onclick="window.saveGithubConfig()" class="w-full py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white rounded-lg text-xs font-bold uppercase hover:bg-slate-300 transition">Lưu cấu hình</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Post Editor Modal (Create/Edit) -->
-    <div id="modal-post" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col h-[90vh]">
-            <div class="p-4 border-b dark:border-white/5 flex justify-between items-center shrink-0 bg-slate-50 dark:bg-slate-800">
-                <h3 class="font-bold uppercase text-sm tracking-widest text-primary" id="editor-title-label">Soạn thảo tin bài</h3>
-                <button onclick="window.closePostModal()" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            
-            <form id="post-form" class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
-                <input type="hidden" id="post-id">
                 
-                <!-- Title & Category -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 shrink-0">
-                    <div class="md:col-span-2 space-y-1">
-                        <label class="text-[10px] font-bold uppercase text-slate-400">Tiêu đề bài viết</label>
-                        <input type="text" id="post-title" required placeholder="Nhập tiêu đề..." class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl font-bold outline-none focus:ring-2 ring-primary/50 transition border border-transparent dark:border-white/5">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold uppercase text-slate-400">Chuyên mục</label>
-                        <select id="post-category" class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 rounded-xl font-bold outline-none focus:ring-2 ring-primary/50 cursor-pointer appearance-none border border-transparent dark:border-white/5">
-                            <option value="Thông báo">Thông báo</option>
-                            <option value="Tiêm chủng">Tiêm chủng</option>
-                            <option value="Dịch bệnh">Dịch bệnh</option>
-                            <option value="Truyền thông">Truyền thông GDSK</option>
-                            <option value="Hoạt động trạm">Hoạt động trạm</option>
-                            <option value="Khác">Khác</option>
-                        </select>
-                    </div>
+                <div class="pt-2">
+                    <h5 class="text-[9px] font-bold uppercase text-slate-500 mb-2">Thông báo chạy</h5>
+                    <textarea id="cfg-announce-text" rows="2" placeholder="Nội dung..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none mb-2"></textarea>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="cfg-announce-show" class="w-4 h-4 accent-blue-500"><span class="text-xs font-bold text-slate-600 dark:text-slate-300">Bật thông báo</span></label>
                 </div>
 
-                <!-- Cover Image Upload -->
-                <div class="space-y-2 shrink-0">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Ảnh đại diện (Banner)</label>
-                    <div id="drop-zone" class="relative group h-32 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition overflow-hidden">
-                        <input type="file" id="cover-input" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                        <div id="upload-placeholder" class="text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <i data-lucide="image-plus" class="w-6 h-6 text-slate-400"></i>
-                                <span class="text-xs font-bold text-slate-500">Tải ảnh lên</span>
-                            </div>
-                        </div>
-                        <img id="cover-preview" src="" class="absolute inset-0 w-full h-full object-cover hidden">
-                    </div>
+                <div class="grid grid-cols-1 gap-2 pt-2">
+                    <input type="text" id="cfg-fb" placeholder="Facebook URL" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
+                    <input type="text" id="cfg-zalo" placeholder="Zalo URL" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
+                    <input type="text" id="cfg-email" placeholder="Email" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
+                    <input type="text" id="cfg-phone" placeholder="Số điện thoại" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
                 </div>
 
-                <!-- Rich Text Editor Container -->
-                <div class="space-y-2 flex-1 flex flex-col min-h-[300px]">
-                    <label class="text-[10px] font-bold uppercase text-slate-400">Nội dung chi tiết</label>
-                    <!-- Quill Container -->
-                    <div id="quill-editor" class="flex-1 rounded-xl overflow-hidden"></div>
-                </div>
-            </form>
+                <button onclick="window.saveGeneralConfig()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/30 hover:bg-blue-500 transition">Lưu Thay Đổi</button>
+            </div>
 
-            <div class="p-4 border-t dark:border-white/5 bg-slate-50 dark:bg-slate-800 shrink-0 flex justify-end gap-3">
-                <button onclick="window.closePostModal()" class="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-xl font-bold uppercase text-xs hover:bg-slate-300 transition">Hủy</button>
-                <button onclick="document.getElementById('post-form').requestSubmit()" class="px-6 py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-sky-600 transition flex items-center gap-2">
-                    <i data-lucide="send" class="w-4 h-4"></i> Đăng bài
-                </button>
+            <!-- Units & Modules lists go here in original script... -->
+            <div class="space-y-4 pb-10">
+                <div class="flex items-center justify-between"><h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Đơn vị</h4><button onclick="window.openUnitModal()" class="p-1.5 bg-blue-500/10 text-blue-500 rounded-lg"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button></div>
+                <div id="admin-unit-list" class="space-y-2"></div>
+                
+                <div class="flex items-center justify-between pt-4"><h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Modules</h4><button onclick="window.openModuleModal()" class="p-1.5 bg-blue-500/10 text-blue-500 rounded-lg"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button></div>
+                <div id="admin-module-list" class="space-y-2"></div>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 z-[500] translate-y-20 opacity-0 transition-all duration-300">
-        <div class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm">
-            <i id="toast-icon" data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
-            <span id="toast-msg">Thông báo</span>
+    <!-- VISITORS MODAL -->
+    <div id="modal-visitors" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[450] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[85vh] animate-slide-up border border-white/10">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center">
+                <div><h3 class="font-bold text-sm uppercase tracking-widest">Quản lý truy cập</h3><p class="text-[10px] text-slate-400 font-medium">Danh sách thiết bị đang tương tác hệ thống</p></div>
+                <button onclick="document.getElementById('modal-visitors').classList.add('hidden')" class="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="overflow-x-auto custom-scroll flex-1">
+                <table class="w-full text-left border-collapse">
+                    <thead class="sticky top-0 bg-slate-50 dark:bg-black/40 backdrop-blur-md text-[10px] font-black uppercase text-slate-500 border-b border-slate-100 dark:border-white/5">
+                        <tr><th class="px-6 py-4">Người dùng</th><th class="px-6 py-4">Thiết bị</th><th class="px-6 py-4">Vị trí</th><th class="px-6 py-4">Thời gian</th><th class="px-6 py-4 text-right">#</th></tr>
+                    </thead>
+                    <tbody id="visitors-list-content" class="text-xs divide-y divide-slate-100 dark:divide-white/5"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <!-- Quill JS -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- Modals (Inbox, Unit, Module) -->
+    <div id="modal-inbox" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[80vh] border border-white/10 animate-slide-up">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center"><h3 class="font-bold text-sm uppercase">Hộp thư</h3><button onclick="document.getElementById('modal-inbox').classList.add('hidden')" class="p-2 rounded-full hover:bg-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <div id="inbox-content" class="p-6 overflow-y-auto custom-scroll space-y-3 bg-slate-50/50 dark:bg-black/20"></div>
+        </div>
+    </div>
 
+    <div id="modal-unit" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[350] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-md shadow-2xl animate-slide-up border border-white/10 overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5"><h3 class="font-bold text-sm uppercase tracking-widest" id="unit-modal-title">Đơn vị</h3><button onclick="document.getElementById('modal-unit').classList.add('hidden')" class="p-2 hover:bg-slate-200 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+            <form id="unit-form" class="p-6 space-y-4">
+                <input type="hidden" id="unit-id">
+                <input type="text" id="unit-name" placeholder="Tên đơn vị" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
+                <input type="text" id="unit-addr" placeholder="Địa chỉ" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
+                <div class="grid grid-cols-2 gap-3"><input type="text" id="unit-lat" placeholder="Lat" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"><input type="text" id="unit-lng" placeholder="Lng" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"></div>
+                <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-white/5 rounded-xl cursor-pointer"><input type="checkbox" id="unit-isMain" class="w-4 h-4 accent-blue-500"><span class="text-xs font-bold text-slate-600">Trụ sở chính</span></label>
+                <button type="submit" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold uppercase text-xs">Lưu</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-module" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-lg shadow-2xl animate-slide-up border border-white/10 overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5"><h3 class="font-bold text-sm uppercase tracking-widest" id="modal-title">Module</h3><button onclick="window.closeModuleModal()" class="p-2 hover:bg-slate-200 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+            <form id="module-form" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto custom-scroll">
+                <input type="hidden" id="mod-id">
+                <div class="grid grid-cols-2 gap-4"><input type="text" id="mod-name" required placeholder="Tên hiển thị" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"><select id="mod-color" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"><option value="indigo">Indigo</option><option value="blue">Blue</option><option value="emerald">Emerald</option><option value="rose">Rose</option><option value="amber">Amber</option><option value="slate">Slate</option></select></div>
+                <input type="text" id="mod-link" required placeholder="Link URL" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
+                <div id="icon-selector-grid" class="grid grid-cols-6 gap-2"></div>
+                <input type="text" id="mod-icon" placeholder="Icon code" class="w-full px-4 py-2 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-xs">
+                <input type="text" id="mod-desc" placeholder="Mô tả ngắn" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
+                <div class="grid grid-cols-2 gap-3 pt-2"><label class="flex items-center justify-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer"><input type="radio" name="mod-visibility" value="public" checked><span class="text-xs font-bold">Công khai</span></label><label class="flex items-center justify-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer"><input type="radio" name="mod-visibility" value="admin"><span class="text-xs font-bold text-red-500">Admin</span></label></div>
+                <button type="submit" class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold uppercase text-xs">Lưu Module</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 right-1/2 translate-x-1/2 md:translate-x-0 md:right-10 z-[500] translate-y-24 opacity-0 transition-all duration-500">
+        <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-white/20 dark:border-white/10 min-w-[300px]">
+            <div class="bg-blue-500 p-2 rounded-lg text-white" id="toast-icon-bg"><i data-lucide="check" class="w-5 h-5" id="toast-icon"></i></div>
+            <div><h6 class="text-[10px] font-black uppercase text-slate-400">Thông báo</h6><p id="toast-msg" class="text-sm font-bold text-slate-800 dark:text-white">Thành công</p></div>
+        </div>
+    </div>
+
+    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
@@ -347,438 +324,317 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        let currentUser = null;
         let isAdmin = false;
-        let posts = [];
-        let ghConfig = { token: '', owner: '', repo: '' };
-        let currentUploadSHA = null; 
-        let currentCoverPath = null;
-        let currentViewingPostId = null;
-        
-        // --- INITIALIZE QUILL EDITOR ---
-        let quill;
-        document.addEventListener('DOMContentLoaded', () => {
-            quill = new Quill('#quill-editor', {
-                theme: 'snow',
-                placeholder: 'Soạn nội dung bài viết tại đây...',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }], // Headers
-                        ['bold', 'italic', 'underline', 'strike'], // Toggle styles
-                        [{ 'color': [] }, { 'background': [] }], // Colors
-                        [{ 'align': [] }], // Alignment
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // Lists
-                        ['link', 'image', 'clean'] // Links, Images
-                    ]
-                }
-            });
-        });
+        let isUserLoggedIn = false;
+        let configData = { title1: "", title2: "", slogan: "", announcement: { enabled: false, text: '' }, socials: { facebook: '', zalo: '', phone: '', email: '' }, units: [], modules: [] };
+        let userLocation = null;
 
-        // --- DATE FORMATTER ---
-        function formatDateTime(isoString) {
-            if (!isoString) return "";
-            const d = new Date(isoString);
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            const hour = String(d.getHours()).padStart(2, '0');
-            const minute = String(d.getMinutes()).padStart(2, '0');
-            return `${day}/${month}/${year} ${hour}:${minute}`;
-        }
+        const presetIcons = [{id:'layout-grid'}, {id:'newspaper'}, {id:'users'}, {id:'file-text'}, {id:'calendar'}, {id:'pie-chart'}, {id:'book'}, {id:'mail'}, {id:'contact'}, {id:'server'}, {id:'globe'}, {id:'cloud'}, {id:'briefcase'}, {id:'video'}, {id:'message-square'}, {id:'cpu'}, {id:'shield'}, {id:'zap'}];
 
-        // --- AUTH ---
-        onAuthStateChanged(auth, async (user) => {
-            currentUser = user;
-            renderAuthUI();
+        // --- TRACKING VISITORS LOGIC ---
+        async function trackVisitor() {
+            let deviceId = localStorage.getItem('tyt_device_id');
+            if (!deviceId) {
+                deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36).substr(-4);
+                localStorage.setItem('tyt_device_id', deviceId);
+            }
+
+            const info = await fetchUserInfo();
+            const visitorRef = doc(db, "visitors", deviceId);
             
-            if (user) {
-                const adminRef = doc(db, "settings", "admins");
-                const snap = await getDoc(adminRef);
-                if (snap.exists()) {
-                    const data = snap.data();
-                    isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
-                }
-                
-                if (isAdmin) {
-                    const ghRef = doc(db, "settings", "github_config");
-                    const ghSnap = await getDoc(ghRef);
-                    if (ghSnap.exists()) ghConfig = ghSnap.data();
-                    
-                    document.getElementById('gh-token').value = ghConfig.token || '';
-                    document.getElementById('gh-owner').value = ghConfig.owner || '';
-                    document.getElementById('gh-repo').value = ghConfig.repo || '';
-                    
-                    document.getElementById('admin-btn').classList.remove('hidden');
-                    document.getElementById('fab-create').classList.remove('hidden');
-                }
-            } else {
-                isAdmin = false;
-                document.getElementById('admin-btn').classList.add('hidden');
-                document.getElementById('fab-create').classList.add('hidden');
-            }
-            renderPosts();
-        });
+            const visitorData = {
+                id: deviceId,
+                uid: auth.currentUser ? auth.currentUser.uid : null,
+                name: auth.currentUser ? auth.currentUser.displayName : "Khách ẩn danh",
+                photo: auth.currentUser ? auth.currentUser.photoURL : null,
+                device: info.device,
+                ip: info.ip,
+                location: info.city,
+                lat: userLocation ? userLocation.lat : null,
+                lng: userLocation ? userLocation.lng : null,
+                lastSeen: new Date()
+            };
 
-        // --- UI UTILS ---
-        function renderAuthUI() {
-            const container = document.getElementById('auth-section');
-            if (currentUser) {
-                container.innerHTML = `
-                    <div class="flex items-center gap-2 cursor-pointer bg-white dark:bg-slate-800 py-1 px-2 rounded-lg border dark:border-white/10" onclick="window.logout()">
-                        <img src="${currentUser.photoURL}" class="w-6 h-6 rounded-full">
-                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300 hidden md:block">${currentUser.displayName}</span>
-                        <i data-lucide="log-out" class="w-4 h-4 text-red-500"></i>
-                    </div>`;
-            } else {
-                container.innerHTML = `<button onclick="window.login()" class="px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs uppercase shadow hover:bg-sky-600 transition">Đăng nhập</button>`;
-            }
-            lucide.createIcons();
+            try { await setDoc(visitorRef, visitorData, { merge: true }); } catch (e) { console.error("Track err", e); }
         }
 
-        window.login = () => signInWithPopup(auth, provider);
-        window.logout = () => signOut(auth).then(() => location.reload());
-        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
-        window.toggleTheme = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        window.openVisitorsModal = () => {
+            if (!isAdmin) return;
+            document.getElementById('modal-visitors').classList.remove('hidden');
+            const listContent = document.getElementById('visitors-list-content');
+            
+            const q = query(collection(db, "visitors"), orderBy("lastSeen", "desc"));
+            onSnapshot(q, (snapshot) => {
+                listContent.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const d = docSnap.data();
+                    const time = d.lastSeen ? new Date(d.lastSeen.seconds * 1000).toLocaleString('vi-VN') : 'N/A';
+                    const isOnline = d.lastSeen && (new Date().getTime() / 1000 - d.lastSeen.seconds < 300);
+                    
+                    listContent.innerHTML += `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative">
+                                        ${d.photo ? `<img src="${d.photo}" class="w-8 h-8 rounded-full">` : `<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><i data-lucide="user" class="w-4 h-4 text-slate-400"></i></div>`}
+                                        ${isOnline ? `<span class="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></span>` : ''}
+                                    </div>
+                                    <div><p class="font-bold text-slate-800 dark:text-white truncate max-w-[120px]">${d.name}</p><p class="text-[9px] font-mono text-slate-400">${d.id}</p></div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4"><span class="font-medium text-slate-700 dark:text-slate-300 block">${d.device}</span><span class="text-[9px] text-slate-400 font-mono">${d.ip}</span></td>
+                            <td class="px-6 py-4"><span class="text-slate-500 block truncate max-w-[150px]">${d.location}</span>${d.lat ? `<button onclick="window.openMapToUnit(${d.lat}, ${d.lng}, 'Khách đang ở đây')" class="text-[9px] text-blue-500 font-bold uppercase flex items-center gap-1 mt-1 hover:underline"><i data-lucide="map-pin" class="w-3 h-3"></i> Google Maps</button>` : ''}</td>
+                            <td class="px-6 py-4 text-slate-500">${time}</td>
+                            <td class="px-6 py-4 text-right"><button onclick="window.deleteVisitor('${docSnap.id}')" class="p-1.5 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
+                        </tr>`;
+                });
+                lucide.createIcons();
+            });
         };
 
-        // --- DATA LOGIC ---
-        onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snap) => {
-            posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            renderPosts();
-            if(currentViewingPostId) {
-                const updatedPost = posts.find(p => p.id === currentViewingPostId);
-                if(updatedPost) updateModalStats(updatedPost);
+        window.deleteVisitor = async (id) => { if(confirm("Xóa bản ghi này?")) await deleteDoc(doc(db, "visitors", id)); };
+
+        // --- AUTH & INIT ---
+        onAuthStateChanged(auth, async (user) => {
+            renderAuthUI(user);
+            if (user) {
+                isUserLoggedIn = true;
+                const adminSnap = await getDoc(doc(db, "settings", "admins"));
+                if (adminSnap.exists()) {
+                    const data = adminSnap.data();
+                    isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
+                }
+                if (isAdmin) document.getElementById('admin-toggle-btn').classList.remove('hidden');
+            } else {
+                isUserLoggedIn = false; isAdmin = false; document.getElementById('admin-toggle-btn').classList.add('hidden');
             }
+            if(configData.title2) renderHomepage();
+            if(isAdmin && configData.title2) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
+            
+            trackVisitor(); // Track on load/auth change
         });
 
-        function renderPosts() {
-            const grid = document.getElementById('blog-grid');
-            if (posts.length === 0) {
-                grid.innerHTML = '';
-                document.getElementById('empty-state').classList.remove('hidden');
-                return;
+        onSnapshot(doc(db, "settings", "homepage"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                configData = { ...configData, ...data };
+                configData.units = data.units || [];
+                configData.modules = data.modules || [];
             }
+            renderHomepage();
+            if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
+            const loader = document.getElementById('global-loading');
+            loader.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => loader.style.display = 'none', 700);
+        });
 
-            document.getElementById('empty-state').classList.add('hidden');
-            grid.innerHTML = posts.map(post => {
-                const dateStr = formatDateTime(post.timestamp);
-                
-                // Strip HTML for excerpt
-                const tmp = document.createElement("DIV");
-                tmp.innerHTML = post.content;
-                const excerpt = (tmp.textContent || tmp.innerText || "").substring(0, 150) + "...";
-                
-                const category = post.category || 'Thông báo';
-                let catColor = "bg-slate-500";
-                if(category === 'Tiêm chủng') catColor = "bg-green-500";
-                if(category === 'Dịch bệnh') catColor = "bg-red-500";
-                if(category === 'Thông báo') catColor = "bg-blue-500";
-                
-                const views = post.views || 0;
-                const likes = post.likes || 0;
-
-                return `
-                <article onclick="window.readPost('${post.id}')" class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 cursor-pointer border border-slate-100 dark:border-white/5 flex flex-col h-full">
-                    <div class="aspect-[16/9] bg-slate-100 dark:bg-slate-700 overflow-hidden relative">
-                        ${post.coverUrl 
-                            ? `<img src="${post.coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`
-                            : `<div class="absolute inset-0 flex items-center justify-center text-slate-300"><i data-lucide="image" class="w-12 h-12"></i></div>`
-                        }
-                        <div class="absolute top-3 left-3 ${catColor} text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                            ${category}
-                        </div>
-                    </div>
-                    <div class="p-5 flex flex-col flex-1">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
-                                <span class="text-xs text-slate-400 font-medium">${dateStr}</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-xs text-slate-400">
-                                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> ${views}</span>
-                                <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> ${likes}</span>
-                            </div>
-                        </div>
-                        <h3 class="text-lg font-bold mb-3 text-slate-800 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition">${post.title}</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 flex-1">${excerpt}</p>
-                        <div class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all mt-auto pt-4 border-t dark:border-white/5">
-                            Xem chi tiết <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                </article>
-                `;
-            }).join('');
-            lucide.createIcons();
+        // --- DISTANCE & LOCATION ---
+        function haversineDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
-        // --- GITHUB UPLOAD ---
-        const toBase64 = file => new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-        });
+        window.getUserLocation = () => {
+            if (!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    renderHomepage(); showToast("Đã cập nhật vị trí!", false);
+                    trackVisitor(); // Update visitor data with GPS
+                },
+                (err) => console.log("GPS Blocked"),
+                { enableHighAccuracy: true, timeout: 5000 }
+            );
+        };
 
-        window.saveGithubConfig = async () => {
-            if (!isAdmin) return;
-            const token = document.getElementById('gh-token').value.trim();
-            const owner = document.getElementById('gh-owner').value.trim();
-            const repo = document.getElementById('gh-repo').value.trim();
-            await setDoc(doc(db, "settings", "github_config"), { token, owner, repo });
-            ghConfig = { token, owner, repo };
+        window.openMapToUnit = (lat, lng, label) => {
+            if(!lat || !lng) return;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const url = isIOS ? `http://maps.apple.com/?ll=${lat},${lng}&q=${encodeURIComponent(label)}` : `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            window.open(url, '_blank');
+        };
+
+        async function fetchUserInfo() {
+            let info = { ip: 'N/A', city: 'Đang xác định...', device: 'Thiết bị lạ' };
+            const ua = navigator.userAgent;
+            if (/Android/i.test(ua)) info.device = "Android Device";
+            else if (/iPhone|iPad|iPod/i.test(ua)) info.device = "iOS Device";
+            else if (/Windows/i.test(ua)) info.device = "Windows PC";
+            else if (/Mac/i.test(ua)) info.device = "MacOS";
+            
+            try { const res = await fetch('https://api.ipify.org?format=json'); const data = await res.json(); info.ip = data.ip; } catch(e){}
+
+            if (userLocation) {
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json`);
+                    const d = await res.json();
+                    const a = d.address || {};
+                    info.city = [a.quarter||a.suburb||a.ward, a.district||a.city_district, a.city||a.state].filter(Boolean).join(', ');
+                } catch(e){ info.city = "Lỗi định vị"; }
+            } else { info.city = "Chưa cấp quyền vị trí"; }
+            return info;
+        }
+
+        // --- UI RENDERING ---
+        async function renderHomepage() {
+            if (!configData.title2) return;
+            document.getElementById('header-title').innerText = configData.title2;
+            document.title = configData.title2;
+
+            const ann = configData.announcement || {};
+            const bar = document.getElementById('announcement-bar');
+            const head = document.getElementById('main-header');
+            const main = document.getElementById('main-content');
+            if (ann.enabled && ann.text) { bar.classList.remove('hidden'); document.getElementById('marquee-text').innerText = ann.text; head.style.top = '36px'; main.style.paddingTop = 'calc(5rem + 36px)'; }
+            else { bar.classList.add('hidden'); head.style.top = '0'; main.style.paddingTop = ''; }
+
+            const uInfo = await fetchUserInfo();
+            const s = configData.socials || {};
+            const socialBtn = (link, icon, color, label) => link ? `<a href="${link}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-white/10 rounded-full border border-white/20 hover:scale-105 transition shadow-sm"><i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i><span class="text-xs font-bold text-slate-700 dark:text-slate-200">${label}</span></a>` : '';
+
+            document.getElementById('footer-content').innerHTML = `
+                <div class="space-y-6 text-center">
+                    <div><h3 class="font-black text-xl md:text-2xl text-slate-900 dark:text-white uppercase break-words">${configData.title2}</h3><p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">${configData.title1}</p><p class="text-slate-500 dark:text-slate-400 text-sm max-w-2xl mx-auto">${configData.slogan}</p></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 flex justify-between items-center text-xs"><span class="text-slate-500">Máy:</span><span class="font-bold text-slate-700 dark:text-slate-300 truncate">${uInfo.device}</span></div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 flex justify-between items-center text-xs"><span class="text-slate-500">IP:</span><span class="font-mono font-bold text-slate-700 dark:text-slate-300 truncate">${uInfo.ip}</span></div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 flex justify-between items-center text-xs"><span class="text-slate-500">Ở tại:</span><span class="font-bold text-slate-700 dark:text-slate-300 truncate">${uInfo.city}</span></div>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-3">${socialBtn(s.facebook,'facebook','blue','FB')}${socialBtn(s.zalo,'message-circle','sky','Zalo')}${socialBtn(s.email ? `mailto:${s.email}` : '','mail','red','Email')}${socialBtn(s.phone ? `tel:${s.phone}` : '','phone','emerald','Hotline')}</div>
+                    <div class="mt-8 pt-6 border-t border-slate-200/50">
+                        <form id="contact-form" onsubmit="window.handleContactSubmit(event)" class="max-w-md mx-auto space-y-3 bg-white/40 dark:bg-white/5 p-5 rounded-2xl border border-white/20">
+                            <input type="text" id="contact-name" placeholder="Tên của bạn..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs outline-none">
+                            <div class="grid grid-cols-2 gap-3"><input type="text" id="contact-phone" placeholder="SĐT..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs"><input type="email" id="contact-email" placeholder="Email..." class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs"></div>
+                            <textarea id="contact-msg" rows="3" placeholder="Góp ý..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs outline-none"></textarea>
+                            <button type="submit" class="w-full py-2 bg-slate-900 text-white dark:bg-white dark:text-black rounded-xl text-xs font-bold uppercase hover:opacity-80 transition">Gửi góp ý</button>
+                        </form>
+                    </div>
+                </div>`;
+
+            let html = `<section class="px-4 py-10 md:py-20 text-center animate-slide-up"><h1 class="font-extrabold text-slate-900 dark:text-white mb-4"><span class="block text-sm text-slate-500 uppercase tracking-widest mb-2">${configData.title1}</span><span class="block text-3xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 py-2">${configData.title2}</span></h1><p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">${configData.slogan}</p></section>`;
+
+            const modules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
+            if(modules.length > 0) {
+                html += `<section class="px-4 pb-12"><div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">`;
+                modules.forEach(m => {
+                    const colorMap = {indigo:'from-indigo-500 to-blue-600', blue:'from-blue-500 to-indigo-600', emerald:'from-emerald-500 to-teal-600', rose:'from-rose-500 to-pink-600', amber:'from-amber-500 to-orange-600', slate:'from-slate-600 to-slate-800'};
+                    html += `<a href="${m.link}" target="_blank" class="spotlight-card reveal p-5 rounded-2xl group transition hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${colorMap[m.color]||colorMap.indigo} flex items-center justify-center mb-4 text-white group-hover:scale-110 transition"><i data-lucide="${m.icon||'box'}" class="w-6 h-6"></i></div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-500 transition">${m.name}</h3>
+                        <p class="text-[10px] text-slate-500 flex-1">${m.desc || 'Module tiện ích.'}</p>
+                        <div class="mt-4 flex items-center gap-1 text-[9px] font-black uppercase text-slate-400 group-hover:text-blue-500">Mở <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
+                    </a>`;
+                });
+                html += `</div></section>`;
+            }
+
+            const units = [...configData.units];
+            if(userLocation) {
+                units.forEach(u => u.dist = u.lat ? haversineDistance(userLocation.lat, userLocation.lng, parseFloat(u.lat), parseFloat(u.lng)) : 9999);
+                units.sort((a,b) => (a.isMain?-1:1) - (b.isMain?-1:1) || a.dist - b.dist);
+            }
+            if(units.length > 0) {
+                html += `<section class="px-4 pb-16"><div class="max-w-6xl mx-auto"><div class="text-center mb-8"><h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Cơ sở hoạt động</h2><button onclick="window.getUserLocation()" class="mt-2 text-[9px] font-bold uppercase text-blue-500 border border-blue-500/20 px-3 py-1 rounded-full hover:bg-blue-50 transition"><i data-lucide="navigation" class="w-3 h-3 inline mr-1"></i> Cập nhật vị trí</button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4">`;
+                units.forEach(u => {
+                    const distStr = u.dist < 999 ? (u.dist < 1 ? Math.round(u.dist*1000)+'m' : u.dist.toFixed(1)+'km') : '';
+                    html += `<div onclick="window.openMapToUnit(${u.lat},${u.lng},'${u.name}')" class="spotlight-card reveal p-4 rounded-2xl cursor-pointer hover:-translate-y-1 transition group relative">
+                        ${u.isMain ? `<span class="absolute top-4 right-4 text-[8px] font-black bg-blue-600 text-white px-2 py-0.5 rounded-full">MAIN</span>` : ''}
+                        <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition"><i data-lucide="building-2" class="w-5 h-5"></i></div>
+                        <div><h4 class="font-bold text-slate-800 dark:text-white text-sm group-hover:text-blue-500 transition">${u.name} ${distStr ? `<span class="ml-2 text-[9px] bg-emerald-100 text-emerald-600 px-1.5 py-0.5 rounded">${distStr}</span>`:''}</h4><p class="text-[10px] text-slate-500 line-clamp-1">${u.addr}</p></div></div>
+                    </div>`;
+                });
+                html += `</div></div></section>`;
+            }
+
+            document.getElementById('main-content').innerHTML = html;
+            lucide.createIcons();
+            initSpotlight(); initScrollObserver();
+        }
+
+        // --- ADMIN HELPERS ---
+        function fillAdminForm() {
+            document.getElementById('cfg-title1').value = configData.title1||'';
+            document.getElementById('cfg-title2').value = configData.title2||'';
+            document.getElementById('cfg-slogan').value = configData.slogan||'';
+            document.getElementById('cfg-announce-text').value = configData.announcement?.text||'';
+            document.getElementById('cfg-announce-show').checked = configData.announcement?.enabled||false;
+            document.getElementById('cfg-fb').value = configData.socials?.facebook||'';
+            document.getElementById('cfg-zalo').value = configData.socials?.zalo||'';
+            document.getElementById('cfg-email').value = configData.socials?.email||'';
+            document.getElementById('cfg-phone').value = configData.socials?.phone||'';
+        }
+
+        window.saveGeneralConfig = async () => {
+            if(!isAdmin) return;
+            const data = {
+                title1: document.getElementById('cfg-title1').value, title2: document.getElementById('cfg-title2').value, slogan: document.getElementById('cfg-slogan').value,
+                announcement: { text: document.getElementById('cfg-announce-text').value, enabled: document.getElementById('cfg-announce-show').checked },
+                socials: { facebook: document.getElementById('cfg-fb').value, zalo: document.getElementById('cfg-zalo').value, email: document.getElementById('cfg-email').value, phone: document.getElementById('cfg-phone').value }
+            };
+            await setDoc(doc(db, "settings", "homepage"), data, { merge: true });
             showToast("Đã lưu cấu hình!");
         };
 
-        // --- POST ACTIONS (CREATE/EDIT) ---
-        window.openPostModal = () => {
-            if(!ghConfig.token) { showToast("Vui lòng cấu hình GitHub!", true); window.toggleAdminSidebar(); return; }
-            
-            document.getElementById('post-form').reset();
-            document.getElementById('post-id').value = '';
-            document.getElementById('editor-title-label').innerText = "Soạn thảo tin bài";
-            document.getElementById('cover-preview').src = '';
-            document.getElementById('cover-preview').classList.add('hidden');
-            document.getElementById('upload-placeholder').classList.remove('hidden');
-            document.getElementById('post-category').value = 'Thông báo';
-            
-            // Clear Editor
-            if(quill) quill.setContents([]);
-
-            currentUploadSHA = null;
-            currentCoverPath = null;
-            
-            document.getElementById('modal-post').classList.remove('hidden');
-        };
-
-        window.closePostModal = () => document.getElementById('modal-post').classList.add('hidden');
-
-        document.getElementById('cover-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.getElementById('cover-preview');
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    document.getElementById('upload-placeholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.getElementById('post-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const postId = document.getElementById('post-id').value;
-            const title = document.getElementById('post-title').value;
-            
-            // Get HTML from Quill
-            const content = quill.root.innerHTML; 
-            
-            const category = document.getElementById('post-category').value;
-            const fileInput = document.getElementById('cover-input');
-            
-            setLoading(true);
-
-            try {
-                let coverUrl = document.getElementById('cover-preview').src;
-                let coverPath = currentCoverPath;
-                let coverSha = currentUploadSHA;
-
-                if(fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    const base64 = await toBase64(file);
-                    const fileName = `tyt_posts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-                    
-                    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${fileName}`;
-                    const res = await fetch(url, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Upload banner tyt", content: base64, branch: 'main' })
-                    });
-                    
-                    if(!res.ok) throw new Error("Lỗi upload ảnh GitHub");
-                    const data = await res.json();
-                    
-                    coverUrl = data.content.download_url;
-                    coverPath = fileName;
-                    coverSha = data.content.sha;
-                }
-
-                const postData = {
-                    title, content, category, coverUrl, coverPath, coverSha,
-                    updatedAt: new Date().toISOString(),
-                    authorName: currentUser.displayName,
-                    authorPhoto: currentUser.photoURL,
-                };
-
-                if(postId) {
-                    await updateDoc(doc(db, "posts", postId), postData);
-                    showToast("Cập nhật thành công!");
-                } else {
-                    postData.timestamp = new Date().toISOString();
-                    postData.views = 0;
-                    postData.likes = 0;
-                    postData.shares = 0;
-                    await addDoc(collection(db, "posts"), postData);
-                    showToast("Đăng tin thành công!");
-                }
-
-                window.closePostModal();
-
-            } catch (err) {
-                console.error(err);
-                showToast("Lỗi: " + err.message, true);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        // --- READ MODE ---
-        window.readPost = async (id) => {
-            const post = posts.find(p => p.id === id);
-            if(!post) return;
-            
-            currentViewingPostId = id;
-
-            document.getElementById('read-title').innerText = post.title;
-            document.getElementById('read-date').innerText = formatDateTime(post.timestamp);
-            document.getElementById('read-category').innerText = post.category || 'Tin tức';
-            document.getElementById('read-author').innerText = post.authorName;
-            document.getElementById('read-cover').src = post.coverUrl;
-            
-            // Inject Rich HTML Content
-            document.getElementById('read-content').innerHTML = post.content;
-            
-            updateModalStats(post);
-
-            try {
-                const postRef = doc(db, "posts", id);
-                await updateDoc(postRef, { views: increment(1) });
-            } catch (e) { console.log("View err", e); }
-
-            const actionDiv = document.getElementById('read-admin-actions');
-            if(isAdmin) {
-                actionDiv.classList.remove('hidden');
-                document.getElementById('btn-edit-post').onclick = () => { window.closeReadModal(); window.editPost(id); };
-                document.getElementById('btn-delete-post').onclick = () => { if(confirm("Xóa bài viết này?")) window.deletePost(id, post.coverPath, post.coverSha); };
-            } else {
-                actionDiv.classList.add('hidden');
-            }
-
-            document.getElementById('modal-read').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-        };
-
-        function updateModalStats(post) {
-            document.getElementById('read-views').innerText = post.views || 0;
-            document.getElementById('count-like').innerText = post.likes || 0;
-            document.getElementById('count-share').innerText = post.shares || 0;
-        }
-
-        window.closeReadModal = () => {
-            document.getElementById('modal-read').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            currentViewingPostId = null;
-        };
-
-        // --- INTERACTIONS ---
-        window.handleLike = async () => {
-            if(!currentViewingPostId) return;
-            const icon = document.getElementById('icon-like');
-            icon.classList.add('fill-red-500', 'text-red-500', 'animate-heart');
-            setTimeout(() => icon.classList.remove('animate-heart'), 300);
-
-            try {
-                const postRef = doc(db, "posts", currentViewingPostId);
-                await updateDoc(postRef, { likes: increment(1) });
-            } catch (e) { console.error(e); }
-        };
-
-        window.handleShare = async () => {
-            if(!currentViewingPostId) return;
-            const post = posts.find(p => p.id === currentViewingPostId);
-            try {
-                const postRef = doc(db, "posts", currentViewingPostId);
-                await updateDoc(postRef, { shares: increment(1) });
-            } catch (e) { console.error(e); }
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: post.title,
-                        text: 'Xem tin tức mới tại TYT Hiệp Thành',
-                        url: window.location.href 
-                    });
-                } catch (err) { console.log('Share canceled'); }
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                showToast("Đã sao chép liên kết!");
-            }
-        };
-
-        // --- EDIT/DELETE ---
-        window.editPost = (id) => {
-            const post = posts.find(p => p.id === id);
-            window.openPostModal();
-            document.getElementById('post-id').value = id;
-            document.getElementById('editor-title-label').innerText = "Chỉnh sửa tin bài";
-            document.getElementById('post-title').value = post.title;
-            
-            // Set content to Quill
-            quill.root.innerHTML = post.content;
-            
-            document.getElementById('post-category').value = post.category || 'Thông báo';
-            
-            if(post.coverUrl) {
-                const img = document.getElementById('cover-preview');
-                img.src = post.coverUrl;
-                img.classList.remove('hidden');
-                document.getElementById('upload-placeholder').classList.add('hidden');
-                currentCoverPath = post.coverPath;
-                currentUploadSHA = post.coverSha;
-            }
-        };
-
-        window.deletePost = async (id, path, sha) => {
-            setLoading(true);
-            try {
-                if(path && sha) {
-                    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${path}`;
-                    await fetch(url, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `token ${ghConfig.token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: "Delete post banner", sha: sha, branch: 'main' })
-                    });
-                }
-                await deleteDoc(doc(db, "posts", id));
-                showToast("Đã xóa tin bài!");
-                window.closeReadModal();
-            } catch (err) {
-                showToast("Lỗi xóa: " + err.message, true);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        function showToast(msg, isError = false) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            const icon = document.getElementById('toast-icon');
-            icon.setAttribute('data-lucide', isError ? 'alert-triangle' : 'check-circle');
-            icon.className = isError ? 'w-5 h-5 text-red-500' : 'w-5 h-5 text-green-500';
+        function renderAdminUnitList() {
+            document.getElementById('admin-unit-list').innerHTML = configData.units.map(u => `<div class="p-3 bg-slate-50 dark:bg-white/5 rounded-xl flex justify-between items-center group"><div class="min-w-0"><p class="text-xs font-bold truncate">${u.name}</p><p class="text-[9px] text-slate-500 truncate">${u.addr}</p></div><div class="flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="window.editUnit('${u.id}')" class="p-1 text-blue-500"><i data-lucide="edit-2" class="w-3 h-3"></i></button><button onclick="window.deleteUnit('${u.id}')" class="p-1 text-red-500"><i data-lucide="trash" class="w-3 h-3"></i></button></div></div>`).join('');
             lucide.createIcons();
-            t.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
+        window.openUnitModal = () => { document.getElementById('unit-form').reset(); document.getElementById('unit-id').value = ''; document.getElementById('modal-unit').classList.remove('hidden'); };
+        window.editUnit = (id) => { const u = configData.units.find(x => x.id === id); if(!u) return; document.getElementById('unit-id').value = u.id; document.getElementById('unit-name').value = u.name; document.getElementById('unit-addr').value = u.addr; document.getElementById('unit-lat').value = u.lat; document.getElementById('unit-lng').value = u.lng; document.getElementById('unit-isMain').checked = u.isMain; document.getElementById('modal-unit').classList.remove('hidden'); };
+        window.deleteUnit = async (id) => { if(confirm("Xóa?")) await setDoc(doc(db, "settings", "homepage"), { units: configData.units.filter(x => x.id !== id) }, { merge: true }); };
+        document.getElementById('unit-form').onsubmit = async (e) => {
+            e.preventDefault(); const id = document.getElementById('unit-id').value || 'u' + Date.now();
+            const unit = { id, name: document.getElementById('unit-name').value, addr: document.getElementById('unit-addr').value, lat: document.getElementById('unit-lat').value, lng: document.getElementById('unit-lng').value, isMain: document.getElementById('unit-isMain').checked };
+            let units = [...configData.units]; if(unit.isMain) units.forEach(x => x.isMain = false);
+            const idx = units.findIndex(x => x.id === id); if(idx >= 0) units[idx] = unit; else units.push(unit);
+            await setDoc(doc(db, "settings", "homepage"), { units }, { merge: true }); document.getElementById('modal-unit').classList.add('hidden');
+        };
 
-        function setLoading(active) {
-            const l = document.getElementById('global-loading');
-            active ? l.classList.remove('opacity-0', 'pointer-events-none') : l.classList.add('opacity-0', 'pointer-events-none');
+        function renderAdminModuleList() {
+            document.getElementById('admin-module-list').innerHTML = configData.modules.map(m => `<div class="p-3 bg-slate-50 dark:bg-white/5 rounded-xl flex justify-between items-center group"><div class="flex items-center gap-2"><i data-lucide="${m.icon||'box'}" class="w-4 h-4 text-${m.color}-500"></i><span class="text-xs font-bold">${m.name}</span></div><div class="flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="window.editModule('${m.id}')" class="p-1 text-blue-500"><i data-lucide="edit-2" class="w-3 h-3"></i></button><button onclick="window.deleteModule('${m.id}')" class="p-1 text-red-500"><i data-lucide="trash" class="w-3 h-3"></i></button></div></div>`).join('');
+            lucide.createIcons();
         }
+        window.openModuleModal = () => { document.getElementById('module-form').reset(); document.getElementById('mod-id').value = ''; window.renderIconGrid('layout-grid'); document.getElementById('modal-module').classList.remove('hidden'); };
+        window.editModule = (id) => { const m = configData.modules.find(x => x.id === id); if(!m) return; document.getElementById('mod-id').value = m.id; document.getElementById('mod-name').value = m.name; document.getElementById('mod-link').value = m.link; document.getElementById('mod-color').value = m.color; document.getElementById('mod-desc').value = m.desc; document.querySelector(`input[name="mod-visibility"][value="${m.visibility}"]`).checked = true; window.renderIconGrid(m.icon); document.getElementById('modal-module').classList.remove('hidden'); };
+        window.deleteModule = async (id) => { if(confirm("Xóa?")) await setDoc(doc(db, "settings", "homepage"), { modules: configData.modules.filter(x => x.id !== id) }, { merge: true }); };
+        document.getElementById('module-form').onsubmit = async (e) => {
+            e.preventDefault(); const id = document.getElementById('mod-id').value || 'm' + Date.now();
+            const mod = { id, name: document.getElementById('mod-name').value, link: document.getElementById('mod-link').value, icon: document.getElementById('mod-icon').value, color: document.getElementById('mod-color').value, desc: document.getElementById('mod-desc').value, visibility: document.querySelector('input[name="mod-visibility"]:checked').value };
+            let modules = [...configData.modules]; const idx = modules.findIndex(x => x.id === id); if(idx >= 0) modules[idx] = mod; else modules.push(mod);
+            await setDoc(doc(db, "settings", "homepage"), { modules }, { merge: true }); document.getElementById('modal-module').classList.add('hidden');
+        };
 
-        if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
+        window.openInboxModal = async () => {
+            document.getElementById('modal-inbox').classList.remove('hidden');
+            const box = document.getElementById('inbox-content'); box.innerHTML = '<p class="text-center text-xs p-10">Đang tải...</p>';
+            const q = query(collection(db, "inbox"), orderBy("timestamp", "desc"));
+            const snap = await getDocs(q); box.innerHTML = '';
+            if(snap.empty) box.innerHTML = '<p class="text-center text-xs opacity-50 py-10">Hộp thư trống.</p>';
+            snap.forEach(docSnap => {
+                const d = docSnap.data(); const t = d.timestamp ? new Date(d.timestamp.seconds * 1000).toLocaleString() : '';
+                box.innerHTML += `<div class="bg-white dark:bg-white/5 p-4 rounded-xl border border-slate-100 relative"><button onclick="window.deleteInbox('${docSnap.id}')" class="absolute top-4 right-4 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button><h5 class="font-bold text-sm">${d.name}</h5><p class="text-[9px] text-slate-400 mb-2">${t}</p><p class="text-xs text-blue-500 font-mono mb-2">${d.phone} | ${d.email}</p><p class="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-wrap">${d.message}</p></div>`;
+            });
+            lucide.createIcons();
+        };
+        window.deleteInbox = async (id) => { if(confirm("Xóa?")) { await deleteDoc(doc(db, "inbox", id)); window.openInboxModal(); } };
+        window.handleContactSubmit = async (e) => { e.preventDefault(); try { await addDoc(collection(db, "inbox"), { name: document.getElementById('contact-name').value, phone: document.getElementById('contact-phone').value, email: document.getElementById('contact-email').value, message: document.getElementById('contact-msg').value, timestamp: new Date() }); showToast("Đã gửi góp ý!"); document.getElementById('contact-form').reset(); } catch(e){ showToast("Lỗi gửi!", true); } };
+
+        // --- CORE UTILS ---
+        window.renderIconGrid = (sel) => { document.getElementById('icon-selector-grid').innerHTML = presetIcons.map(i => `<div onclick="window.selectIcon('${i.id}')" class="cursor-pointer p-2 rounded-lg border flex justify-center ${i.id===sel?'bg-blue-500 text-white border-blue-500':'bg-slate-50 dark:bg-white/5 border-transparent'}"><i data-lucide="${i.id}" class="w-4 h-4"></i></div>`).join(''); document.getElementById('mod-icon').value = sel; lucide.createIcons(); };
+        window.selectIcon = (id) => window.renderIconGrid(id);
+        window.login = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth).then(() => location.reload());
+        function renderAuthUI(user) { const c = document.getElementById('auth-section'); if(user) c.innerHTML = `<img src="${user.photoURL}" class="w-8 h-8 rounded-full cursor-pointer ring-2 ring-blue-500/20" onclick="window.logout()">`; else c.innerHTML = `<button onclick="window.login()" class="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-lg text-[10px] font-bold uppercase">Login</button>`; }
+        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
+        window.toggleTheme = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
+        function showToast(m, err=false) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; const bg = document.getElementById('toast-icon-bg'); if(err) { bg.className = "bg-red-500 p-2 rounded-lg text-white"; } else { bg.className = "bg-blue-500 p-2 rounded-lg text-white"; } t.classList.remove('translate-y-24', 'opacity-0'); setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3000); }
+        function initSpotlight() { const cards = document.querySelectorAll(".spotlight-card"); cards.forEach(c => { c.onmousemove = e => { const r = c.getBoundingClientRect(); c.style.setProperty("--mouse-x", `${e.clientX - r.left}px`); c.style.setProperty("--mouse-y", `${e.clientY - r.top}px`); }; }); }
+        function initScrollObserver() { const observer = new IntersectionObserver((es) => { es.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
         lucide.createIcons();
+        window.addEventListener('load', () => setTimeout(window.getUserLocation, 1500));
     </script>
 </body>
 </html>
