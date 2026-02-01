@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trạm y tế Phường Hiệp Thành</title>
+    <title>Hệ thống Quản lý - TYT Phường Hiệp Thành</title>
     <link rel="icon" href="https://hdd.io.vn/img/bmassloadings.png" type="image/png">
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -19,30 +17,16 @@
             theme: { 
                 extend: { 
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { 
-                        primary: '#3b82f6', 
-                        accent: '#6366f1',
-                        dark: '#030712',
-                    },
+                    colors: { primary: '#3b82f6', accent: '#6366f1', dark: '#030712' },
                     animation: {
                         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'aurora': 'aurora 20s linear infinite',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'marquee': 'marquee 25s linear infinite',
                     },
                     keyframes: {
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' }, 
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        aurora: {
-                            '0%': { backgroundPosition: '50% 50%, 50% 50%' },
-                            '100%': { backgroundPosition: '350% 50%, 350% 50%' },
-                        },
-                        marquee: {
-                            '0%': { transform: 'translate3d(100vw, 0, 0)' }, 
-                            '100%': { transform: 'translate3d(-100%, 0, 0)' } 
-                        }
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        aurora: { '0%': { backgroundPosition: '50% 50%, 50% 50%' }, '100%': { backgroundPosition: '350% 50%, 350% 50%' } },
+                        marquee: { '0%': { transform: 'translate3d(100vw, 0, 0)' }, '100%': { transform: 'translate3d(-100%, 0, 0)' } }
                     }
                 } 
             }
@@ -51,107 +35,58 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
         .dark body { background-color: #030712; color: #e2e8f0; }
-        .break-words { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
-        .hyphens-auto { -webkit-hyphens: auto; hyphens: auto; }
-
-        .bg-noise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0; opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-        }
-        .dark .bg-grid {
-            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
-        }
-
-        .spotlight-card {
-            position: relative; overflow: hidden;
-            background: rgba(255, 255, 255, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-        .dark .spotlight-card {
-            background: rgba(17, 24, 39, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .spotlight-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit; padding: 1px;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.8), transparent 40%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
-            opacity: 0; transition: opacity 0.5s; pointer-events: none;
-        }
-        .dark .spotlight-card::before {
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.3), transparent 40%);
-        }
+        .bg-noise { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+        .dark .bg-grid { background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px); }
+        .spotlight-card { position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.4); }
+        .dark .spotlight-card { background: rgba(17, 24, 39, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .spotlight-card::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.8), transparent 40%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+        .dark .spotlight-card::before { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.3), transparent 40%); }
         .spotlight-card:hover::before { opacity: 1; }
-        .spotlight-bg {
-            position: absolute; inset: 0;
-            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.06), transparent 40%);
-            opacity: 0; transition: opacity 0.5s; pointer-events: none;
-        }
+        .spotlight-bg { position: absolute; inset: 0; background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.06), transparent 40%); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
         .spotlight-card:hover .spotlight-bg { opacity: 1; }
-
         .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 20px; }
-
         .admin-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); }
         .admin-sidebar.open { transform: translateX(0); }
-
         .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .marquee-wrapper { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 36px; 
-            z-index: 100; overflow: hidden; 
-            background: #3b82f6; color: white; display: flex; align-items: center; 
-        }
-        .marquee-content { 
-            display: inline-block; white-space: nowrap; animation: marquee 25s linear infinite; 
-            font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;
-        }
-        @keyframes marquee {
-            0% { transform: translate3d(100vw, 0, 0); } 
-            100% { transform: translate3d(-100%, 0, 0); } 
-        }
+        .marquee-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 36px; z-index: 100; overflow: hidden; background: #3b82f6; color: white; display: flex; align-items: center; }
+        .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 25s linear infinite; font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
     <div class="bg-noise z-0"></div>
     <div class="fixed inset-0 z-[-1] bg-grid mask-gradient">
-        <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[60%] rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-indigo-400/20 blur-[100px] animate-aurora dark:from-blue-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 mix-blend-multiply dark:mix-blend-screen"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[60%] rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 blur-[100px] animate-aurora"></div>
     </div>
 
-    <div id="announcement-bar" class="hidden marquee-wrapper shadow-md border-b border-white/10">
+    <!-- Announcement Bar -->
+    <div id="announcement-bar" class="hidden marquee-wrapper shadow-md">
         <div id="marquee-text" class="marquee-content"></div>
     </div>
 
+    <!-- Loading Screen -->
     <div id="global-loading" class="fixed inset-0 bg-white dark:bg-black z-[900] flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="relative w-24 h-24 flex items-center justify-center mb-6">
-            <div class="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
-            <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-16 h-16 object-contain relative z-10 animate-bounce">
-        </div>
-        <span class="text-sm font-extrabold tracking-[0.2em] text-slate-900 dark:text-white uppercase">TYT Phường Hiệp Thành</span>
+        <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-16 h-16 animate-bounce mb-4" alt="Loading">
+        <span class="text-xs font-bold tracking-widest uppercase text-slate-400 animate-pulse">Đang đồng bộ dữ liệu...</span>
     </div>
 
+    <!-- Header -->
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 pt-3 px-4 flex justify-center transition-all duration-300">
-        <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg px-4 py-2 flex justify-between items-center">
+        <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg px-4 py-2 flex justify-between items-center transition-all">
             <div class="flex items-center gap-3 cursor-pointer group flex-1 min-w-0" onclick="location.reload()">
-                <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform">
-                <h1 class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white truncate" id="header-title">ĐANG TẢI...</h1>
+                <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-8 h-8 group-hover:scale-110 transition duration-300">
+                <h1 class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white truncate" id="header-title">TYT Phường Hiệp Thành</h1>
             </div>
-            <div class="flex items-center gap-1 md:gap-2 shrink-0">
-                 <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-2">
-                    <i data-lucide="settings-2" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Admin</span>
+
+            <div class="flex items-center gap-1">
+                 <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-2">
+                    <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Admin</span>
                 </button>
-                <button onclick="window.toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition text-slate-600 dark:text-slate-400">
+                <div class="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1"></div>
+                <button onclick="window.toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 transition text-slate-600 dark:text-slate-400">
                     <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
                     <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
                 </button>
@@ -160,147 +95,177 @@
         </div>
     </header>
 
-    <main class="flex-1 w-full relative z-10 pt-20 md:pt-24 transition-all duration-300" id="main-content"></main>
+    <!-- Main Content -->
+    <main class="flex-1 w-full relative z-10 pt-20 md:pt-24" id="main-content"></main>
 
+    <!-- Footer -->
     <footer class="relative z-10 pb-6 px-4 pt-6">
-        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2rem] border border-white/50 dark:border-white/5 shadow-2xl p-6 md:p-10 reveal">
+        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2rem] border border-white/50 dark:border-white/5 shadow-2xl p-6 md:p-10 overflow-hidden reveal">
             <div id="footer-content"></div>
-            <div class="border-t border-slate-200/50 dark:border-white/5 pt-4 mt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-center">
+            <div class="border-t border-slate-200/50 dark:border-white/5 pt-4 mt-6 flex flex-col md:flex-row justify-between items-center gap-3">
                 <p class="text-[10px] font-medium text-slate-500 uppercase tracking-widest">© 2026 TRẠM Y TẾ PHƯỜNG HIỆP THÀNH.</p>
-                <div class="flex items-center gap-2 px-3 py-1 bg-white/50 dark:bg-black/20 rounded-full border border-white/20 dark:border-white/5">
+                <div class="flex items-center gap-2 px-3 py-1 bg-white/50 dark:bg-black/20 rounded-full border border-white/20">
                     <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span class="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase">Đang hoạt động</span>
+                    <span class="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">Hệ thống đang hoạt động</span>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- Admin Sidebar -->
-    <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 w-full max-w-sm bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl border-l border-slate-200 dark:border-white/10 shadow-2xl z-[200] flex flex-col h-screen">
+    <div id="admin-sidebar" class="admin-sidebar fixed right-0 top-0 bottom-0 w-full max-w-sm bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl border-l border-slate-200 dark:border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.2)] z-[200] flex flex-col h-screen">
         <div class="p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center shrink-0">
             <h3 class="font-bold text-sm tracking-wider uppercase text-slate-800 dark:text-white flex items-center gap-2">
-                <i data-lucide="command" class="w-4 h-4"></i> Control Panel
+                <span class="w-6 h-6 rounded bg-blue-600 text-white flex items-center justify-center"><i data-lucide="command" class="w-3 h-3"></i></span>
+                Control Panel
             </h3>
-            <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+            <button onclick="window.toggleAdminSidebar()" class="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
 
-        <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-6">
-            <!-- Visitors Action Card -->
-            <div onclick="window.openVisitorsModal()" class="group relative overflow-hidden bg-gradient-to-br from-indigo-600 to-blue-700 p-5 rounded-2xl shadow-lg cursor-pointer transform hover:-translate-y-1 transition-all">
-                <div class="absolute right-0 top-0 opacity-10 translate-x-2 -translate-y-2"><i data-lucide="users" class="w-20 h-20 text-white"></i></div>
+        <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-8">
+            <!-- Visitor Tracker Stats (NEW) -->
+            <div onclick="window.openVisitorModal()" class="group relative overflow-hidden bg-gradient-to-br from-indigo-600 to-blue-700 p-5 rounded-2xl shadow-xl cursor-pointer hover:scale-[1.02] transition-transform duration-300">
+                <div class="absolute right-0 top-0 opacity-10 translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
+                    <i data-lucide="users" class="w-20 h-20 text-white"></i>
+                </div>
                 <div class="relative z-10 text-white">
-                    <div class="flex items-center gap-2 mb-1"><i data-lucide="monitor-smartphone" class="w-4 h-4"></i><h4 class="text-xs font-black uppercase tracking-widest">Người truy cập</h4></div>
-                    <p class="text-[10px] text-white/70 mb-4">Xem thiết bị & vị trí truy cập.</p>
-                    <div class="text-[10px] font-bold uppercase bg-white/20 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">Xem chi tiết <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
+                    <h4 class="text-xs font-black uppercase tracking-widest mb-1">Người truy cập</h4>
+                    <p class="text-[11px] opacity-80 mb-4 font-medium">Quản lý định vị & Thiết bị người dùng.</p>
+                    <div class="text-[10px] font-bold uppercase bg-white/20 px-3 py-1.5 rounded-lg backdrop-blur-sm inline-flex items-center gap-2">Xem chi tiết <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
                 </div>
             </div>
 
-            <!-- Inbox Card -->
-            <div onclick="window.openInboxModal()" class="group relative overflow-hidden bg-slate-900 dark:bg-white p-5 rounded-2xl shadow-lg cursor-pointer transform hover:-translate-y-1 transition-all">
-                <div class="relative z-10 text-white dark:text-black">
-                    <div class="flex items-center gap-2 mb-1"><i data-lucide="mail" class="w-4 h-4"></i><h4 class="text-xs font-black uppercase tracking-widest">Hộp thư</h4></div>
-                    <p class="text-[10px] opacity-70 mb-4">Quản lý phản hồi người dùng.</p>
-                    <div class="text-[10px] font-bold uppercase bg-white/10 dark:bg-black/10 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">Mở ngay <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
+            <!-- Inbox -->
+            <div onclick="window.openInboxModal()" class="group bg-slate-900 dark:bg-white p-5 rounded-2xl shadow-xl cursor-pointer hover:scale-[1.02] transition-transform">
+                <div class="relative z-10">
+                    <h4 class="text-xs font-black uppercase tracking-widest text-white dark:text-black mb-1">Hộp thư góp ý</h4>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-4">Phản hồi từ người dân.</p>
+                    <div class="text-[10px] font-bold uppercase bg-white/10 dark:bg-black/10 text-white dark:text-black px-3 py-1.5 rounded-lg inline-flex items-center gap-2">Mở ngay <i data-lucide="mail" class="w-3 h-3"></i></div>
                 </div>
             </div>
 
-            <!-- Configs -->
+            <!-- General Config -->
             <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-white/5">
-                <h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Cấu hình hệ thống</h4>
+                <h4 class="text-[10px] font-black uppercase text-slate-400">Cấu hình hệ thống</h4>
                 <div class="space-y-3">
-                    <input type="text" id="cfg-title1" placeholder="Đơn vị" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none focus:ring-1 ring-blue-500">
-                    <input type="text" id="cfg-title2" placeholder="Tên hệ thống" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none focus:ring-1 ring-blue-500">
-                    <textarea id="cfg-slogan" rows="2" placeholder="Slogan..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none focus:ring-1 ring-blue-500"></textarea>
-                </div>
-                
-                <div class="pt-2">
-                    <h5 class="text-[9px] font-bold uppercase text-slate-500 mb-2">Thông báo chạy</h5>
-                    <textarea id="cfg-announce-text" rows="2" placeholder="Nội dung..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none mb-2"></textarea>
-                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="cfg-announce-show" class="w-4 h-4 accent-blue-500"><span class="text-xs font-bold text-slate-600 dark:text-slate-300">Bật thông báo</span></label>
-                </div>
+                    <input type="text" id="cfg-title1" placeholder="Đơn vị cấp trên" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border border-transparent focus:border-blue-500 outline-none">
+                    <input type="text" id="cfg-title2" placeholder="Tên hệ thống" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border border-transparent focus:border-blue-500 outline-none">
+                    <textarea id="cfg-slogan" rows="2" placeholder="Câu slogan..." class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border border-transparent focus:border-blue-500 outline-none"></textarea>
+                    
+                    <div class="p-3 bg-blue-50 dark:bg-white/5 rounded-xl">
+                        <label class="text-[10px] font-bold text-blue-600 block mb-2 uppercase">Thông báo chạy (Marquee)</label>
+                        <textarea id="cfg-announce-text" rows="2" placeholder="Nội dung..." class="w-full p-2 text-[10px] bg-white dark:bg-black/20 rounded-lg mb-2"></textarea>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="cfg-announce-show" class="w-3 h-3 accent-blue-600">
+                            <span class="text-[10px] font-bold uppercase text-slate-600">Bật thông báo</span>
+                        </div>
+                    </div>
 
-                <div class="grid grid-cols-1 gap-2 pt-2">
-                    <input type="text" id="cfg-fb" placeholder="Facebook URL" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
-                    <input type="text" id="cfg-zalo" placeholder="Zalo URL" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
-                    <input type="text" id="cfg-email" placeholder="Email" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
-                    <input type="text" id="cfg-phone" placeholder="Số điện thoại" class="w-full px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-xl text-xs border-none outline-none">
+                    <button onclick="window.saveGeneralConfig()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">Lưu thay đổi</button>
                 </div>
-
-                <button onclick="window.saveGeneralConfig()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/30 hover:bg-blue-500 transition">Lưu Thay Đổi</button>
             </div>
 
-            <!-- Units & Modules lists go here in original script... -->
-            <div class="space-y-4 pb-10">
-                <div class="flex items-center justify-between"><h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Đơn vị</h4><button onclick="window.openUnitModal()" class="p-1.5 bg-blue-500/10 text-blue-500 rounded-lg"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button></div>
+            <!-- Management Sections -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center"><h4 class="text-[10px] font-black uppercase text-slate-400">Đơn vị</h4><button onclick="window.openUnitModal()" class="text-blue-500"><i data-lucide="plus" class="w-4 h-4"></i></button></div>
                 <div id="admin-unit-list" class="space-y-2"></div>
-                
-                <div class="flex items-center justify-between pt-4"><h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Modules</h4><button onclick="window.openModuleModal()" class="p-1.5 bg-blue-500/10 text-blue-500 rounded-lg"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button></div>
+            </div>
+
+            <div class="space-y-4 pb-10">
+                <div class="flex justify-between items-center"><h4 class="text-[10px] font-black uppercase text-slate-400">Modules</h4><button onclick="window.openModuleModal()" class="text-blue-500"><i data-lucide="plus" class="w-4 h-4"></i></button></div>
                 <div id="admin-module-list" class="space-y-2"></div>
             </div>
         </div>
     </div>
 
-    <!-- VISITORS MODAL -->
-    <div id="modal-visitors" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[450] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[85vh] animate-slide-up border border-white/10">
-            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center">
-                <div><h3 class="font-bold text-sm uppercase tracking-widest">Quản lý truy cập</h3><p class="text-[10px] text-slate-400 font-medium">Danh sách thiết bị đang tương tác hệ thống</p></div>
-                <button onclick="document.getElementById('modal-visitors').classList.add('hidden')" class="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <!-- VISITOR MODAL (NEW FEATURE) -->
+    <div id="modal-visitor" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[450] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[85vh] animate-slide-up overflow-hidden border border-white/10">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-black/20">
+                <div>
+                    <h3 class="font-black text-sm uppercase tracking-widest text-slate-800 dark:text-white">Danh sách truy cập</h3>
+                    <p id="visitor-stat-count" class="text-[10px] font-bold text-blue-500 uppercase mt-1"></p>
+                </div>
+                <button onclick="document.getElementById('modal-visitor').classList.add('hidden')" class="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div class="overflow-x-auto custom-scroll flex-1">
-                <table class="w-full text-left border-collapse">
-                    <thead class="sticky top-0 bg-slate-50 dark:bg-black/40 backdrop-blur-md text-[10px] font-black uppercase text-slate-500 border-b border-slate-100 dark:border-white/5">
-                        <tr><th class="px-6 py-4">Người dùng</th><th class="px-6 py-4">Thiết bị</th><th class="px-6 py-4">Vị trí</th><th class="px-6 py-4">Thời gian</th><th class="px-6 py-4 text-right">#</th></tr>
-                    </thead>
-                    <tbody id="visitors-list-content" class="text-xs divide-y divide-slate-100 dark:divide-white/5"></tbody>
-                </table>
+            
+            <!-- Filters -->
+            <div class="p-3 bg-white dark:bg-black/40 border-b border-slate-100 dark:border-white/5 flex flex-wrap gap-2 overflow-x-auto custom-scroll">
+                <button onclick="window.filterVisitors('all')" class="v-filter-btn active px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="all">Tất cả</button>
+                <button onclick="window.filterVisitors('ios')" class="v-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="ios">iOS / iPhone</button>
+                <button onclick="window.filterVisitors('android')" class="v-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="android">Android</button>
+                <button onclick="window.filterVisitors('desktop')" class="v-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="desktop">Máy tính</button>
+                <div class="w-px h-4 bg-slate-200 dark:bg-white/10 my-auto mx-1"></div>
+                <button onclick="window.filterVisitors('auth')" class="v-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-blue-200 text-blue-600 transition" data-filter="auth">Đã đăng nhập</button>
+                <button onclick="window.filterVisitors('guest')" class="v-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="guest">Khách</button>
+                
+                <button onclick="window.clearVisitorLogs()" class="ml-auto px-3 py-1.5 bg-red-500 text-white rounded-full text-[10px] font-black uppercase hover:bg-red-600 transition">Xóa nhật ký</button>
+            </div>
+
+            <div id="visitor-list-container" class="p-6 overflow-y-auto custom-scroll flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50/50 dark:bg-black/20">
+                <!-- Data rendered via JS -->
             </div>
         </div>
     </div>
 
-    <!-- Modals (Inbox, Unit, Module) -->
+    <!-- Common Modals (Inbox, Unit, Module) -->
     <div id="modal-inbox" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[80vh] border border-white/10 animate-slide-up">
-            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center"><h3 class="font-bold text-sm uppercase">Hộp thư</h3><button onclick="document.getElementById('modal-inbox').classList.add('hidden')" class="p-2 rounded-full hover:bg-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button></div>
-            <div id="inbox-content" class="p-6 overflow-y-auto custom-scroll space-y-3 bg-slate-50/50 dark:bg-black/20"></div>
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[80vh] overflow-hidden">
+             <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center">
+                 <h3 class="font-black text-sm uppercase">Hộp thư góp ý</h3>
+                 <button onclick="document.getElementById('modal-inbox').classList.add('hidden')" class="p-2 hover:bg-slate-100 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+             </div>
+             <div id="inbox-content" class="p-6 overflow-y-auto custom-scroll space-y-4"></div>
         </div>
     </div>
 
-    <div id="modal-unit" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[350] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-md shadow-2xl animate-slide-up border border-white/10 overflow-hidden">
-            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5"><h3 class="font-bold text-sm uppercase tracking-widest" id="unit-modal-title">Đơn vị</h3><button onclick="document.getElementById('modal-unit').classList.add('hidden')" class="p-2 hover:bg-slate-200 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-            <form id="unit-form" class="p-6 space-y-4">
+    <!-- MODAL FORMS (Unit, Module) - Simplified for brevity -->
+    <div id="modal-unit" class="fixed inset-0 bg-black/60 z-[400] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md p-6">
+            <h3 class="font-bold uppercase text-sm mb-4">Quản lý Đơn vị</h3>
+            <form id="unit-form" class="space-y-3">
                 <input type="hidden" id="unit-id">
-                <input type="text" id="unit-name" placeholder="Tên đơn vị" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
-                <input type="text" id="unit-addr" placeholder="Địa chỉ" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
-                <div class="grid grid-cols-2 gap-3"><input type="text" id="unit-lat" placeholder="Lat" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"><input type="text" id="unit-lng" placeholder="Lng" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"></div>
-                <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-white/5 rounded-xl cursor-pointer"><input type="checkbox" id="unit-isMain" class="w-4 h-4 accent-blue-500"><span class="text-xs font-bold text-slate-600">Trụ sở chính</span></label>
-                <button type="submit" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold uppercase text-xs">Lưu</button>
+                <input type="text" id="unit-name" placeholder="Tên đơn vị" required class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                <input type="text" id="unit-addr" placeholder="Địa chỉ" required class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="unit-lat" placeholder="Latitude" class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                    <input type="text" id="unit-lng" placeholder="Longitude" class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                </div>
+                <div class="flex items-center gap-2 text-xs font-bold"><input type="checkbox" id="unit-isMain"> Trụ sở chính</div>
+                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg uppercase text-xs font-bold mt-2">Lưu dữ liệu</button>
             </form>
         </div>
     </div>
 
-    <div id="modal-module" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-lg shadow-2xl animate-slide-up border border-white/10 overflow-hidden">
-            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5"><h3 class="font-bold text-sm uppercase tracking-widest" id="modal-title">Module</h3><button onclick="window.closeModuleModal()" class="p-2 hover:bg-slate-200 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-            <form id="module-form" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto custom-scroll">
+    <div id="modal-module" class="fixed inset-0 bg-black/60 z-[400] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md p-6">
+            <h3 class="font-bold uppercase text-sm mb-4">Quản lý Module</h3>
+            <form id="module-form" class="space-y-3">
                 <input type="hidden" id="mod-id">
-                <div class="grid grid-cols-2 gap-4"><input type="text" id="mod-name" required placeholder="Tên hiển thị" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"><select id="mod-color" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm"><option value="indigo">Indigo</option><option value="blue">Blue</option><option value="emerald">Emerald</option><option value="rose">Rose</option><option value="amber">Amber</option><option value="slate">Slate</option></select></div>
-                <input type="text" id="mod-link" required placeholder="Link URL" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
-                <div id="icon-selector-grid" class="grid grid-cols-6 gap-2"></div>
-                <input type="text" id="mod-icon" placeholder="Icon code" class="w-full px-4 py-2 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-xs">
-                <input type="text" id="mod-desc" placeholder="Mô tả ngắn" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm">
-                <div class="grid grid-cols-2 gap-3 pt-2"><label class="flex items-center justify-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer"><input type="radio" name="mod-visibility" value="public" checked><span class="text-xs font-bold">Công khai</span></label><label class="flex items-center justify-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer"><input type="radio" name="mod-visibility" value="admin"><span class="text-xs font-bold text-red-500">Admin</span></label></div>
-                <button type="submit" class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold uppercase text-xs">Lưu Module</button>
+                <input type="text" id="mod-name" placeholder="Tên hiển thị" required class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                <input type="text" id="mod-link" placeholder="Liên kết" required class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                <select id="mod-color" class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                    <option value="blue">Blue</option><option value="indigo">Indigo</option><option value="emerald">Emerald</option><option value="rose">Rose</option>
+                </select>
+                <input type="text" id="mod-icon" placeholder="Lucide Icon Name" class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none">
+                <textarea id="mod-desc" placeholder="Mô tả..." class="w-full p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border-none"></textarea>
+                <div class="flex gap-4 text-xs font-bold uppercase">
+                    <label><input type="radio" name="mod-visibility" value="public" checked> Công khai</label>
+                    <label><input type="radio" name="mod-visibility" value="admin"> Admin</label>
+                </div>
+                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg uppercase text-xs font-bold mt-2">Lưu Module</button>
             </form>
         </div>
     </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-10 right-1/2 translate-x-1/2 md:translate-x-0 md:right-10 z-[500] translate-y-24 opacity-0 transition-all duration-500">
-        <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-white/20 dark:border-white/10 min-w-[300px]">
-            <div class="bg-blue-500 p-2 rounded-lg text-white" id="toast-icon-bg"><i data-lucide="check" class="w-5 h-5" id="toast-icon"></i></div>
-            <div><h6 class="text-[10px] font-black uppercase text-slate-400">Thông báo</h6><p id="toast-msg" class="text-sm font-bold text-slate-800 dark:text-white">Thành công</p></div>
+        <div class="bg-white dark:bg-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-100 dark:border-white/5 min-w-[280px]">
+            <div class="bg-blue-500 p-2 rounded-lg text-white" id="toast-icon-bg"><i data-lucide="check" class="w-5 h-5"></i></div>
+            <div>
+                <h6 class="text-[10px] font-black uppercase text-slate-400">Thông báo</h6>
+                <p id="toast-msg" class="text-sm font-bold text-slate-800 dark:text-white">Thành công</p>
+            </div>
         </div>
     </div>
 
@@ -308,8 +273,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
             authDomain: "profile-d1214.firebaseapp.com",
@@ -326,315 +292,453 @@
 
         let isAdmin = false;
         let isUserLoggedIn = false;
-        let configData = { title1: "", title2: "", slogan: "", announcement: { enabled: false, text: '' }, socials: { facebook: '', zalo: '', phone: '', email: '' }, units: [], modules: [] };
+        let currentUser = null;
+        let configData = { title1: "", title2: "", slogan: "", modules: [], units: [] };
+        let visitorData = [];
+        let currentVisitorFilter = 'all';
         let userLocation = null;
 
-        const presetIcons = [{id:'layout-grid'}, {id:'newspaper'}, {id:'users'}, {id:'file-text'}, {id:'calendar'}, {id:'pie-chart'}, {id:'book'}, {id:'mail'}, {id:'contact'}, {id:'server'}, {id:'globe'}, {id:'cloud'}, {id:'briefcase'}, {id:'video'}, {id:'message-square'}, {id:'cpu'}, {id:'shield'}, {id:'zap'}];
-
-        // --- TRACKING VISITORS LOGIC ---
-        async function trackVisitor() {
-            let deviceId = localStorage.getItem('tyt_device_id');
-            if (!deviceId) {
-                deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36).substr(-4);
-                localStorage.setItem('tyt_device_id', deviceId);
-            }
-
-            const info = await fetchUserInfo();
-            const visitorRef = doc(db, "visitors", deviceId);
+        // --- TRACKING LOGIC (NEW) ---
+        async function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let os = "web";
+            let device = "Desktop / Laptop";
             
-            const visitorData = {
-                id: deviceId,
-                uid: auth.currentUser ? auth.currentUser.uid : null,
-                name: auth.currentUser ? auth.currentUser.displayName : "Khách ẩn danh",
-                photo: auth.currentUser ? auth.currentUser.photoURL : null,
-                device: info.device,
-                ip: info.ip,
-                location: info.city,
-                lat: userLocation ? userLocation.lat : null,
-                lng: userLocation ? userLocation.lng : null,
-                lastSeen: new Date()
-            };
+            if (/iPhone|iPad|iPod/.test(ua)) { os = "ios"; device = "iPhone / iPad"; }
+            else if (/Android/.test(ua)) { os = "android"; device = "Android Phone"; }
+            else if (/Windows/.test(ua)) { os = "windows"; device = "Windows PC"; }
+            else if (/Macintosh/.test(ua)) { os = "macos"; device = "Macintosh"; }
 
-            try { await setDoc(visitorRef, visitorData, { merge: true }); } catch (e) { console.error("Track err", e); }
+            let ip = "Checking...";
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                ip = data.ip;
+            } catch (e) { ip = "Unknown IP"; }
+
+            let city = "Chưa xác định";
+            if (userLocation) {
+                try {
+                    const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json`);
+                    const gData = await geo.json();
+                    const a = gData.address;
+                    city = [a.ward || a.suburb, a.district || a.city_district, a.city || a.state].filter(Boolean).join(', ');
+                } catch (e) { city = "Lỗi định vị"; }
+            }
+            return { os, device, ip, city };
         }
 
-        window.openVisitorsModal = () => {
-            if (!isAdmin) return;
-            document.getElementById('modal-visitors').classList.remove('hidden');
-            const listContent = document.getElementById('visitors-list-content');
-            
-            const q = query(collection(db, "visitors"), orderBy("lastSeen", "desc"));
-            onSnapshot(q, (snapshot) => {
-                listContent.innerHTML = '';
-                snapshot.forEach((docSnap) => {
-                    const d = docSnap.data();
-                    const time = d.lastSeen ? new Date(d.lastSeen.seconds * 1000).toLocaleString('vi-VN') : 'N/A';
-                    const isOnline = d.lastSeen && (new Date().getTime() / 1000 - d.lastSeen.seconds < 300);
-                    
-                    listContent.innerHTML += `
-                        <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="relative">
-                                        ${d.photo ? `<img src="${d.photo}" class="w-8 h-8 rounded-full">` : `<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><i data-lucide="user" class="w-4 h-4 text-slate-400"></i></div>`}
-                                        ${isOnline ? `<span class="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></span>` : ''}
-                                    </div>
-                                    <div><p class="font-bold text-slate-800 dark:text-white truncate max-w-[120px]">${d.name}</p><p class="text-[9px] font-mono text-slate-400">${d.id}</p></div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4"><span class="font-medium text-slate-700 dark:text-slate-300 block">${d.device}</span><span class="text-[9px] text-slate-400 font-mono">${d.ip}</span></td>
-                            <td class="px-6 py-4"><span class="text-slate-500 block truncate max-w-[150px]">${d.location}</span>${d.lat ? `<button onclick="window.openMapToUnit(${d.lat}, ${d.lng}, 'Khách đang ở đây')" class="text-[9px] text-blue-500 font-bold uppercase flex items-center gap-1 mt-1 hover:underline"><i data-lucide="map-pin" class="w-3 h-3"></i> Google Maps</button>` : ''}</td>
-                            <td class="px-6 py-4 text-slate-500">${time}</td>
-                            <td class="px-6 py-4 text-right"><button onclick="window.deleteVisitor('${docSnap.id}')" class="p-1.5 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
-                        </tr>`;
-                });
-                lucide.createIcons();
-            });
-        };
+        async function trackVisitor(user = null) {
+            try {
+                const info = await getDeviceInfo();
+                // Guest ID based on localStorage
+                let vid = user ? user.uid : localStorage.getItem('visitor_id');
+                if (!vid) {
+                    vid = 'g_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('visitor_id', vid);
+                }
 
-        window.deleteVisitor = async (id) => { if(confirm("Xóa bản ghi này?")) await deleteDoc(doc(db, "visitors", id)); };
+                const visitorRef = doc(db, "visitors", vid);
+                await setDoc(visitorRef, {
+                    uid: user ? user.uid : null,
+                    name: user ? user.displayName : 'Khách vãng lai',
+                    email: user ? user.email : 'guest@system.local',
+                    avatar: user ? user.photoURL : 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                    os: info.os,
+                    device: info.device,
+                    ip: info.ip,
+                    city: info.city,
+                    lat: userLocation ? userLocation.lat : null,
+                    lng: userLocation ? userLocation.lng : null,
+                    lastSeen: serverTimestamp()
+                }, { merge: true });
+            } catch (e) { console.error("Tracking error:", e); }
+        }
 
-        // --- AUTH & INIT ---
+        // --- AUTH & INITIALIZATION ---
         onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
             renderAuthUI(user);
             if (user) {
                 isUserLoggedIn = true;
-                const adminSnap = await getDoc(doc(db, "settings", "admins"));
-                if (adminSnap.exists()) {
-                    const data = adminSnap.data();
-                    isAdmin = (data.super_uid === user.uid) || (data.deputy_emails && data.deputy_emails.includes(user.email));
+                const adminRef = doc(db, "settings", "admins");
+                const snap = await getDoc(adminRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    isAdmin = (data.super_uid === user.uid) || (data.deputy_emails?.includes(user.email));
                 }
                 if (isAdmin) document.getElementById('admin-toggle-btn').classList.remove('hidden');
             } else {
-                isUserLoggedIn = false; isAdmin = false; document.getElementById('admin-toggle-btn').classList.add('hidden');
+                isUserLoggedIn = false; isAdmin = false;
+                document.getElementById('admin-toggle-btn').classList.add('hidden');
             }
-            if(configData.title2) renderHomepage();
-            if(isAdmin && configData.title2) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
             
-            trackVisitor(); // Track on load/auth change
+            // Track visitor on auth change
+            trackVisitor(user);
+            
+            if(configData.title2) renderHomepage();
         });
 
-        onSnapshot(doc(db, "settings", "homepage"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                configData = { ...configData, ...data };
-                configData.units = data.units || [];
-                configData.modules = data.modules || [];
+        // Sync Homepage Data
+        onSnapshot(doc(db, "settings", "homepage"), (snap) => {
+            if (snap.exists()) {
+                configData = snap.data();
+                renderHomepage();
+                if(isAdmin) { fillAdminForm(); renderAdminUnitList(); renderAdminModuleList(); }
             }
-            renderHomepage();
-            if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
             const loader = document.getElementById('global-loading');
             loader.classList.add('opacity-0', 'pointer-events-none');
-            setTimeout(() => loader.style.display = 'none', 700);
         });
 
-        // --- DISTANCE & LOCATION ---
-        function haversineDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
+        // --- DISTANCE CALC ---
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
-        window.getUserLocation = () => {
-            if (!navigator.geolocation) return;
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                    renderHomepage(); showToast("Đã cập nhật vị trí!", false);
-                    trackVisitor(); // Update visitor data with GPS
-                },
-                (err) => console.log("GPS Blocked"),
-                { enableHighAccuracy: true, timeout: 5000 }
-            );
-        };
-
-        window.openMapToUnit = (lat, lng, label) => {
-            if(!lat || !lng) return;
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const url = isIOS ? `http://maps.apple.com/?ll=${lat},${lng}&q=${encodeURIComponent(label)}` : `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-            window.open(url, '_blank');
-        };
-
-        async function fetchUserInfo() {
-            let info = { ip: 'N/A', city: 'Đang xác định...', device: 'Thiết bị lạ' };
-            const ua = navigator.userAgent;
-            if (/Android/i.test(ua)) info.device = "Android Device";
-            else if (/iPhone|iPad|iPod/i.test(ua)) info.device = "iOS Device";
-            else if (/Windows/i.test(ua)) info.device = "Windows PC";
-            else if (/Mac/i.test(ua)) info.device = "MacOS";
-            
-            try { const res = await fetch('https://api.ipify.org?format=json'); const data = await res.json(); info.ip = data.ip; } catch(e){}
-
-            if (userLocation) {
-                try {
-                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json`);
-                    const d = await res.json();
-                    const a = d.address || {};
-                    info.city = [a.quarter||a.suburb||a.ward, a.district||a.city_district, a.city||a.state].filter(Boolean).join(', ');
-                } catch(e){ info.city = "Lỗi định vị"; }
-            } else { info.city = "Chưa cấp quyền vị trí"; }
-            return info;
-        }
-
-        // --- UI RENDERING ---
-        async function renderHomepage() {
+        // --- UI RENDERING (HOME) ---
+        function renderHomepage() {
             if (!configData.title2) return;
             document.getElementById('header-title').innerText = configData.title2;
-            document.title = configData.title2;
-
+            
+            // Announcement Bar
             const ann = configData.announcement || {};
             const bar = document.getElementById('announcement-bar');
-            const head = document.getElementById('main-header');
-            const main = document.getElementById('main-content');
-            if (ann.enabled && ann.text) { bar.classList.remove('hidden'); document.getElementById('marquee-text').innerText = ann.text; head.style.top = '36px'; main.style.paddingTop = 'calc(5rem + 36px)'; }
-            else { bar.classList.add('hidden'); head.style.top = '0'; main.style.paddingTop = ''; }
-
-            const uInfo = await fetchUserInfo();
-            const s = configData.socials || {};
-            const socialBtn = (link, icon, color, label) => link ? `<a href="${link}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-white/10 rounded-full border border-white/20 hover:scale-105 transition shadow-sm"><i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i><span class="text-xs font-bold text-slate-700 dark:text-slate-200">${label}</span></a>` : '';
-
-            document.getElementById('footer-content').innerHTML = `
-                <div class="space-y-6 text-center">
-                    <div><h3 class="font-black text-xl md:text-2xl text-slate-900 dark:text-white uppercase break-words">${configData.title2}</h3><p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">${configData.title1}</p><p class="text-slate-500 dark:text-slate-400 text-sm max-w-2xl mx-auto">${configData.slogan}</p></div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 flex justify-between items-center text-xs"><span class="text-slate-500">Máy:</span><span class="font-bold text-slate-700 dark:text-slate-300 truncate">${uInfo.device}</span></div>
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 flex justify-between items-center text-xs"><span class="text-slate-500">IP:</span><span class="font-mono font-bold text-slate-700 dark:text-slate-300 truncate">${uInfo.ip}</span></div>
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 flex justify-between items-center text-xs"><span class="text-slate-500">Ở tại:</span><span class="font-bold text-slate-700 dark:text-slate-300 truncate">${uInfo.city}</span></div>
-                    </div>
-                    <div class="flex flex-wrap justify-center gap-3">${socialBtn(s.facebook,'facebook','blue','FB')}${socialBtn(s.zalo,'message-circle','sky','Zalo')}${socialBtn(s.email ? `mailto:${s.email}` : '','mail','red','Email')}${socialBtn(s.phone ? `tel:${s.phone}` : '','phone','emerald','Hotline')}</div>
-                    <div class="mt-8 pt-6 border-t border-slate-200/50">
-                        <form id="contact-form" onsubmit="window.handleContactSubmit(event)" class="max-w-md mx-auto space-y-3 bg-white/40 dark:bg-white/5 p-5 rounded-2xl border border-white/20">
-                            <input type="text" id="contact-name" placeholder="Tên của bạn..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs outline-none">
-                            <div class="grid grid-cols-2 gap-3"><input type="text" id="contact-phone" placeholder="SĐT..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs"><input type="email" id="contact-email" placeholder="Email..." class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs"></div>
-                            <textarea id="contact-msg" rows="3" placeholder="Góp ý..." required class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 rounded-xl text-xs outline-none"></textarea>
-                            <button type="submit" class="w-full py-2 bg-slate-900 text-white dark:bg-white dark:text-black rounded-xl text-xs font-bold uppercase hover:opacity-80 transition">Gửi góp ý</button>
-                        </form>
-                    </div>
-                </div>`;
-
-            let html = `<section class="px-4 py-10 md:py-20 text-center animate-slide-up"><h1 class="font-extrabold text-slate-900 dark:text-white mb-4"><span class="block text-sm text-slate-500 uppercase tracking-widest mb-2">${configData.title1}</span><span class="block text-3xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 py-2">${configData.title2}</span></h1><p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">${configData.slogan}</p></section>`;
-
-            const modules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
-            if(modules.length > 0) {
-                html += `<section class="px-4 pb-12"><div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">`;
-                modules.forEach(m => {
-                    const colorMap = {indigo:'from-indigo-500 to-blue-600', blue:'from-blue-500 to-indigo-600', emerald:'from-emerald-500 to-teal-600', rose:'from-rose-500 to-pink-600', amber:'from-amber-500 to-orange-600', slate:'from-slate-600 to-slate-800'};
-                    html += `<a href="${m.link}" target="_blank" class="spotlight-card reveal p-5 rounded-2xl group transition hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${colorMap[m.color]||colorMap.indigo} flex items-center justify-center mb-4 text-white group-hover:scale-110 transition"><i data-lucide="${m.icon||'box'}" class="w-6 h-6"></i></div>
-                        <h3 class="font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-500 transition">${m.name}</h3>
-                        <p class="text-[10px] text-slate-500 flex-1">${m.desc || 'Module tiện ích.'}</p>
-                        <div class="mt-4 flex items-center gap-1 text-[9px] font-black uppercase text-slate-400 group-hover:text-blue-500">Mở <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
-                    </a>`;
-                });
-                html += `</div></section>`;
+            if (ann.enabled && ann.text) {
+                bar.classList.remove('hidden');
+                document.getElementById('marquee-text').innerText = ann.text;
+                document.getElementById('main-header').style.top = '36px';
+            } else {
+                bar.classList.add('hidden');
+                document.getElementById('main-header').style.top = '0';
             }
 
-            const units = [...configData.units];
-            if(userLocation) {
-                units.forEach(u => u.dist = u.lat ? haversineDistance(userLocation.lat, userLocation.lng, parseFloat(u.lat), parseFloat(u.lng)) : 9999);
-                units.sort((a,b) => (a.isMain?-1:1) - (b.isMain?-1:1) || a.dist - b.dist);
+            let html = `
+            <section class="px-4 py-12 md:py-20 text-center animate-slide-up">
+                <span class="inline-block px-3 py-1 bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest rounded-md mb-4">${configData.title1}</span>
+                <h2 class="text-3xl md:text-6xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4 leading-tight">${configData.title2}</h2>
+                <p class="text-sm md:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed px-4">${configData.slogan}</p>
+            </section>
+            
+            <section class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-20">`;
+
+            const modules = configData.modules || [];
+            modules.filter(m => isAdmin || m.visibility === 'public').forEach(m => {
+                const colorMap = { blue: 'from-blue-500 to-indigo-600', indigo: 'from-indigo-500 to-purple-600', emerald: 'from-emerald-500 to-teal-600', rose: 'from-rose-500 to-pink-600' };
+                const grad = colorMap[m.color] || colorMap.blue;
+                html += `
+                <a href="${m.link}" target="_blank" class="spotlight-card group p-5 rounded-3xl transition hover:-translate-y-1 duration-300">
+                    <div class="spotlight-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br ${grad} flex items-center justify-center text-white mb-4 shadow-lg group-hover:scale-110 transition duration-300"><i data-lucide="${m.icon || 'box'}"></i></div>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1 uppercase tracking-tight">${m.name}</h4>
+                        <p class="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">${m.desc || 'Hệ thống chức năng.'}</p>
+                    </div>
+                </a>`;
+            });
+            html += `</section>`;
+
+            // Units Map
+            let units = [...(configData.units || [])];
+            if (userLocation) {
+                units.forEach(u => u.dist = (u.lat && u.lng) ? getDistance(userLocation.lat, userLocation.lng, u.lat, u.lng) : 9999);
+                units.sort((a, b) => a.dist - b.dist);
             }
-            if(units.length > 0) {
-                html += `<section class="px-4 pb-16"><div class="max-w-6xl mx-auto"><div class="text-center mb-8"><h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Cơ sở hoạt động</h2><button onclick="window.getUserLocation()" class="mt-2 text-[9px] font-bold uppercase text-blue-500 border border-blue-500/20 px-3 py-1 rounded-full hover:bg-blue-50 transition"><i data-lucide="navigation" class="w-3 h-3 inline mr-1"></i> Cập nhật vị trí</button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4">`;
+
+            if (units.length > 0) {
+                html += `
+                <div class="max-w-6xl mx-auto px-4 pb-20">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                        <h3 class="font-black uppercase tracking-widest text-xs flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-blue-500"></i> Mạng lưới hoạt động</h3>
+                        <button onclick="window.getUserLocation()" class="px-4 py-1.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-full text-[9px] font-bold uppercase hover:bg-slate-50 transition shadow-sm">Cập nhật vị trí hiện tại</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
                 units.forEach(u => {
-                    const distStr = u.dist < 999 ? (u.dist < 1 ? Math.round(u.dist*1000)+'m' : u.dist.toFixed(1)+'km') : '';
-                    html += `<div onclick="window.openMapToUnit(${u.lat},${u.lng},'${u.name}')" class="spotlight-card reveal p-4 rounded-2xl cursor-pointer hover:-translate-y-1 transition group relative">
-                        ${u.isMain ? `<span class="absolute top-4 right-4 text-[8px] font-black bg-blue-600 text-white px-2 py-0.5 rounded-full">MAIN</span>` : ''}
-                        <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition"><i data-lucide="building-2" class="w-5 h-5"></i></div>
-                        <div><h4 class="font-bold text-slate-800 dark:text-white text-sm group-hover:text-blue-500 transition">${u.name} ${distStr ? `<span class="ml-2 text-[9px] bg-emerald-100 text-emerald-600 px-1.5 py-0.5 rounded">${distStr}</span>`:''}</h4><p class="text-[10px] text-slate-500 line-clamp-1">${u.addr}</p></div></div>
+                    const distBadge = u.dist ? `<span class="ml-2 text-[9px] text-emerald-500 font-bold">${u.dist < 1 ? Math.round(u.dist*1000)+'m' : u.dist.toFixed(1)+'km'}</span>` : '';
+                    html += `
+                    <div onclick="window.openMapToUnit(${u.lat}, ${u.lng}, '${u.name}')" class="spotlight-card p-4 rounded-2xl cursor-pointer hover:shadow-xl transition group">
+                        <div class="spotlight-bg"></div>
+                        <div class="relative z-10 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center text-slate-500 group-hover:bg-blue-600 group-hover:text-white transition"><i data-lucide="building-2" class="w-4 h-4"></i></div>
+                            <div class="flex-1 min-w-0">
+                                <h5 class="text-xs font-bold truncate">${u.name} ${distBadge}</h5>
+                                <p class="text-[9px] text-slate-400 truncate">${u.addr}</p>
+                            </div>
+                        </div>
                     </div>`;
                 });
-                html += `</div></div></section>`;
+                html += `</div></div>`;
             }
 
             document.getElementById('main-content').innerHTML = html;
+            
+            // Render Footer Form
+            document.getElementById('footer-content').innerHTML = `
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div>
+                        <h3 class="font-black text-xl md:text-2xl text-slate-900 dark:text-white uppercase mb-2">${configData.title2}</h3>
+                        <p class="text-xs text-slate-500 mb-6 font-medium">${configData.slogan}</p>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <a href="#" class="px-3 py-1.5 bg-white dark:bg-white/5 rounded-full text-[9px] font-bold border border-slate-100 dark:border-white/5 uppercase">Facebook</a>
+                            <a href="#" class="px-3 py-1.5 bg-white dark:bg-white/5 rounded-full text-[9px] font-bold border border-slate-100 dark:border-white/5 uppercase">Zalo</a>
+                        </div>
+                    </div>
+                    <form onsubmit="window.handleContactSubmit(event)" class="bg-white/40 dark:bg-white/5 p-6 rounded-3xl border border-white/40 dark:border-white/5 space-y-3">
+                        <input type="text" id="c-name" placeholder="Họ tên của bạn" required class="w-full p-3 bg-white/50 dark:bg-black/20 rounded-xl text-xs border-none focus:ring-1 ring-blue-500">
+                        <input type="text" id="c-phone" placeholder="Số điện thoại" required class="w-full p-3 bg-white/50 dark:bg-black/20 rounded-xl text-xs border-none focus:ring-1 ring-blue-500">
+                        <textarea id="c-msg" placeholder="Nội dung bạn muốn gửi..." rows="3" required class="w-full p-3 bg-white/50 dark:bg-black/20 rounded-xl text-xs border-none focus:ring-1 ring-blue-500"></textarea>
+                        <button type="submit" class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] transition">Gửi góp ý ngay</button>
+                    </form>
+                </div>`;
+            
             lucide.createIcons();
-            initSpotlight(); initScrollObserver();
+            initSpotlight();
+            initScrollObserver();
         }
 
-        // --- ADMIN HELPERS ---
-        function fillAdminForm() {
-            document.getElementById('cfg-title1').value = configData.title1||'';
-            document.getElementById('cfg-title2').value = configData.title2||'';
-            document.getElementById('cfg-slogan').value = configData.slogan||'';
-            document.getElementById('cfg-announce-text').value = configData.announcement?.text||'';
-            document.getElementById('cfg-announce-show').checked = configData.announcement?.enabled||false;
-            document.getElementById('cfg-fb').value = configData.socials?.facebook||'';
-            document.getElementById('cfg-zalo').value = configData.socials?.zalo||'';
-            document.getElementById('cfg-email').value = configData.socials?.email||'';
-            document.getElementById('cfg-phone').value = configData.socials?.phone||'';
-        }
-
-        window.saveGeneralConfig = async () => {
-            if(!isAdmin) return;
-            const data = {
-                title1: document.getElementById('cfg-title1').value, title2: document.getElementById('cfg-title2').value, slogan: document.getElementById('cfg-slogan').value,
-                announcement: { text: document.getElementById('cfg-announce-text').value, enabled: document.getElementById('cfg-announce-show').checked },
-                socials: { facebook: document.getElementById('cfg-fb').value, zalo: document.getElementById('cfg-zalo').value, email: document.getElementById('cfg-email').value, phone: document.getElementById('cfg-phone').value }
-            };
-            await setDoc(doc(db, "settings", "homepage"), data, { merge: true });
-            showToast("Đã lưu cấu hình!");
+        // --- VISITOR MANAGEMENT (NEW) ---
+        window.openVisitorModal = async () => {
+            if (!isAdmin) return;
+            const container = document.getElementById('visitor-list-container');
+            document.getElementById('modal-visitor').classList.remove('hidden');
+            container.innerHTML = `<div class="col-span-full py-20 text-center"><span class="animate-spin inline-block w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full mb-2"></span><p class="text-[10px] font-bold uppercase text-slate-400">Đang tải nhật ký...</p></div>`;
+            
+            const q = query(collection(db, "visitors"), orderBy("lastSeen", "desc"), limit(60));
+            onSnapshot(q, (snap) => {
+                visitorData = [];
+                snap.forEach(d => visitorData.push({ id: d.id, ...d.data() }));
+                renderVisitorList();
+            });
         };
 
-        function renderAdminUnitList() {
-            document.getElementById('admin-unit-list').innerHTML = configData.units.map(u => `<div class="p-3 bg-slate-50 dark:bg-white/5 rounded-xl flex justify-between items-center group"><div class="min-w-0"><p class="text-xs font-bold truncate">${u.name}</p><p class="text-[9px] text-slate-500 truncate">${u.addr}</p></div><div class="flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="window.editUnit('${u.id}')" class="p-1 text-blue-500"><i data-lucide="edit-2" class="w-3 h-3"></i></button><button onclick="window.deleteUnit('${u.id}')" class="p-1 text-red-500"><i data-lucide="trash" class="w-3 h-3"></i></button></div></div>`).join('');
+        window.filterVisitors = (filter) => {
+            currentVisitorFilter = filter;
+            document.querySelectorAll('.v-filter-btn').forEach(btn => {
+                const isActive = btn.dataset.filter === filter;
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('bg-blue-600', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('border-blue-600', isActive);
+            });
+            renderVisitorList();
+        };
+
+        function renderVisitorList() {
+            const container = document.getElementById('visitor-list-container');
+            let filtered = visitorData;
+
+            if (currentVisitorFilter === 'ios') filtered = visitorData.filter(v => v.os === 'ios');
+            else if (currentVisitorFilter === 'android') filtered = visitorData.filter(v => v.os === 'android');
+            else if (currentVisitorFilter === 'desktop') filtered = visitorData.filter(v => v.os === 'windows' || v.os === 'macos');
+            else if (currentVisitorFilter === 'auth') filtered = visitorData.filter(v => v.uid !== null);
+            else if (currentVisitorFilter === 'guest') filtered = visitorData.filter(v => v.uid === null);
+
+            document.getElementById('visitor-stat-count').innerText = `${filtered.length} người dùng đang hiển thị`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-20 text-center"><p class="text-xs italic text-slate-400">Không tìm thấy bản ghi nào.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(v => {
+                const isOnline = v.lastSeen && (Date.now() / 1000 - v.lastSeen.seconds < 300); // 5 mins
+                const timeStr = v.lastSeen ? new Date(v.lastSeen.seconds * 1000).toLocaleString('vi-VN') : 'N/A';
+                const osIcon = v.os === 'ios' ? 'smartphone' : (v.os === 'android' ? 'smartphone' : 'monitor');
+                
+                return `
+                <div class="bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 p-4 rounded-2xl flex items-center gap-4 group">
+                    <div class="relative">
+                        <img src="${v.avatar}" class="w-12 h-12 rounded-full ring-2 ring-slate-100 dark:ring-white/10">
+                        ${isOnline ? `<div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-[#0f172a] rounded-full"></div>` : ''}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <h4 class="font-bold text-xs text-slate-800 dark:text-white truncate">${v.name}</h4>
+                            ${v.uid ? `<span class="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[8px] font-black uppercase rounded">Thành viên</span>` : ''}
+                        </div>
+                        <p class="text-[9px] text-slate-400 font-mono truncate uppercase mt-0.5">${v.ip} • ${v.device}</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[9px] flex items-center gap-1 text-blue-500 font-bold"><i data-lucide="map-pin" class="w-2.5 h-2.5"></i> ${v.city}</span>
+                            <span class="text-[8px] text-slate-400 font-medium">${timeStr}</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                         ${v.lat ? `<button onclick="window.openMapToUnit(${v.lat}, ${v.lng}, 'Vị trí khách')" class="p-2 hover:bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="map" class="w-4 h-4"></i></button>` : ''}
+                         <button onclick="window.deleteVisitorLog('${v.id}')" class="p-2 hover:bg-red-50 text-red-500 rounded-lg opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
             lucide.createIcons();
         }
+
+        window.deleteVisitorLog = async (id) => { if(confirm("Xác nhận xóa bản ghi truy cập này?")) await deleteDoc(doc(db, "visitors", id)); };
+        window.clearVisitorLogs = async () => {
+            if(!confirm("CẢNH BÁO: Bạn có muốn xóa toàn bộ nhật ký truy cập không?")) return;
+            const q = query(collection(db, "visitors"));
+            const s = await getDocs(q);
+            const batch = s.docs.map(d => deleteDoc(doc(db, "visitors", d.id)));
+            await Promise.all(batch);
+            showToast("Đã dọn dẹp nhật ký!");
+        };
+
+        // --- GLOBAL ACTIONS ---
+        window.login = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth).then(() => location.reload());
+        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
+        window.toggleTheme = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
+        window.getUserLocation = () => {
+            if (!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(p => {
+                userLocation = { lat: p.coords.latitude, lng: p.coords.longitude };
+                trackVisitor(currentUser); // Update tracking with location
+                renderHomepage();
+                showToast("Đã cập nhật vị trí chính xác!");
+            }, () => showToast("Vui lòng cho phép GPS!", true));
+        };
+        window.openMapToUnit = (lat, lng, label) => {
+            if(!lat) return;
+            const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? `http://maps.apple.com/?q=${label}&ll=${lat},${lng}` : `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            window.open(url, '_blank');
+        };
+
+        // --- ADMIN CRUD ---
+        window.saveGeneralConfig = async () => {
+            if(!isAdmin) return;
+            const updates = {
+                title1: document.getElementById('cfg-title1').value,
+                title2: document.getElementById('cfg-title2').value,
+                slogan: document.getElementById('cfg-slogan').value,
+                announcement: { text: document.getElementById('cfg-announce-text').value, enabled: document.getElementById('cfg-announce-show').checked }
+            };
+            await setDoc(doc(db, "settings", "homepage"), updates, { merge: true });
+            showToast("Đã lưu cài đặt hệ thống!");
+        };
+
+        function fillAdminForm() {
+            document.getElementById('cfg-title1').value = configData.title1 || '';
+            document.getElementById('cfg-title2').value = configData.title2 || '';
+            document.getElementById('cfg-slogan').value = configData.slogan || '';
+            document.getElementById('cfg-announce-text').value = configData.announcement?.text || '';
+            document.getElementById('cfg-announce-show').checked = configData.announcement?.enabled || false;
+        }
+
+        function renderAdminUnitList() {
+            document.getElementById('admin-unit-list').innerHTML = (configData.units || []).map(u => `
+                <div class="p-2 bg-slate-50 dark:bg-white/5 rounded-lg flex justify-between items-center text-[10px] font-bold border border-transparent hover:border-blue-500 transition">
+                    <span class="truncate pr-2">${u.name}</span>
+                    <div class="flex gap-1"><button onclick="window.editUnit('${u.id}')" class="text-blue-500">Sửa</button><button onclick="window.deleteUnit('${u.id}')" class="text-red-500">Xóa</button></div>
+                </div>`).join('');
+        }
         window.openUnitModal = () => { document.getElementById('unit-form').reset(); document.getElementById('unit-id').value = ''; document.getElementById('modal-unit').classList.remove('hidden'); };
-        window.editUnit = (id) => { const u = configData.units.find(x => x.id === id); if(!u) return; document.getElementById('unit-id').value = u.id; document.getElementById('unit-name').value = u.name; document.getElementById('unit-addr').value = u.addr; document.getElementById('unit-lat').value = u.lat; document.getElementById('unit-lng').value = u.lng; document.getElementById('unit-isMain').checked = u.isMain; document.getElementById('modal-unit').classList.remove('hidden'); };
-        window.deleteUnit = async (id) => { if(confirm("Xóa?")) await setDoc(doc(db, "settings", "homepage"), { units: configData.units.filter(x => x.id !== id) }, { merge: true }); };
+        window.editUnit = (id) => {
+            const u = configData.units.find(x => x.id === id);
+            document.getElementById('unit-id').value = u.id;
+            document.getElementById('unit-name').value = u.name;
+            document.getElementById('unit-addr').value = u.addr;
+            document.getElementById('unit-lat').value = u.lat || '';
+            document.getElementById('unit-lng').value = u.lng || '';
+            document.getElementById('unit-isMain').checked = u.isMain || false;
+            document.getElementById('modal-unit').classList.remove('hidden');
+        };
+        window.deleteUnit = async (id) => { if(confirm("Xóa đơn vị này?")) await setDoc(doc(db, "settings", "homepage"), { units: configData.units.filter(x => x.id !== id) }, { merge: true }); };
         document.getElementById('unit-form').onsubmit = async (e) => {
-            e.preventDefault(); const id = document.getElementById('unit-id').value || 'u' + Date.now();
-            const unit = { id, name: document.getElementById('unit-name').value, addr: document.getElementById('unit-addr').value, lat: document.getElementById('unit-lat').value, lng: document.getElementById('unit-lng').value, isMain: document.getElementById('unit-isMain').checked };
-            let units = [...configData.units]; if(unit.isMain) units.forEach(x => x.isMain = false);
-            const idx = units.findIndex(x => x.id === id); if(idx >= 0) units[idx] = unit; else units.push(unit);
-            await setDoc(doc(db, "settings", "homepage"), { units }, { merge: true }); document.getElementById('modal-unit').classList.add('hidden');
+            e.preventDefault();
+            const id = document.getElementById('unit-id').value || 'u_' + Date.now();
+            const newUnit = { id, name: document.getElementById('unit-name').value, addr: document.getElementById('unit-addr').value, lat: document.getElementById('unit-lat').value, lng: document.getElementById('unit-lng').value, isMain: document.getElementById('unit-isMain').checked };
+            let list = [...(configData.units || [])];
+            const idx = list.findIndex(x => x.id === id);
+            if (idx > -1) list[idx] = newUnit; else list.push(newUnit);
+            await setDoc(doc(db, "settings", "homepage"), { units: list }, { merge: true });
+            document.getElementById('modal-unit').classList.add('hidden');
+            showToast("Đã cập nhật đơn vị!");
         };
 
         function renderAdminModuleList() {
-            document.getElementById('admin-module-list').innerHTML = configData.modules.map(m => `<div class="p-3 bg-slate-50 dark:bg-white/5 rounded-xl flex justify-between items-center group"><div class="flex items-center gap-2"><i data-lucide="${m.icon||'box'}" class="w-4 h-4 text-${m.color}-500"></i><span class="text-xs font-bold">${m.name}</span></div><div class="flex gap-1 opacity-0 group-hover:opacity-100 transition"><button onclick="window.editModule('${m.id}')" class="p-1 text-blue-500"><i data-lucide="edit-2" class="w-3 h-3"></i></button><button onclick="window.deleteModule('${m.id}')" class="p-1 text-red-500"><i data-lucide="trash" class="w-3 h-3"></i></button></div></div>`).join('');
-            lucide.createIcons();
+            document.getElementById('admin-module-list').innerHTML = (configData.modules || []).map(m => `
+                <div class="p-2 bg-slate-50 dark:bg-white/5 rounded-lg flex justify-between items-center text-[10px] font-bold border border-transparent hover:border-blue-500 transition">
+                    <span class="truncate pr-2 text-${m.color}-500">${m.name}</span>
+                    <div class="flex gap-1"><button onclick="window.editModule('${m.id}')" class="text-blue-500">Sửa</button><button onclick="window.deleteModule('${m.id}')" class="text-red-500">Xóa</button></div>
+                </div>`).join('');
         }
-        window.openModuleModal = () => { document.getElementById('module-form').reset(); document.getElementById('mod-id').value = ''; window.renderIconGrid('layout-grid'); document.getElementById('modal-module').classList.remove('hidden'); };
-        window.editModule = (id) => { const m = configData.modules.find(x => x.id === id); if(!m) return; document.getElementById('mod-id').value = m.id; document.getElementById('mod-name').value = m.name; document.getElementById('mod-link').value = m.link; document.getElementById('mod-color').value = m.color; document.getElementById('mod-desc').value = m.desc; document.querySelector(`input[name="mod-visibility"][value="${m.visibility}"]`).checked = true; window.renderIconGrid(m.icon); document.getElementById('modal-module').classList.remove('hidden'); };
-        window.deleteModule = async (id) => { if(confirm("Xóa?")) await setDoc(doc(db, "settings", "homepage"), { modules: configData.modules.filter(x => x.id !== id) }, { merge: true }); };
+        window.openModuleModal = () => { document.getElementById('module-form').reset(); document.getElementById('mod-id').value = ''; document.getElementById('modal-module').classList.remove('hidden'); };
+        window.editModule = (id) => {
+            const m = configData.modules.find(x => x.id === id);
+            document.getElementById('mod-id').value = m.id;
+            document.getElementById('mod-name').value = m.name;
+            document.getElementById('mod-link').value = m.link;
+            document.getElementById('mod-color').value = m.color;
+            document.getElementById('mod-icon').value = m.icon || '';
+            document.getElementById('mod-desc').value = m.desc || '';
+            document.querySelector(`input[name="mod-visibility"][value="${m.visibility}"]`).checked = true;
+            document.getElementById('modal-module').classList.remove('hidden');
+        };
+        window.deleteModule = async (id) => { if(confirm("Xóa module này?")) await setDoc(doc(db, "settings", "homepage"), { modules: configData.modules.filter(x => x.id !== id) }, { merge: true }); };
         document.getElementById('module-form').onsubmit = async (e) => {
-            e.preventDefault(); const id = document.getElementById('mod-id').value || 'm' + Date.now();
-            const mod = { id, name: document.getElementById('mod-name').value, link: document.getElementById('mod-link').value, icon: document.getElementById('mod-icon').value, color: document.getElementById('mod-color').value, desc: document.getElementById('mod-desc').value, visibility: document.querySelector('input[name="mod-visibility"]:checked').value };
-            let modules = [...configData.modules]; const idx = modules.findIndex(x => x.id === id); if(idx >= 0) modules[idx] = mod; else modules.push(mod);
-            await setDoc(doc(db, "settings", "homepage"), { modules }, { merge: true }); document.getElementById('modal-module').classList.add('hidden');
+            e.preventDefault();
+            const id = document.getElementById('mod-id').value || 'm_' + Date.now();
+            const data = { id, name: document.getElementById('mod-name').value, link: document.getElementById('mod-link').value, color: document.getElementById('mod-color').value, icon: document.getElementById('mod-icon').value, desc: document.getElementById('mod-desc').value, visibility: document.querySelector('input[name="mod-visibility"]:checked').value };
+            let list = [...(configData.modules || [])];
+            const idx = list.findIndex(x => x.id === id);
+            if (idx > -1) list[idx] = data; else list.push(data);
+            await setDoc(doc(db, "settings", "homepage"), { modules: list }, { merge: true });
+            document.getElementById('modal-module').classList.add('hidden');
+            showToast("Đã cập nhật module!");
         };
 
         window.openInboxModal = async () => {
             document.getElementById('modal-inbox').classList.remove('hidden');
-            const box = document.getElementById('inbox-content'); box.innerHTML = '<p class="text-center text-xs p-10">Đang tải...</p>';
             const q = query(collection(db, "inbox"), orderBy("timestamp", "desc"));
-            const snap = await getDocs(q); box.innerHTML = '';
-            if(snap.empty) box.innerHTML = '<p class="text-center text-xs opacity-50 py-10">Hộp thư trống.</p>';
-            snap.forEach(docSnap => {
-                const d = docSnap.data(); const t = d.timestamp ? new Date(d.timestamp.seconds * 1000).toLocaleString() : '';
-                box.innerHTML += `<div class="bg-white dark:bg-white/5 p-4 rounded-xl border border-slate-100 relative"><button onclick="window.deleteInbox('${docSnap.id}')" class="absolute top-4 right-4 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button><h5 class="font-bold text-sm">${d.name}</h5><p class="text-[9px] text-slate-400 mb-2">${t}</p><p class="text-xs text-blue-500 font-mono mb-2">${d.phone} | ${d.email}</p><p class="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-wrap">${d.message}</p></div>`;
-            });
+            const s = await getDocs(q);
+            document.getElementById('inbox-content').innerHTML = s.docs.map(d => {
+                const data = d.data();
+                return `<div class="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl relative border border-slate-100 dark:border-white/5">
+                    <button onclick="window.deleteInboxMsg('${d.id}')" class="absolute top-4 right-4 text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <h5 class="font-bold text-xs">${data.name} <span class="text-[9px] font-medium text-slate-400">(${data.phone})</span></h5>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">${data.message}</p>
+                </div>`;
+            }).join('') || '<p class="text-center py-10 text-xs italic text-slate-400">Chưa có tin nhắn nào.</p>';
             lucide.createIcons();
         };
-        window.deleteInbox = async (id) => { if(confirm("Xóa?")) { await deleteDoc(doc(db, "inbox", id)); window.openInboxModal(); } };
-        window.handleContactSubmit = async (e) => { e.preventDefault(); try { await addDoc(collection(db, "inbox"), { name: document.getElementById('contact-name').value, phone: document.getElementById('contact-phone').value, email: document.getElementById('contact-email').value, message: document.getElementById('contact-msg').value, timestamp: new Date() }); showToast("Đã gửi góp ý!"); document.getElementById('contact-form').reset(); } catch(e){ showToast("Lỗi gửi!", true); } };
+        window.deleteInboxMsg = async (id) => { if(confirm("Xóa tin nhắn này?")) { await deleteDoc(doc(db, "inbox", id)); window.openInboxModal(); } };
+        window.handleContactSubmit = async (e) => {
+            e.preventDefault();
+            await addDoc(collection(db, "inbox"), { name: document.getElementById('c-name').value, phone: document.getElementById('c-phone').value, message: document.getElementById('c-msg').value, timestamp: serverTimestamp() });
+            e.target.reset(); showToast("Cảm ơn! Góp ý của bạn đã được gửi.");
+        };
 
-        // --- CORE UTILS ---
-        window.renderIconGrid = (sel) => { document.getElementById('icon-selector-grid').innerHTML = presetIcons.map(i => `<div onclick="window.selectIcon('${i.id}')" class="cursor-pointer p-2 rounded-lg border flex justify-center ${i.id===sel?'bg-blue-500 text-white border-blue-500':'bg-slate-50 dark:bg-white/5 border-transparent'}"><i data-lucide="${i.id}" class="w-4 h-4"></i></div>`).join(''); document.getElementById('mod-icon').value = sel; lucide.createIcons(); };
-        window.selectIcon = (id) => window.renderIconGrid(id);
-        window.login = () => signInWithPopup(auth, provider);
-        window.logout = () => signOut(auth).then(() => location.reload());
-        function renderAuthUI(user) { const c = document.getElementById('auth-section'); if(user) c.innerHTML = `<img src="${user.photoURL}" class="w-8 h-8 rounded-full cursor-pointer ring-2 ring-blue-500/20" onclick="window.logout()">`; else c.innerHTML = `<button onclick="window.login()" class="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-lg text-[10px] font-bold uppercase">Login</button>`; }
-        window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
-        window.toggleTheme = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); };
-        function showToast(m, err=false) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; const bg = document.getElementById('toast-icon-bg'); if(err) { bg.className = "bg-red-500 p-2 rounded-lg text-white"; } else { bg.className = "bg-blue-500 p-2 rounded-lg text-white"; } t.classList.remove('translate-y-24', 'opacity-0'); setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3000); }
-        function initSpotlight() { const cards = document.querySelectorAll(".spotlight-card"); cards.forEach(c => { c.onmousemove = e => { const r = c.getBoundingClientRect(); c.style.setProperty("--mouse-x", `${e.clientX - r.left}px`); c.style.setProperty("--mouse-y", `${e.clientY - r.top}px`); }; }); }
-        function initScrollObserver() { const observer = new IntersectionObserver((es) => { es.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+        // --- UTILS ---
+        function renderAuthUI(user) {
+            const c = document.getElementById('auth-section');
+            if(user) c.innerHTML = `<img src="${user.photoURL}" class="w-8 h-8 rounded-full ring-2 ring-white cursor-pointer hover:scale-105 transition" onclick="window.logout()">`;
+            else c.innerHTML = `<button onclick="window.login()" class="px-3 py-1.5 bg-slate-900 text-white dark:bg-white dark:text-black rounded-lg text-[10px] font-black uppercase tracking-widest">Login</button>`;
+        }
+        function showToast(m, err=false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = m;
+            const bg = document.getElementById('toast-icon-bg');
+            bg.className = err ? 'bg-red-500 p-2 rounded-lg text-white' : 'bg-blue-500 p-2 rounded-lg text-white';
+            t.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3000);
+        }
+        function initSpotlight() {
+            document.querySelectorAll(".spotlight-card").forEach(c => {
+                c.onmousemove = e => {
+                    const r = c.getBoundingClientRect();
+                    c.style.setProperty("--mouse-x", `${e.clientX - r.left}px`);
+                    c.style.setProperty("--mouse-y", `${e.clientY - r.top}px`);
+                };
+            });
+        }
+        function initScrollObserver() {
+            const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }), { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
-        lucide.createIcons();
-        window.addEventListener('load', () => setTimeout(window.getUserLocation, 1500));
+        if(localStorage.theme === 'dark') document.documentElement.classList.add('dark');
+        setTimeout(() => window.getUserLocation(), 2000);
     </script>
 </body>
 </html>
