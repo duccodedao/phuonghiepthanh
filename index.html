@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi" class="light">
 <head>
@@ -144,6 +143,13 @@
             0% { transform: translate3d(100vw, 0, 0); } 
             100% { transform: translate3d(-100%, 0, 0); } 
         }
+
+        /* Filter Active State */
+        .filter-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -233,6 +239,22 @@
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-8">
+            
+            <!-- NEW: Visitor Tracking Card -->
+            <div onclick="window.openVisitorModal()" class="group relative overflow-hidden bg-gradient-to-br from-indigo-600 to-blue-700 p-5 rounded-2xl shadow-xl cursor-pointer hover:scale-[1.02] transition-transform">
+                <div class="absolute right-0 top-0 opacity-10 translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
+                    <i data-lucide="users" class="w-20 h-20 text-white"></i>
+                </div>
+                <div class="relative z-10 text-white">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        <h4 class="text-xs font-black uppercase tracking-widest">Người truy cập</h4>
+                    </div>
+                    <p class="text-[11px] opacity-80 mb-4 font-medium">Theo dõi thiết bị, vị trí & bộ lọc.</p>
+                    <div class="text-[10px] font-bold uppercase bg-white/20 px-3 py-1.5 rounded-lg backdrop-blur-sm inline-flex items-center gap-2">Kiểm tra <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
+                </div>
+            </div>
+
             <!-- Inbox -->
             <div onclick="window.openInboxModal()" class="group relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 dark:from-white dark:to-slate-200 p-5 rounded-2xl shadow-xl cursor-pointer">
                 <div class="absolute right-0 top-0 opacity-10 translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
@@ -323,6 +345,36 @@
                     <button onclick="window.openModuleModal()" class="w-6 h-6 flex items-center justify-center bg-blue-500/10 text-blue-600 rounded-md hover:bg-blue-500 hover:text-white transition"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
                 </div>
                 <div id="admin-module-list" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISITOR MODAL (NEW) -->
+    <div id="modal-visitor" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[450] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[85vh] animate-slide-up border border-white/10 overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-black/20">
+                <div>
+                    <h3 class="font-black text-sm uppercase tracking-widest text-slate-800 dark:text-white">Theo dõi truy cập</h3>
+                    <p id="visitor-stat-text" class="text-[10px] font-bold text-blue-500 uppercase mt-1"></p>
+                </div>
+                <button onclick="document.getElementById('modal-visitor').classList.add('hidden')" class="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <!-- Filter Bar -->
+            <div class="p-3 bg-white dark:bg-black/40 border-b border-slate-100 dark:border-white/5 flex flex-wrap gap-2 overflow-x-auto custom-scroll">
+                <button onclick="window.setVisitorFilter('all')" class="visitor-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition active" data-filter="all">Tất cả</button>
+                <button onclick="window.setVisitorFilter('ios')" class="visitor-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="ios">iOS / iPhone</button>
+                <button onclick="window.setVisitorFilter('android')" class="visitor-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="android">Android</button>
+                <button onclick="window.setVisitorFilter('desktop')" class="visitor-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="desktop">Máy tính</button>
+                <div class="w-px h-5 bg-slate-200 dark:bg-white/10 mx-1"></div>
+                <button onclick="window.setVisitorFilter('auth')" class="visitor-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-blue-200 text-blue-500 transition" data-filter="auth">Đã đăng nhập</button>
+                <button onclick="window.setVisitorFilter('guest')" class="visitor-filter-btn px-3 py-1.5 rounded-full text-[10px] font-bold uppercase border border-slate-200 dark:border-white/10 transition" data-filter="guest">Khách</button>
+                
+                <button onclick="window.clearVisitorLogs()" class="ml-auto px-3 py-1.5 bg-red-50 text-red-600 rounded-full text-[10px] font-black uppercase hover:bg-red-600 hover:text-white transition">Xóa hết nhật ký</button>
+            </div>
+
+            <div id="visitor-list-content" class="p-6 overflow-y-auto custom-scroll flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50/50 dark:bg-black/20">
+                <!-- List data via JS -->
             </div>
         </div>
     </div>
@@ -440,7 +492,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // FIREBASE CONFIG
         const firebaseConfig = {
@@ -459,16 +511,15 @@
 
         let isAdmin = false;
         let isUserLoggedIn = false;
-        // KHỞI TẠO RỖNG ĐỂ KHÔNG HIỆN TEXT MẶC ĐỊNH
+        let currentUser = null;
         let configData = {
-            title1: "",
-            title2: "",
-            slogan: "",
+            title1: "", title2: "", slogan: "",
             announcement: { enabled: false, text: '' },
             socials: { facebook: '', zalo: '', phone: '', email: '' },
-            units: [], 
-            modules: [] 
+            units: [], modules: [] 
         };
+        let visitorData = [];
+        let currentVisitorFilter = 'all';
         let userLocation = null;
 
         const presetIcons = [
@@ -480,8 +531,70 @@
             { id: 'cpu', label: 'Tech' }, { id: 'shield', label: 'Bảo mật' }, { id: 'zap', label: 'Tiện ích' }
         ];
 
+        // --- NEW: TRACKING LOGIC ---
+        async function getDeviceDetails() {
+            const ua = navigator.userAgent;
+            let os = "Desktop";
+            let deviceType = "Web Browser";
+            
+            if (/iPhone|iPad|iPod/.test(ua)) { os = "ios"; deviceType = "iPhone / iPad"; }
+            else if (/Android/.test(ua)) { os = "android"; deviceType = "Android Device"; }
+            else if (/Windows/.test(ua)) { os = "windows"; deviceType = "Windows PC"; }
+            else if (/Macintosh/.test(ua)) { os = "macos"; deviceType = "Macintosh"; }
+
+            let ip = "Checking...";
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                ip = data.ip;
+            } catch (e) { ip = "Unknown IP"; }
+
+            let city = "Đang xác định...";
+            if (userLocation) {
+                try {
+                    const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json`);
+                    const gData = await geo.json();
+                    const a = gData.address || {};
+                    const parts = [];
+                    if(a.ward || a.suburb) parts.push(a.ward || a.suburb);
+                    if(a.district || a.city_district) parts.push(a.district || a.city_district);
+                    if(a.city || a.state) parts.push(a.city || a.state);
+                    city = parts.join(', ') || "Vị trí không xác định";
+                } catch (e) { city = "Lỗi định vị"; }
+            }
+            return { os, deviceType, ip, city };
+        }
+
+        async function trackVisitor(user = null) {
+            try {
+                const details = await getDeviceDetails();
+                // Guest ID persistence
+                let visitorId = user ? user.uid : localStorage.getItem('site_v_id');
+                if (!visitorId) {
+                    visitorId = 'g_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('site_v_id', visitorId);
+                }
+
+                const vRef = doc(db, "visitors", visitorId);
+                await setDoc(vRef, {
+                    uid: user ? user.uid : null,
+                    name: user ? user.displayName : 'Khách vãng lai',
+                    email: user ? user.email : 'N/A',
+                    avatar: user ? user.photoURL : 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                    os: details.os,
+                    device: details.deviceType,
+                    ip: details.ip,
+                    city: details.city,
+                    lat: userLocation ? userLocation.lat : null,
+                    lng: userLocation ? userLocation.lng : null,
+                    lastSeen: serverTimestamp()
+                }, { merge: true });
+            } catch (e) { console.error("Track Error:", e); }
+        }
+
         // --- AUTH & INIT ---
         onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
             renderAuthUI(user);
             if (user) {
                 isUserLoggedIn = true;
@@ -497,10 +610,10 @@
                 isAdmin = false;
                 document.getElementById('admin-toggle-btn').classList.add('hidden');
             }
-            // Chỉ render nếu đã có dữ liệu, nếu chưa có, chờ snapshot
-            if(configData.title2) {
-                 renderHomepage(); 
-            }
+            
+            trackVisitor(user); // TRACKING ON AUTH
+
+            if(configData.title2) renderHomepage();
             if(isAdmin && configData.title2) {
                 fillAdminForm();
                 renderAdminModuleList();
@@ -517,20 +630,13 @@
                 configData.slogan = data.slogan || "Chưa có khẩu hiệu.";
                 configData.announcement = data.announcement || { enabled: false, text: '' };
                 configData.socials = data.socials || { facebook: '', zalo: '', phone: '', email: '' };
-                if(data.modules && Array.isArray(data.modules)) configData.modules = data.modules;
-                if(data.units && Array.isArray(data.units)) configData.units = data.units;
+                configData.modules = Array.isArray(data.modules) ? data.modules : [];
+                configData.units = Array.isArray(data.units) ? data.units : [];
             }
             
-            // Render giao diện khi đã có dữ liệu
             renderHomepage();
+            if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
             
-            if(isAdmin) {
-                fillAdminForm();
-                renderAdminModuleList();
-                renderAdminUnitList();
-            }
-            
-            // TẮT LOADING SAU KHI DỮ LIỆU ĐÃ TẢI VỀ
             const loader = document.getElementById('global-loading');
             loader.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => loader.style.display = 'none', 700);
@@ -542,8 +648,7 @@
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
         window.getUserLocation = () => {
@@ -551,17 +656,18 @@
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    trackVisitor(currentUser); // Update location in tracking
                     renderHomepage(); 
-                    showToast("Đã cập nhật vị trí!", false);
+                    showToast("Đã cập nhật vị trí chính xác!", false);
                 },
-                (error) => { console.log("GPS Blocked or Error"); },
+                (error) => { showToast("Vui lòng cấp quyền vị trí!", true); },
                 { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
             );
         };
 
         window.openMapToUnit = (lat, lng, label) => {
             if(!lat || !lng) { showToast("Chưa có tọa độ!", true); return; }
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             const url = isIOS ? `http://maps.apple.com/?ll=${lat},${lng}&q=${encodeURIComponent(label)}` : `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
             window.open(url, '_blank');
         };
@@ -569,26 +675,20 @@
         // --- SCROLL ANIMATION OBSERVER ---
         function initScrollObserver() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
             }, { threshold: 0.1 });
-
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // --- FETCH USER INFO FOR FOOTER (DETAILED LOCATION) ---
+        // --- FETCH USER INFO FOR FOOTER ---
         async function fetchUserInfo() {
-            let info = { ip: 'Checking...', city: 'Unknown', device: 'Unknown' };
-            
+            let info = { ip: '...', city: 'Unknown', device: 'Unknown' };
             const ua = navigator.userAgent;
             if (/Android/i.test(ua)) info.device = "Android Device";
             else if (/iPhone|iPad|iPod/i.test(ua)) info.device = "iOS Device";
             else if (/Windows/i.test(ua)) info.device = "Windows PC";
             else if (/Mac/i.test(ua)) info.device = "Macintosh";
-            else info.device = "Web Browser";
+            else info.device = "Browser";
 
             try {
                 const ipRes = await fetch('https://api.ipify.org?format=json');
@@ -600,37 +700,20 @@
                 try {
                     const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json`);
                     const geoData = await geoRes.json();
-                    const addr = geoData.address || {};
-                    const parts = [];
-                    if(addr.hamlet) parts.push(addr.hamlet); 
-                    else if(addr.village) parts.push(addr.village);
-                    else if(addr.neighbourhood) parts.push(addr.neighbourhood);
-                    else if(addr.quarter) parts.push(addr.quarter);
-                    if(addr.ward) parts.push(addr.ward);
-                    else if(addr.suburb) parts.push(addr.suburb);
-                    if(addr.city_district) parts.push(addr.city_district);
-                    else if(addr.district) parts.push(addr.district);
-                    else if(addr.town) parts.push(addr.town);
-                    if(addr.city) parts.push(addr.city);
-                    else if(addr.state) parts.push(addr.state);
-                    info.city = parts.join(', ') || 'Đang định vị...';
-                } catch (e) { info.city = 'Không thể lấy tên địa điểm'; }
-            } else {
-                info.city = 'Chưa cấp quyền vị trí';
+                    const a = geoData.address || {};
+                    info.city = [a.ward || a.suburb, a.district || a.city_district, a.city || a.state].filter(Boolean).join(', ') || 'Unknown';
+                } catch (e) { info.city = 'GPS Error'; }
             }
             return info;
         }
 
         // --- RENDER UI ---
         async function renderHomepage() {
-            // Nếu chưa có dữ liệu cấu hình, không render gì cả (để Loading che)
             if (!configData.title2) return;
 
-            // Update Header
             document.getElementById('header-title').innerText = configData.title2;
             document.title = `${configData.title2} - ${configData.title1}`;
 
-            // Announcement Logic
             const ann = configData.announcement || {};
             const bar = document.getElementById('announcement-bar');
             const header = document.getElementById('main-header');
@@ -647,9 +730,7 @@
                 main.style.paddingTop = ''; 
             }
 
-            // Socials Row
             const s = configData.socials || {};
-            let footerSocials = '';
             const socialBtn = (link, icon, color, label) => `
                 <a href="${link}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-white/10 rounded-full border border-white/20 dark:border-white/5 hover:bg-white dark:hover:bg-white/20 hover:scale-105 transition-all shadow-sm">
                     <i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i>
@@ -724,9 +805,7 @@
             document.getElementById('footer-content').innerHTML = footerHTML;
 
             let html = '';
-
             const heroHeight = isUserLoggedIn ? 'py-6' : 'min-h-[70vh] flex flex-col justify-center'; 
-            const loginBtn = !isUserLoggedIn ? `` : ''; 
             const scrollIndicator = !isUserLoggedIn ?
                 `<div class="absolute bottom-6 left-0 w-full flex flex-col items-center gap-1 opacity-60 animate-bounce z-10">
                     <span class="text-[9px] uppercase font-bold tracking-widest text-slate-500 text-center">Khám phá</span>
@@ -747,7 +826,6 @@
                     <p class="text-xs md:text-base lg:text-lg text-slate-600 dark:text-slate-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed font-medium px-4">
                         ${configData.slogan}
                     </p>
-                    ${loginBtn}
                 </div>
                 ${scrollIndicator}
             </section>
@@ -800,9 +878,10 @@
 
             let displayUnits = [...(configData.units || [])];
             if (userLocation) {
-                displayUnits.forEach(u => u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, u.lat, u.lng) : 99999);
+                displayUnits.forEach(u => u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, parseFloat(u.lat), parseFloat(u.lng)) : 99999);
                 displayUnits.sort((a, b) => {
-                    if(a.isMain) return -1; if(b.isMain) return 1;
+                    if(a.isMain && !b.isMain) return -1;
+                    if(!a.isMain && b.isMain) return 1;
                     return a.distance - b.distance;
                 });
             } else {
@@ -826,7 +905,7 @@
                 
                 displayUnits.forEach((u, idx) => {
                     let distBadge = '';
-                    if (userLocation && u.distance < 9000) {
+                    if (userLocation && u.distance < 1000) {
                         const distStr = u.distance < 1 
                             ? `${Math.round(u.distance * 1000)}m` 
                             : `${u.distance.toFixed(1)}km`;
@@ -874,13 +953,95 @@
             initScrollObserver();
         }
 
+        // --- NEW: VISITOR MODAL FUNCTIONS ---
+        window.openVisitorModal = async () => {
+            if(!isAdmin) return;
+            const content = document.getElementById('visitor-list-content');
+            document.getElementById('modal-visitor').classList.remove('hidden');
+            content.innerHTML = `<div class="col-span-full py-20 text-center"><span class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-2"></span><p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 animate-pulse">Đang đồng bộ nhật ký...</p></div>`;
+            
+            const q = query(collection(db, "visitors"), orderBy("lastSeen", "desc"), limit(60));
+            onSnapshot(q, (snap) => {
+                visitorData = [];
+                snap.forEach(d => visitorData.push({ id: d.id, ...d.data() }));
+                renderVisitorList();
+            });
+        };
+
+        window.setVisitorFilter = (filter) => {
+            currentVisitorFilter = filter;
+            document.querySelectorAll('.visitor-filter-btn').forEach(btn => {
+                const active = btn.dataset.filter === filter;
+                btn.classList.toggle('active', active);
+                btn.classList.toggle('bg-blue-600', active);
+                btn.classList.toggle('text-white', active);
+                btn.classList.toggle('border-blue-600', active);
+            });
+            renderVisitorList();
+        };
+
+        function renderVisitorList() {
+            const container = document.getElementById('visitor-list-content');
+            let filtered = visitorData;
+
+            if (currentVisitorFilter === 'ios') filtered = visitorData.filter(v => v.os === 'ios');
+            else if (currentVisitorFilter === 'android') filtered = visitorData.filter(v => v.os === 'android');
+            else if (currentVisitorFilter === 'desktop') filtered = visitorData.filter(v => v.os === 'windows' || v.os === 'macos');
+            else if (currentVisitorFilter === 'auth') filtered = visitorData.filter(v => v.uid !== null);
+            else if (currentVisitorFilter === 'guest') filtered = visitorData.filter(v => v.uid === null);
+
+            document.getElementById('visitor-stat-text').innerText = `${filtered.length} người dùng đang hiển thị`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-20 text-center"><p class="text-xs italic text-slate-400">Không tìm thấy bản ghi phù hợp.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(v => {
+                const online = v.lastSeen && (Date.now() / 1000 - v.lastSeen.seconds < 300); // 5 mins
+                const time = v.lastSeen ? new Date(v.lastSeen.seconds * 1000).toLocaleString('vi-VN') : 'N/A';
+                
+                return `
+                <div class="bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 p-4 rounded-2xl flex items-center gap-4 group">
+                    <div class="relative">
+                        <img src="${v.avatar}" class="w-12 h-12 rounded-full ring-2 ring-slate-100 dark:ring-white/10">
+                        ${online ? `<div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-[#0f172a] rounded-full"></div>` : ''}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <h4 class="font-bold text-xs truncate">${v.name}</h4>
+                            ${v.uid ? `<span class="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[8px] font-black uppercase rounded">Member</span>` : ''}
+                        </div>
+                        <p class="text-[9px] text-slate-500 font-mono truncate uppercase mt-0.5">${v.ip} • ${v.device}</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[9px] flex items-center gap-1 text-blue-500 font-bold"><i data-lucide="map-pin" class="w-2.5 h-2.5"></i> ${v.city}</span>
+                            <span class="text-[8px] text-slate-400 font-medium">${time}</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        ${v.lat ? `<button onclick="window.openMapToUnit(${v.lat}, ${v.lng}, 'Vị trí khách')" class="p-2 hover:bg-blue-50 text-blue-500 rounded-lg"><i data-lucide="map" class="w-4 h-4"></i></button>` : ''}
+                        <button onclick="window.deleteVisitorLog('${v.id}')" class="p-2 hover:bg-red-50 text-red-500 rounded-lg opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        window.deleteVisitorLog = async (id) => { if(confirm("Xóa nhật ký này?")) await deleteDoc(doc(db, "visitors", id)); };
+        window.clearVisitorLogs = async () => {
+            if(!confirm("Xác nhận xóa TẤT CẢ nhật ký truy cập?")) return;
+            const s = await getDocs(collection(db, "visitors"));
+            const batch = s.docs.map(d => deleteDoc(doc(db, "visitors", d.id)));
+            await Promise.all(batch);
+            showToast("Đã dọn dẹp!");
+        };
+
         // --- ADMIN FUNCTIONS ---
         function fillAdminForm() {
             if(document.getElementById('cfg-title1')) document.getElementById('cfg-title1').value = configData.title1 || '';
             if(document.getElementById('cfg-title2')) document.getElementById('cfg-title2').value = configData.title2 || '';
             if(document.getElementById('cfg-slogan')) document.getElementById('cfg-slogan').value = configData.slogan || '';
             
-            // Announcement
             const ann = configData.announcement || { enabled: false, text: '' };
             if(document.getElementById('cfg-announce-text')) document.getElementById('cfg-announce-text').value = ann.text || '';
             if(document.getElementById('cfg-announce-show')) document.getElementById('cfg-announce-show').checked = ann.enabled || false;
@@ -1039,7 +1200,7 @@
             if(!isAdmin) return;
             const contentDiv = document.getElementById('inbox-content');
             document.getElementById('modal-inbox').classList.remove('hidden');
-            contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-50"><span class="loader w-6 h-6 border-2 mb-2"></span><p class="text-xs">Đang tải...</p></div>`;
+            contentDiv.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-50"><span class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-2"></span><p class="text-xs">Đang tải...</p></div>`;
             const q = query(collection(db, "inbox"), orderBy("timestamp", "desc"));
             const snapshot = await getDocs(q);
             if (snapshot.empty) contentDiv.innerHTML = `<p class="text-center text-slate-400 text-sm italic py-10">Trống.</p>`;
@@ -1062,21 +1223,20 @@
                 lucide.createIcons();
             }
         };
-        window.deleteInboxMsg = async (id) => { if(confirm("Xóa tin nhắn này?")) { await deleteDoc(doc(db, "inbox", id)); window.openInboxModal(); } };
+        window.deleteInboxMsg = async (id) => { if(confirm("Xác nhận xóa?")) { await deleteDoc(doc(db, "inbox", id)); window.openInboxModal(); } };
         window.handleContactSubmit = async (e) => {
             e.preventDefault();
             try {
-                // Update: Added Phone & Email fields
                 await addDoc(collection(db, "inbox"), {
                     name: document.getElementById('contact-name').value,
                     phone: document.getElementById('contact-phone').value, 
                     email: document.getElementById('contact-email').value,
                     message: document.getElementById('contact-msg').value,
-                    timestamp: new Date()
+                    timestamp: serverTimestamp()
                 });
-                showToast("Đã gửi tin nhắn!", false);
+                showToast("Đã gửi tin nhắn góp ý!", false);
                 document.getElementById('contact-form').reset();
-            } catch (err) { showToast("Lỗi gửi tin!", true); }
+            } catch (err) { showToast("Lỗi khi gửi!", true); }
         };
 
         // --- UTILS ---
@@ -1089,10 +1249,10 @@
             lucide.createIcons();
         };
         window.selectIcon = (id) => window.renderIconGrid(id);
-        async function updateFirestore(data) { try { await setDoc(doc(db, "settings", "homepage"), data, { merge: true }); } catch (e) { showToast("Lỗi lưu dữ liệu!", true); } }
+        async function updateFirestore(data) { try { await setDoc(doc(db, "settings", "homepage"), data, { merge: true }); } catch (e) { showToast("Lỗi lưu!", true); } }
         function renderAuthUI(user) {
             const c = document.getElementById('auth-section');
-            if(user) c.innerHTML = `<div class="flex items-center gap-2 pl-3 border-l border-slate-200 dark:border-white/10 cursor-pointer" onclick="window.logout()"><img src="${user.photoURL}" class="w-8 h-8 rounded-full shadow-sm ring-2 ring-white dark:ring-white/10"></div>`;
+            if(user) c.innerHTML = `<div class="flex items-center gap-2 pl-3 border-l border-slate-200 dark:border-white/10 cursor-pointer" onclick="window.logout()"><img src="${user.photoURL}" class="w-8 h-8 rounded-full shadow-sm ring-2 ring-white dark:ring-white/10 hover:scale-110 transition"></div>`;
             else c.innerHTML = `<button onclick="window.login()" class="ml-2 px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-lg text-[10px] font-bold uppercase tracking-wider">Login</button>`;
         }
         window.login = () => signInWithPopup(auth, provider);
@@ -1105,28 +1265,21 @@
             const iconBg = document.getElementById('toast-icon-bg');
             const icon = document.getElementById('toast-icon');
             if(isErr) {
-                iconBg.classList.replace('from-blue-500', 'from-red-500'); iconBg.classList.replace('to-indigo-500', 'to-pink-500');
-                iconBg.classList.replace('shadow-blue-500/30', 'shadow-red-500/30');
+                iconBg.className = "bg-gradient-to-br from-red-500 to-pink-500 p-2 rounded-lg text-white shadow-lg shadow-red-500/30";
                 icon.setAttribute('data-lucide', 'alert-circle');
             } else {
-                iconBg.classList.replace('from-red-500', 'from-blue-500'); iconBg.classList.replace('to-pink-500', 'to-indigo-500');
-                iconBg.classList.replace('shadow-red-500/30', 'shadow-blue-500/30');
+                iconBg.className = "bg-gradient-to-br from-blue-500 to-indigo-500 p-2 rounded-lg text-white shadow-lg shadow-blue-500/30";
                 icon.setAttribute('data-lucide', 'check');
             }
             lucide.createIcons();
             t.classList.remove('translate-y-24', 'opacity-0');
             setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3500);
         }
+        
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
         lucide.createIcons();
 
-        // --- AUTO TRIGGER LOCATION ON LOAD ---
-        window.addEventListener('load', () => {
-             setTimeout(() => {
-                 window.getUserLocation();
-             }, 1500);
-        });
-
+        window.addEventListener('load', () => { setTimeout(() => window.getUserLocation(), 1500); });
     </script>
 </body>
 </html>
