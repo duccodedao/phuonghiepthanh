@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi" class="light">
 <head>
@@ -49,9 +50,12 @@
         }
     </script>
     <style>
+        /* Thêm scroll-behavior smooth vào html để đảm bảo trượt mượt */
+        html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
         .dark body { background-color: #030712; color: #e2e8f0; }
         
+        .section-optimize { content-visibility: auto; contain-intrinsic-size: 500px; }
         .break-words { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
         .hyphens-auto { -webkit-hyphens: auto; hyphens: auto; }
 
@@ -71,7 +75,7 @@
                               linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
         }
 
-        /* Spotlight Effect CSS */
+        /* Spotlight Effect CSS - ONLY ON DESKTOP */
         .spotlight-card {
             position: relative; overflow: hidden;
             background: rgba(255, 255, 255, 0.65);
@@ -81,33 +85,38 @@
             background: rgba(17, 24, 39, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .spotlight-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit; padding: 1px;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.8), transparent 40%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
-            opacity: 0; transition: opacity 0.5s; pointer-events: none;
-        }
-        .dark .spotlight-card::before {
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.3), transparent 40%);
-        }
-        .spotlight-card:hover::before { opacity: 1; }
         
-        .spotlight-bg {
-            position: absolute; inset: 0;
-            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.06), transparent 40%);
-            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        @media (hover: hover) and (pointer: fine) {
+            .spotlight-card::before {
+                content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+                border-radius: inherit; padding: 1px;
+                background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.8), transparent 40%);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor; mask-composite: exclude;
+                opacity: 0; transition: opacity 0.5s; pointer-events: none;
+            }
+            .dark .spotlight-card::before {
+                background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.3), transparent 40%);
+            }
+            .spotlight-card:hover::before { opacity: 1; }
+            
+            .spotlight-bg {
+                position: absolute; inset: 0;
+                background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.06), transparent 40%);
+                opacity: 0; transition: opacity 0.5s; pointer-events: none;
+            }
+            .spotlight-card:hover .spotlight-bg { opacity: 1; }
         }
-        .spotlight-card:hover .spotlight-bg { opacity: 1; }
 
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 20px; }
 
-        /* Admin Sidebar */
-        .admin-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); }
+        /* Admin & Side Tab Sidebar */
+        .admin-sidebar, .app-sidetab { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+        .admin-sidebar { transform: translateX(100%); }
         .admin-sidebar.open { transform: translateX(0); }
+        .app-sidetab.open { transform: translateX(0); }
 
         .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -135,21 +144,13 @@
             will-change: transform;
         }
 
-        .marquee-wrapper:hover .marquee-content { 
-            animation-play-state: paused; 
-        }
-
         @keyframes marquee {
             0% { transform: translate3d(100vw, 0, 0); } 
             100% { transform: translate3d(-100%, 0, 0); } 
         }
 
         /* Filter Active State */
-        .filter-btn.active {
-            background-color: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
-        }
+        .filter-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -157,8 +158,8 @@
     <!-- Background Layers -->
     <div class="bg-noise z-0"></div>
     <div class="fixed inset-0 z-[-1] bg-grid mask-gradient">
-        <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[60%] rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-indigo-400/20 blur-[100px] animate-aurora dark:from-blue-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 mix-blend-multiply dark:mix-blend-screen"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[100%] h-[50%] rounded-full bg-gradient-to-l from-emerald-400/20 to-teal-400/20 blur-[90px] dark:from-emerald-900/20 dark:to-teal-900/20 mix-blend-multiply dark:mix-blend-screen"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[60%] rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-indigo-400/20 blur-[100px] animate-aurora dark:from-blue-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 mix-blend-multiply dark:mix-blend-screen will-change-transform"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[100%] h-[50%] rounded-full bg-gradient-to-l from-emerald-400/20 to-teal-400/20 blur-[90px] dark:from-emerald-900/20 dark:to-teal-900/20 mix-blend-multiply dark:mix-blend-screen will-change-transform"></div>
     </div>
     <div class="fixed inset-0 z-[-1] bg-gradient-to-b from-transparent via-transparent to-white/80 dark:to-black/80 pointer-events-none"></div>
 
@@ -179,20 +180,61 @@
         </div>
     </div>
 
+    <!-- SIDETAB MENU (Đã xóa nút thừa) -->
+    <div id="sidetab-overlay" onclick="window.toggleSidetab()" class="fixed inset-0 bg-black/50 z-[998] hidden backdrop-blur-sm transition-opacity"></div>
+    <aside id="app-sidetab" class="app-sidetab fixed left-0 top-0 bottom-0 w-72 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.2)] z-[999] flex flex-col h-screen overflow-hidden">
+        <div class="p-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-8 h-8 object-contain">
+                <span class="font-bold text-sm uppercase tracking-wider text-slate-800 dark:text-white">Menu</span>
+            </div>
+            <button onclick="window.toggleSidetab()" class="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-2">
+            <!-- Đã thêm hàm handleSidetabClick có tham số để scroll mượt -->
+            <a href="#sec-services" onclick="window.handleSidetabClick(event, '#sec-services')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i> Dịch vụ & Tiện ích
+            </a>
+            <a href="#sec-network" onclick="window.handleSidetabClick(event, '#sec-network')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="map" class="w-5 h-5"></i> Mạng lưới hoạt động
+            </a>
+            <a href="#footer-content" onclick="window.handleSidetabClick(event, '#footer-content')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="info" class="w-5 h-5"></i> Hệ thống thông tin
+            </a>
+            <a href="#sec-reviews" onclick="window.handleSidetabClick(event, '#sec-reviews')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="star" class="w-5 h-5"></i> Đánh giá & Phản hồi
+            </a>
+            <a href="#sec-feedback" onclick="window.handleSidetabClick(event, '#sec-feedback')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="send" class="w-5 h-5"></i> Gửi góp ý
+            </a>
+        </div>
+        <div class="p-4 border-t border-slate-100 dark:border-white/5 text-center">
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">TYT Phường Hiệp Thành © 2026</p>
+        </div>
+    </aside>
+
     <!-- Header -->
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 pt-3 px-4 flex justify-center transition-all duration-300">
         <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg shadow-black/5 px-4 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-xl hover:bg-white/90 dark:hover:bg-black/80">
             
-            <div class="flex items-center gap-3 cursor-pointer group flex-1 min-w-0" onclick="location.reload()">
-                <div class="w-10 h-10 shrink-0 flex items-center justify-center bg-transparent rounded-full group-hover:scale-110 transition-transform duration-300">
+            <div class="flex items-center gap-3 cursor-pointer group flex-1 min-w-0">
+                <!-- Nút menu chính thức trên Header -->
+                <button onclick="window.toggleSidetab()" class="md:hidden mr-1 p-1"><i data-lucide="menu" class="w-6 h-6 text-slate-700 dark:text-slate-200"></i></button>
+                
+                <div class="w-10 h-10 shrink-0 flex items-center justify-center bg-transparent rounded-full group-hover:scale-110 transition-transform duration-300" onclick="location.reload()">
                     <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-full h-full object-contain filter drop-shadow-md">
                 </div>
-                <div class="flex flex-col min-w-0 pr-2">
+                <div class="flex flex-col min-w-0 pr-2 hidden sm:flex" onclick="location.reload()">
                     <h1 class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white truncate" id="header-title">ĐANG TẢI...</h1>
                 </div>
             </div>
 
             <div class="flex items-center gap-1 md:gap-2 shrink-0">
+                <!-- Nút Menu chữ trên Desktop -->
+                <button onclick="window.toggleSidetab()" class="hidden md:flex items-center gap-2 px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300 transition-colors">
+                    <i data-lucide="menu" class="w-3.5 h-3.5"></i> Menu
+                </button>
+
                  <button onclick="window.toggleAdminSidebar()" id="admin-toggle-btn" class="hidden px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-2">
                     <i data-lucide="settings-2" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Admin</span>
                 </button>
@@ -212,8 +254,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 pb-6 px-4 pt-6">
-        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2rem] border border-white/50 dark:border-white/5 shadow-2xl p-6 md:p-10 overflow-hidden relative reveal">
+    <footer class="relative z-10 pb-6 px-4 pt-6" id="sec-feedback">
+        <div class="max-w-5xl mx-auto backdrop-blur-2xl bg-white/40 dark:bg-slate-900/40 rounded-[2rem] border border-white/50 dark:border-white/5 shadow-2xl p-6 md:p-10 overflow-hidden relative reveal section-optimize">
             <div class="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
             <div id="footer-content"></div>
@@ -239,8 +281,7 @@
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll p-6 space-y-8">
-            
-            <!-- NEW: Visitor Tracking Card -->
+            <!-- Visitor Tracking Card -->
             <div onclick="window.openVisitorModal()" class="group relative overflow-hidden bg-gradient-to-br from-indigo-600 to-blue-700 p-5 rounded-2xl shadow-xl cursor-pointer hover:scale-[1.02] transition-transform">
                 <div class="absolute right-0 top-0 opacity-10 translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
                     <i data-lucide="users" class="w-20 h-20 text-white"></i>
@@ -349,7 +390,7 @@
         </div>
     </div>
 
-    <!-- VISITOR MODAL (NEW) -->
+    <!-- VISITOR MODAL -->
     <div id="modal-visitor" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[450] hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[85vh] animate-slide-up border border-white/10 overflow-hidden">
             <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-black/20">
@@ -492,7 +533,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc, addDoc, collection, query, orderBy, getDocs, deleteDoc, serverTimestamp, limit, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // FIREBASE CONFIG
         const firebaseConfig = {
@@ -519,8 +560,11 @@
             units: [], modules: [] 
         };
         let visitorData = [];
+        let reviewsData = []; 
+        let currentReviewRating = 0; 
         let currentVisitorFilter = 'all';
         let userLocation = null;
+        let isAllReviewsVisible = false;
 
         const presetIcons = [
             { id: 'layout-grid', label: 'Tất cả' }, { id: 'newspaper', label: 'Tin tức' }, { id: 'users', label: 'Nhân sự' },
@@ -530,6 +574,44 @@
             { id: 'briefcase', label: 'Công việc' }, { id: 'video', label: 'Họp Online' }, { id: 'message-square', label: 'Chat' },
             { id: 'cpu', label: 'Tech' }, { id: 'shield', label: 'Bảo mật' }, { id: 'zap', label: 'Tiện ích' }
         ];
+
+        // --- SIDETAB LOGIC ---
+        window.toggleSidetab = () => {
+            const sidebar = document.getElementById('app-sidetab');
+            const overlay = document.getElementById('sidetab-overlay');
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        };
+
+        // --- FIXED: SMOOTH SCROLL FUNCTION ---
+        window.handleSidetabClick = (e, targetId) => {
+            // Ngăn chặn hành động mặc định để xử lý scroll tay
+            if(e) e.preventDefault();
+            
+            // Đóng menu nếu đang ở mobile
+            if (window.innerWidth < 768) {
+                window.toggleSidetab();
+            }
+
+            // Xử lý scroll mượt
+            const target = document.querySelector(targetId);
+            if (target) {
+                const headerOffset = 80; // Trừ chiều cao header
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        };
 
         // --- NEW: TRACKING LOGIC ---
         async function getDeviceDetails() {
@@ -568,7 +650,6 @@
         async function trackVisitor(user = null) {
             try {
                 const details = await getDeviceDetails();
-                // Guest ID persistence
                 let visitorId = user ? user.uid : localStorage.getItem('site_v_id');
                 if (!visitorId) {
                     visitorId = 'g_' + Math.random().toString(36).substr(2, 9);
@@ -610,9 +691,7 @@
                 isAdmin = false;
                 document.getElementById('admin-toggle-btn').classList.add('hidden');
             }
-            
-            trackVisitor(user); // TRACKING ON AUTH
-
+            trackVisitor(user); 
             if(configData.title2) renderHomepage();
             if(isAdmin && configData.title2) {
                 fillAdminForm();
@@ -621,7 +700,7 @@
             }
         });
 
-        // --- LẮNG NGHE DỮ LIỆU TỪ FIREBASE ---
+        // --- FIREBASE LISTENERS ---
         onSnapshot(doc(db, "settings", "homepage"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -633,14 +712,69 @@
                 configData.modules = Array.isArray(data.modules) ? data.modules : [];
                 configData.units = Array.isArray(data.units) ? data.units : [];
             }
-            
             renderHomepage();
             if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
-            
             const loader = document.getElementById('global-loading');
             loader.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => loader.style.display = 'none', 700);
         });
+
+        onSnapshot(query(collection(db, "reviews"), orderBy("timestamp", "desc")), (snap) => {
+            reviewsData = [];
+            snap.forEach(d => reviewsData.push({ id: d.id, ...d.data() }));
+            renderHomepage(); 
+        });
+
+        // --- REVIEW FUNCTIONS ---
+        window.setReviewRating = (rating) => {
+            currentReviewRating = rating;
+            const starContainer = document.getElementById('star-input-container');
+             starContainer.innerHTML = [1,2,3,4,5].map(i => `
+                <button type="button" onclick="window.setReviewRating(${i})" class="transition hover:scale-110">
+                    <i data-lucide="star" class="w-6 h-6 ${i <= currentReviewRating ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400'}"></i>
+                </button>
+            `).join('');
+            lucide.createIcons();
+            setTimeout(() => { const el = document.getElementById('review-comment'); if(el) el.focus(); }, 50);
+        };
+
+        window.submitReview = async (e) => {
+            e.preventDefault();
+            if (!currentUser) { showToast("Vui lòng đăng nhập!", true); window.login(); return; }
+            if (currentReviewRating === 0) { showToast("Vui lòng chọn số sao!", true); return; }
+            const comment = document.getElementById('review-comment').value;
+            try {
+                const existing = reviewsData.find(r => r.uid === currentUser.uid);
+                if (existing) {
+                    await updateDoc(doc(db, "reviews", existing.id), {
+                         rating: currentReviewRating,
+                         comment: comment,
+                         timestamp: serverTimestamp()
+                    });
+                    showToast("Đã cập nhật đánh giá!");
+                } else {
+                    await addDoc(collection(db, "reviews"), {
+                        uid: currentUser.uid,
+                        name: currentUser.displayName || "Người dùng",
+                        avatar: currentUser.photoURL || "https://hdd.io.vn/img/bmassloadings.png",
+                        rating: currentReviewRating,
+                        comment: comment,
+                        timestamp: serverTimestamp()
+                    });
+                    showToast("Cảm ơn đánh giá của bạn!");
+                }
+                currentReviewRating = 0;
+            } catch (err) { console.error(err); showToast("Lỗi khi gửi đánh giá!", true); }
+        };
+
+        window.deleteReview = async (id) => {
+            if(confirm("Xóa đánh giá này?")) { await deleteDoc(doc(db, "reviews", id)); showToast("Đã xóa đánh giá."); }
+        }
+
+        window.toggleAllReviews = () => {
+            isAllReviewsVisible = !isAllReviewsVisible;
+            renderHomepage();
+        }
 
         // --- DISTANCE LOGIC ---
         function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -656,7 +790,7 @@
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-                    trackVisitor(currentUser); // Update location in tracking
+                    trackVisitor(currentUser);
                     renderHomepage(); 
                     showToast("Đã cập nhật vị trí chính xác!", false);
                 },
@@ -813,7 +947,7 @@
                 </div>` : '';
 
             html += `
-            <section class="relative px-4 ${heroHeight} mb-4 overflow-hidden">
+            <section id="sec-home" class="relative px-4 ${heroHeight} mb-4 overflow-hidden section-optimize">
                 <div class="max-w-5xl mx-auto text-center relative z-10 animate-slide-up">
                     <h1 class="font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
                         <span class="block text-sm sm:text-lg md:text-xl lg:text-2xl text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-4 pb-1 px-2 break-words">
@@ -834,7 +968,7 @@
             const visibleModules = configData.modules.filter(m => isAdmin || m.visibility === 'public');
             if (visibleModules.length > 0) {
                 html += `
-                <section class="px-4 pb-12 relative z-20">
+                <section id="sec-services" class="px-4 pb-12 relative z-20 section-optimize">
                     <div class="max-w-6xl mx-auto">
                         <div class="flex items-center justify-center gap-2 mb-6 reveal">
                              <span class="w-1 h-6 bg-blue-500 rounded-full"></span>
@@ -876,6 +1010,160 @@
                 html += `</div></div></section>`;
             }
 
+            // --- REVIEW SECTION ---
+            let totalReviews = reviewsData.length;
+            let sumStars = 0;
+            let countStars = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+            reviewsData.forEach(r => {
+                let rVal = parseInt(r.rating) || 0;
+                sumStars += rVal;
+                if(countStars[rVal] !== undefined) countStars[rVal]++;
+            });
+            let avgRating = totalReviews > 0 ? (sumStars / totalReviews).toFixed(1) : "0.0";
+            
+            const myReview = currentUser ? reviewsData.find(r => r.uid === currentUser.uid) : null;
+            let displayReviews = [...reviewsData];
+            if (myReview) {
+                displayReviews = displayReviews.filter(r => r.id !== myReview.id);
+            }
+            
+            let visibleReviewsList = isAllReviewsVisible ? displayReviews : displayReviews.slice(0, 1);
+
+            const renderStars = (rating) => {
+                let s = '';
+                for(let i=1; i<=5; i++) {
+                    let fill = i <= rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300 dark:text-slate-600";
+                    s += `<i data-lucide="star" class="w-3 h-3 ${fill}"></i>`;
+                }
+                return `<div class="flex gap-0.5">${s}</div>`;
+            };
+
+            html += `
+            <section id="sec-reviews" class="px-4 pb-16 max-w-5xl mx-auto relative z-20 section-optimize">
+                <div class="flex items-center gap-2 mb-6 reveal">
+                    <span class="w-1 h-6 bg-yellow-400 rounded-full"></span>
+                    <h3 class="text-lg md:text-xl font-black uppercase text-slate-900 dark:text-white tracking-tight">Đánh giá & Phản hồi</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <div class="md:col-span-4 bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-white/40 dark:border-white/5 rounded-2xl p-6 shadow-xl reveal">
+                        <div class="text-center mb-6">
+                            <div class="text-5xl font-black text-slate-900 dark:text-white mb-2">${avgRating}</div>
+                            <div class="flex justify-center gap-1 mb-2">
+                                ${Array(5).fill(0).map((_,i) => `<i data-lucide="star" class="w-5 h-5 ${i < Math.round(avgRating) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 dark:text-slate-600'}"></i>`).join('')}
+                            </div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">${totalReviews} lượt đánh giá</p>
+                        </div>
+                        <div class="space-y-2">
+                            ${[5,4,3,2,1].map(star => {
+                                const count = countStars[star];
+                                const percent = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
+                                return `
+                                <div class="flex items-center gap-3 text-xs">
+                                    <div class="w-8 font-bold text-slate-600 dark:text-slate-400 flex items-center gap-1">${star} <i data-lucide="star" class="w-3 h-3"></i></div>
+                                    <div class="flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-yellow-400 rounded-full" style="width: ${percent}%"></div>
+                                    </div>
+                                    <div class="w-6 text-right font-mono text-slate-400">${count}</div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                    <div class="md:col-span-8 space-y-6">
+                        <div class="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-white/40 dark:border-white/5 rounded-2xl p-6 shadow-xl reveal delay-100">
+                            ${isUserLoggedIn ? (myReview ? `
+                                <!-- ALREADY REVIEWED -->
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+                                        <h4 class="text-xs font-black uppercase text-slate-500">Đánh giá của bạn</h4>
+                                        <div class="flex gap-2">
+                                            <button onclick="window.deleteReview('${myReview.id}')" class="text-xs text-red-500 font-bold hover:underline">Xóa</button>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <img src="${myReview.avatar}" class="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-white/10 shrink-0">
+                                        <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <div class="font-bold text-slate-900 dark:text-white text-sm">${myReview.name}</div>
+                                                ${renderStars(myReview.rating)}
+                                            </div>
+                                            <p class="text-sm text-slate-600 dark:text-slate-300">${myReview.comment}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : `
+                                <!-- REVIEW FORM -->
+                                <form onsubmit="window.submitReview(event)" class="space-y-4">
+                                    <div class="flex flex-col sm:flex-row items-center gap-4 justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <img src="${currentUser.photoURL}" class="w-10 h-10 rounded-full border border-slate-200 dark:border-white/10">
+                                            <div>
+                                                <div class="text-xs font-bold text-slate-900 dark:text-white">${currentUser.displayName}</div>
+                                                <div class="text-[10px] text-slate-500">Chia sẻ trải nghiệm của bạn</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-1 bg-slate-100 dark:bg-black/20 p-2 rounded-xl" id="star-input-container">
+                                            ${[1,2,3,4,5].map(i => `
+                                                <button type="button" onclick="window.setReviewRating(${i})" class="transition hover:scale-110">
+                                                    <i data-lucide="star" class="w-6 h-6 ${i <= currentReviewRating ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400'}"></i>
+                                                </button>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                    <textarea id="review-comment" required rows="3" placeholder="Nhập bình luận của bạn tại đây..." class="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-sm focus:border-blue-500 outline-none transition"></textarea>
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="px-6 py-2 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg transition">Gửi đánh giá</button>
+                                    </div>
+                                </form>
+                            `) : `
+                                <div class="text-center py-6">
+                                    <div class="w-12 h-12 bg-slate-100 dark:bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
+                                        <i data-lucide="lock" class="w-6 h-6"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300 mb-4">Bạn cần đăng nhập để viết đánh giá</p>
+                                    <button onclick="window.login()" class="px-6 py-2 bg-blue-600 text-white rounded-full text-xs font-bold uppercase hover:bg-blue-500 transition shadow-lg shadow-blue-500/30">Đăng nhập với Google</button>
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- PUBLIC REVIEWS LIST -->
+                        <div class="space-y-4 max-h-[800px] overflow-y-auto custom-scroll pr-2">
+                            ${displayReviews.length === 0 ? `<p class="text-center text-slate-400 text-xs italic py-4">Chưa có đánh giá nào khác.</p>` : ''}
+                            ${visibleReviewsList.map(r => {
+                                const timeStr = r.timestamp ? new Date(r.timestamp.seconds * 1000).toLocaleDateString('vi-VN') : '';
+                                return `
+                                <div class="bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/5 p-4 rounded-xl flex gap-4 reveal">
+                                    <img src="${r.avatar}" class="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-white/10 shrink-0">
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h4 class="text-xs font-bold text-slate-900 dark:text-white mb-0.5">${r.name}</h4>
+                                                ${renderStars(r.rating)}
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-[9px] text-slate-400 font-medium">${timeStr}</span>
+                                                ${isAdmin ? `<button onclick="window.deleteReview('${r.id}')" class="text-[9px] text-red-500 hover:underline mt-1">Xóa (Admin)</button>` : ''}
+                                            </div>
+                                        </div>
+                                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed break-words">${r.comment}</p>
+                                    </div>
+                                </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <!-- VIEW ALL BUTTON -->
+                        ${displayReviews.length > 1 ? `
+                            <div class="text-center">
+                                <button onclick="window.toggleAllReviews()" class="px-5 py-2 rounded-full border border-slate-300 dark:border-white/20 text-xs font-bold uppercase text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition">
+                                    ${isAllReviewsVisible ? 'Thu gọn' : `Xem tất cả (${displayReviews.length})`}
+                                </button>
+                            </div>
+                        ` : ''}
+
+                    </div>
+                </div>
+            </section>`;
+
             let displayUnits = [...(configData.units || [])];
             if (userLocation) {
                 displayUnits.forEach(u => u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, parseFloat(u.lat), parseFloat(u.lng)) : 99999);
@@ -890,7 +1178,7 @@
 
             if (displayUnits.length > 0) {
                 html += `
-                <div class="w-full max-w-6xl mx-auto px-4 mb-16">
+                <div id="sec-network" class="w-full max-w-6xl mx-auto px-4 mb-16 section-optimize">
                     <div class="flex flex-col items-center justify-center text-center mb-6 gap-2 reveal">
                         <span class="p-2 bg-blue-50 dark:bg-white/5 text-blue-600 rounded-full mb-1"><i data-lucide="map" class="w-5 h-5"></i></span>
                         <h2 class="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
@@ -940,16 +1228,18 @@
             document.getElementById('main-content').innerHTML = html;
             lucide.createIcons();
             
-            const cards = document.querySelectorAll(".spotlight-card");
-            cards.forEach(card => {
-                card.onmousemove = e => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    card.style.setProperty("--mouse-x", `${x}px`);
-                    card.style.setProperty("--mouse-y", `${y}px`);
-                };
-            });
+            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                const cards = document.querySelectorAll(".spotlight-card");
+                cards.forEach(card => {
+                    card.onmousemove = e => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        card.style.setProperty("--mouse-x", `${x}px`);
+                        card.style.setProperty("--mouse-y", `${y}px`);
+                    };
+                });
+            }
             initScrollObserver();
         }
 
@@ -1279,7 +1569,10 @@
         if (localStorage.theme === 'dark') document.documentElement.classList.add('dark');
         lucide.createIcons();
 
-        window.addEventListener('load', () => { setTimeout(() => window.getUserLocation(), 1500); });
+        // Optimized load sequence
+        window.addEventListener('load', () => { 
+            setTimeout(() => window.getUserLocation(), 1500); 
+        });
     </script>
 </body>
 </html>
