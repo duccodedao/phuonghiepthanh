@@ -50,12 +50,12 @@
         }
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; overflow-x: hidden; scroll-behavior: smooth; }
+        /* Thêm scroll-behavior smooth vào html để đảm bảo trượt mượt */
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; overflow-x: hidden; }
         .dark body { background-color: #030712; color: #e2e8f0; }
         
-        /* Optimized rendering */
         .section-optimize { content-visibility: auto; contain-intrinsic-size: 500px; }
-
         .break-words { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
         .hyphens-auto { -webkit-hyphens: auto; hyphens: auto; }
 
@@ -75,7 +75,7 @@
                               linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
         }
 
-        /* Spotlight Effect CSS - ONLY ON DESKTOP (Fix Lag on Mobile) */
+        /* Spotlight Effect CSS - ONLY ON DESKTOP */
         .spotlight-card {
             position: relative; overflow: hidden;
             background: rgba(255, 255, 255, 0.65);
@@ -180,10 +180,7 @@
         </div>
     </div>
 
-    <!-- SIDETAB (NEW) -->
-    <button onclick="window.toggleSidetab()" class="fixed left-0 top-1/2 -translate-y-1/2 z-[800] bg-white/80 dark:bg-black/80 backdrop-blur border border-l-0 border-slate-200 dark:border-white/10 p-3 rounded-r-xl shadow-lg hover:scale-110 transition-transform group md:hidden">
-        <i data-lucide="menu" class="w-5 h-5 text-slate-800 dark:text-white"></i>
-    </button>
+    <!-- SIDETAB MENU (Đã xóa nút thừa) -->
     <div id="sidetab-overlay" onclick="window.toggleSidetab()" class="fixed inset-0 bg-black/50 z-[998] hidden backdrop-blur-sm transition-opacity"></div>
     <aside id="app-sidetab" class="app-sidetab fixed left-0 top-0 bottom-0 w-72 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.2)] z-[999] flex flex-col h-screen overflow-hidden">
         <div class="p-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
@@ -194,19 +191,20 @@
             <button onclick="window.toggleSidetab()" class="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
         <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-2">
-            <a href="#sec-services" onclick="window.handleSidetabClick()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium">
+            <!-- Đã thêm hàm handleSidetabClick có tham số để scroll mượt -->
+            <a href="#sec-services" onclick="window.handleSidetabClick(event, '#sec-services')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="layout-grid" class="w-5 h-5"></i> Dịch vụ & Tiện ích
             </a>
-            <a href="#sec-network" onclick="window.handleSidetabClick()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium">
+            <a href="#sec-network" onclick="window.handleSidetabClick(event, '#sec-network')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="map" class="w-5 h-5"></i> Mạng lưới hoạt động
             </a>
-            <a href="#footer-content" onclick="window.handleSidetabClick()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium">
+            <a href="#footer-content" onclick="window.handleSidetabClick(event, '#footer-content')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="info" class="w-5 h-5"></i> Hệ thống thông tin
             </a>
-            <a href="#sec-reviews" onclick="window.handleSidetabClick()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium">
+            <a href="#sec-reviews" onclick="window.handleSidetabClick(event, '#sec-reviews')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="star" class="w-5 h-5"></i> Đánh giá & Phản hồi
             </a>
-            <a href="#sec-feedback" onclick="window.handleSidetabClick()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium">
+            <a href="#sec-feedback" onclick="window.handleSidetabClick(event, '#sec-feedback')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="send" class="w-5 h-5"></i> Gửi góp ý
             </a>
         </div>
@@ -220,7 +218,9 @@
         <div class="w-full max-w-5xl backdrop-blur-xl bg-white/70 dark:bg-black/60 rounded-full border border-white/40 dark:border-white/10 shadow-lg shadow-black/5 px-4 py-2 flex justify-between items-center transition-all duration-300 hover:shadow-xl hover:bg-white/90 dark:hover:bg-black/80">
             
             <div class="flex items-center gap-3 cursor-pointer group flex-1 min-w-0">
-                <button onclick="window.toggleSidetab()" class="md:hidden mr-1 p-1"><i data-lucide="menu" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i></button>
+                <!-- Nút menu chính thức trên Header -->
+                <button onclick="window.toggleSidetab()" class="md:hidden mr-1 p-1"><i data-lucide="menu" class="w-6 h-6 text-slate-700 dark:text-slate-200"></i></button>
+                
                 <div class="w-10 h-10 shrink-0 flex items-center justify-center bg-transparent rounded-full group-hover:scale-110 transition-transform duration-300" onclick="location.reload()">
                     <img src="https://hdd.io.vn/img/bmassloadings.png" class="w-full h-full object-contain filter drop-shadow-md">
                 </div>
@@ -230,7 +230,7 @@
             </div>
 
             <div class="flex items-center gap-1 md:gap-2 shrink-0">
-                <!-- Sidetab Toggle Desktop (Optional, kept hidden usually) -->
+                <!-- Nút Menu chữ trên Desktop -->
                 <button onclick="window.toggleSidetab()" class="hidden md:flex items-center gap-2 px-3 py-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300 transition-colors">
                     <i data-lucide="menu" class="w-3.5 h-3.5"></i> Menu
                 </button>
@@ -560,11 +560,11 @@
             units: [], modules: [] 
         };
         let visitorData = [];
-        let reviewsData = []; // Store reviews
-        let currentReviewRating = 0; // Selected star rating
+        let reviewsData = []; 
+        let currentReviewRating = 0; 
         let currentVisitorFilter = 'all';
         let userLocation = null;
-        let isAllReviewsVisible = false; // Toggle state for "View All"
+        let isAllReviewsVisible = false;
 
         const presetIcons = [
             { id: 'layout-grid', label: 'Tất cả' }, { id: 'newspaper', label: 'Tin tức' }, { id: 'users', label: 'Nhân sự' },
@@ -589,10 +589,27 @@
             }
         };
 
-        window.handleSidetabClick = () => {
-            // Close sidetab on mobile when a link is clicked
+        // --- FIXED: SMOOTH SCROLL FUNCTION ---
+        window.handleSidetabClick = (e, targetId) => {
+            // Ngăn chặn hành động mặc định để xử lý scroll tay
+            if(e) e.preventDefault();
+            
+            // Đóng menu nếu đang ở mobile
             if (window.innerWidth < 768) {
                 window.toggleSidetab();
+            }
+
+            // Xử lý scroll mượt
+            const target = document.querySelector(targetId);
+            if (target) {
+                const headerOffset = 80; // Trừ chiều cao header
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
             }
         };
 
@@ -633,7 +650,6 @@
         async function trackVisitor(user = null) {
             try {
                 const details = await getDeviceDetails();
-                // Guest ID persistence
                 let visitorId = user ? user.uid : localStorage.getItem('site_v_id');
                 if (!visitorId) {
                     visitorId = 'g_' + Math.random().toString(36).substr(2, 9);
@@ -675,9 +691,7 @@
                 isAdmin = false;
                 document.getElementById('admin-toggle-btn').classList.add('hidden');
             }
-            
-            trackVisitor(user); // TRACKING ON AUTH
-
+            trackVisitor(user); 
             if(configData.title2) renderHomepage();
             if(isAdmin && configData.title2) {
                 fillAdminForm();
@@ -686,7 +700,7 @@
             }
         });
 
-        // --- LẮNG NGHE DỮ LIỆU TỪ FIREBASE ---
+        // --- FIREBASE LISTENERS ---
         onSnapshot(doc(db, "settings", "homepage"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -698,16 +712,13 @@
                 configData.modules = Array.isArray(data.modules) ? data.modules : [];
                 configData.units = Array.isArray(data.units) ? data.units : [];
             }
-            
             renderHomepage();
             if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
-            
             const loader = document.getElementById('global-loading');
             loader.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => loader.style.display = 'none', 700);
         });
 
-        // Lắng nghe dữ liệu Reviews
         onSnapshot(query(collection(db, "reviews"), orderBy("timestamp", "desc")), (snap) => {
             reviewsData = [];
             snap.forEach(d => reviewsData.push({ id: d.id, ...d.data() }));
@@ -718,7 +729,6 @@
         window.setReviewRating = (rating) => {
             currentReviewRating = rating;
             const starContainer = document.getElementById('star-input-container');
-            // Re-render only stars in container without full page reload
              starContainer.innerHTML = [1,2,3,4,5].map(i => `
                 <button type="button" onclick="window.setReviewRating(${i})" class="transition hover:scale-110">
                     <i data-lucide="star" class="w-6 h-6 ${i <= currentReviewRating ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400'}"></i>
@@ -734,7 +744,6 @@
             if (currentReviewRating === 0) { showToast("Vui lòng chọn số sao!", true); return; }
             const comment = document.getElementById('review-comment').value;
             try {
-                // Check duplicate is handled in UI (hiding form), but extra safety here
                 const existing = reviewsData.find(r => r.uid === currentUser.uid);
                 if (existing) {
                     await updateDoc(doc(db, "reviews", existing.id), {
@@ -764,20 +773,8 @@
 
         window.toggleAllReviews = () => {
             isAllReviewsVisible = !isAllReviewsVisible;
-            renderHomepage(); // Re-render to show/hide
+            renderHomepage();
         }
-
-        window.editMyReview = (rating, comment) => {
-            // Simply delete current (or set edit mode) - for simplicity here we assume re-submitting updates or we delete then re-add.
-            // Actually better to just show the form pre-filled.
-             if(confirm("Bạn muốn sửa lại đánh giá?")) {
-                 // Trigger UI to show form pre-filled by removing the visual block for a moment or handle via state
-                 // For now, let's just scroll to form and populate values if we were to implementing full edit mode.
-                 // A simple way: Delete old one and let user re-write
-                 // Better way implemented in submitReview: updateDoc.
-                 // So UI just needs to show form.
-             }
-        };
 
         // --- DISTANCE LOGIC ---
         function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -793,7 +790,7 @@
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-                    trackVisitor(currentUser); // Update location in tracking
+                    trackVisitor(currentUser);
                     renderHomepage(); 
                     showToast("Đã cập nhật vị trí chính xác!", false);
                 },
@@ -1024,24 +1021,12 @@
             });
             let avgRating = totalReviews > 0 ? (sumStars / totalReviews).toFixed(1) : "0.0";
             
-            // Check if user has already reviewed
             const myReview = currentUser ? reviewsData.find(r => r.uid === currentUser.uid) : null;
-            // Filter list to separate 'my review' from others if needed, but requirements say 1 review per user.
-            
-            // Display logic: 
-            // - Always separate "My Review" to top if exists.
-            // - If !isAllReviewsVisible, show only 1 (preferably not mine if mine is shown separately, or just latest).
-            // Let's stick to simple logic:
-            // 1. My Review block (edit/delete).
-            // 2. Public Reviews list (limit 1 or all).
-
             let displayReviews = [...reviewsData];
-            // Remove my review from general list to avoid duplication if I show it in "My Review" section
             if (myReview) {
                 displayReviews = displayReviews.filter(r => r.id !== myReview.id);
             }
             
-            // Limit logic
             let visibleReviewsList = isAllReviewsVisible ? displayReviews : displayReviews.slice(0, 1);
 
             const renderStars = (rating) => {
@@ -1243,7 +1228,6 @@
             document.getElementById('main-content').innerHTML = html;
             lucide.createIcons();
             
-            // LAG FIX: Only attach mouse listeners on devices that support hover (Desktop)
             if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
                 const cards = document.querySelectorAll(".spotlight-card");
                 cards.forEach(card => {
