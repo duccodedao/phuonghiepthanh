@@ -198,14 +198,14 @@
             <a href="#sec-network" onclick="window.handleSidetabClick(event, '#sec-network')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="map" class="w-5 h-5"></i> Mạng lưới hoạt động
             </a>
-            <a href="#footer-content" onclick="window.handleSidetabClick(event, '#footer-content')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
-                <i data-lucide="info" class="w-5 h-5"></i> Hệ thống thông tin
+            <a href="#sec-faq" onclick="window.handleSidetabClick(event, '#sec-faq')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="help-circle" class="w-5 h-5"></i> Câu hỏi thường gặp
             </a>
             <a href="#sec-reviews" onclick="window.handleSidetabClick(event, '#sec-reviews')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
                 <i data-lucide="star" class="w-5 h-5"></i> Đánh giá & Phản hồi
             </a>
-            <a href="#sec-feedback" onclick="window.handleSidetabClick(event, '#sec-feedback')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
-                <i data-lucide="send" class="w-5 h-5"></i> Gửi góp ý
+            <a href="#footer-content" onclick="window.handleSidetabClick(event, '#footer-content')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition font-medium cursor-pointer">
+                <i data-lucide="info" class="w-5 h-5"></i> Hệ thống thông tin
             </a>
         </div>
         <div class="p-4 border-t border-slate-100 dark:border-white/5 text-center">
@@ -353,6 +353,15 @@
                 <div id="admin-unit-list" class="space-y-2"></div>
             </div>
 
+            <!-- FAQ List (Admin) -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Câu hỏi thường gặp (FAQ)</h4>
+                    <button onclick="window.openFaqModal()" class="w-6 h-6 flex items-center justify-center bg-blue-500/10 text-blue-600 rounded-md hover:bg-blue-500 hover:text-white transition"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
+                </div>
+                <div id="admin-faq-list" class="space-y-2"></div>
+            </div>
+
              <!-- Contacts -->
             <div class="space-y-4">
                 <h4 class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Liên hệ & Mạng xã hội</h4>
@@ -467,6 +476,28 @@
         </div>
     </div>
 
+    <!-- FAQ MODAL -->
+    <div id="modal-faq" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[320] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-lg shadow-2xl animate-slide-up border border-white/10 overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5">
+                <h3 class="font-bold text-sm uppercase tracking-widest" id="faq-modal-title">Quản lý FAQ</h3>
+                <button onclick="document.getElementById('modal-faq').classList.add('hidden')" class="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="faq-form" class="p-6 space-y-4">
+                <input type="hidden" id="faq-id">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Câu hỏi</label>
+                    <input type="text" id="faq-question" required placeholder="Ví dụ: Giờ làm việc..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-blue-500">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Câu trả lời</label>
+                    <textarea id="faq-answer" rows="4" required placeholder="Nội dung trả lời..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-blue-500"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold uppercase text-xs shadow-lg hover:shadow-xl hover:-translate-y-1 transition">Lưu FAQ</button>
+            </form>
+        </div>
+    </div>
+
     <!-- MODULE MODAL -->
     <div id="modal-module" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#0f172a] rounded-3xl w-full max-w-lg shadow-2xl animate-slide-up border border-white/10 overflow-hidden">
@@ -557,7 +588,7 @@
             title1: "", title2: "", slogan: "",
             announcement: { enabled: false, text: '' },
             socials: { facebook: '', zalo: '', phone: '', email: '' },
-            units: [], modules: [] 
+            units: [], modules: [], faqs: []
         };
         let visitorData = [];
         let reviewsData = []; 
@@ -697,6 +728,7 @@
                 fillAdminForm();
                 renderAdminModuleList();
                 renderAdminUnitList();
+                renderAdminFaqList();
             }
         });
 
@@ -711,9 +743,10 @@
                 configData.socials = data.socials || { facebook: '', zalo: '', phone: '', email: '' };
                 configData.modules = Array.isArray(data.modules) ? data.modules : [];
                 configData.units = Array.isArray(data.units) ? data.units : [];
+                configData.faqs = Array.isArray(data.faqs) ? data.faqs : [];
             }
             renderHomepage();
-            if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); }
+            if(isAdmin) { fillAdminForm(); renderAdminModuleList(); renderAdminUnitList(); renderAdminFaqList(); }
             const loader = document.getElementById('global-loading');
             loader.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => loader.style.display = 'none', 700);
@@ -1010,6 +1043,96 @@
                 html += `</div></div></section>`;
             }
 
+            let displayUnits = [...(configData.units || [])];
+            if (userLocation) {
+                displayUnits.forEach(u => u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, parseFloat(u.lat), parseFloat(u.lng)) : 99999);
+                displayUnits.sort((a, b) => {
+                    if(a.isMain && !b.isMain) return -1;
+                    if(!a.isMain && b.isMain) return 1;
+                    return a.distance - b.distance;
+                });
+            } else {
+                 displayUnits.sort((a, b) => (b.isMain ? 1 : 0) - (a.isMain ? 1 : 0));
+            }
+
+            if (displayUnits.length > 0) {
+                html += `
+                <div id="sec-network" class="w-full max-w-6xl mx-auto px-4 mb-16 section-optimize">
+                    <div class="flex flex-col items-center justify-center text-center mb-6 gap-2 reveal">
+                        <span class="p-2 bg-blue-50 dark:bg-white/5 text-blue-600 rounded-full mb-1"><i data-lucide="map" class="w-5 h-5"></i></span>
+                        <h2 class="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                             Mạng lưới hoạt động
+                        </h2>
+                        <button onclick="window.getUserLocation()" class="mt-2 px-4 py-1.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm text-slate-600 dark:text-slate-300 text-[9px] font-bold rounded-full flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-white/10 transition uppercase tracking-widest">
+                            <i data-lucide="navigation" class="w-3 h-3 text-blue-500"></i> Cập nhật vị trí mới nhất
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
+                
+                displayUnits.forEach((u, idx) => {
+                    let distBadge = '';
+                    if (userLocation && u.distance < 1000) {
+                        const distStr = u.distance < 1 
+                            ? `${Math.round(u.distance * 1000)}m` 
+                            : `${u.distance.toFixed(1)}km`;
+                        distBadge = `<span class="ml-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"><i data-lucide="ruler" class="w-3 h-3"></i> ${distStr}</span>`;
+                    }
+
+                    const mainBadge = u.isMain 
+                        ? `<span class="absolute top-3 right-3 text-[8px] font-black bg-slate-900 text-white dark:bg-white dark:text-black px-1.5 py-0.5 rounded uppercase tracking-wider z-10">C</span>` 
+                        : '';
+                    
+                    html += `
+                    <div class="spotlight-card reveal group p-4 rounded-2xl cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="window.openMapToUnit(${u.lat}, ${u.lng}, '${u.name}')">
+                        <div class="spotlight-bg"></div>
+                        ${mainBadge}
+                        <div class="relative z-10 flex items-start gap-3">
+                            <div class="shrink-0 w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="building-2" class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-white"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-xs md:text-sm mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center flex-wrap break-words">
+                                    ${u.name}
+                                    ${distBadge}
+                                </h4>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed font-medium break-words">${u.addr}</p>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+
+            // --- FAQ SECTION ---
+            if (configData.faqs && configData.faqs.length > 0) {
+                html += `
+                <section id="sec-faq" class="px-4 pb-16 relative z-20 section-optimize max-w-4xl mx-auto">
+                    <div class="flex items-center justify-center gap-2 mb-8 reveal">
+                        <span class="w-1 h-6 bg-rose-500 rounded-full"></span>
+                        <h3 class="text-lg md:text-xl font-black uppercase text-slate-900 dark:text-white tracking-tight">Câu hỏi thường gặp</h3>
+                    </div>
+                    <div class="space-y-3">`;
+                
+                configData.faqs.forEach((faq, idx) => {
+                    html += `
+                    <div class="reveal bg-white/60 dark:bg-white/5 border border-white/50 dark:border-white/5 backdrop-blur-sm rounded-2xl overflow-hidden transition-all hover:border-blue-300 dark:hover:border-blue-500/30 shadow-sm">
+                        <button onclick="window.toggleFaq('faq-${faq.id}')" class="w-full p-4 md:p-5 flex items-center justify-between gap-4 text-left group">
+                            <span class="font-bold text-sm md:text-base text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${faq.question}</span>
+                            <div id="icon-faq-${faq.id}" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center text-slate-500 transition-transform duration-300 shrink-0 group-hover:bg-blue-500 group-hover:text-white">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </div>
+                        </button>
+                        <div id="ans-faq-${faq.id}" class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-slate-50/50 dark:bg-black/20">
+                            <div class="p-5 pt-0 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-white/5 mt-2">
+                                ${faq.answer.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                html += `</div></section>`;
+            }
+
             // --- REVIEW SECTION ---
             let totalReviews = reviewsData.length;
             let sumStars = 0;
@@ -1163,67 +1286,6 @@
                     </div>
                 </div>
             </section>`;
-
-            let displayUnits = [...(configData.units || [])];
-            if (userLocation) {
-                displayUnits.forEach(u => u.distance = (u.lat && u.lng) ? haversineDistance(userLocation.lat, userLocation.lng, parseFloat(u.lat), parseFloat(u.lng)) : 99999);
-                displayUnits.sort((a, b) => {
-                    if(a.isMain && !b.isMain) return -1;
-                    if(!a.isMain && b.isMain) return 1;
-                    return a.distance - b.distance;
-                });
-            } else {
-                 displayUnits.sort((a, b) => (b.isMain ? 1 : 0) - (a.isMain ? 1 : 0));
-            }
-
-            if (displayUnits.length > 0) {
-                html += `
-                <div id="sec-network" class="w-full max-w-6xl mx-auto px-4 mb-16 section-optimize">
-                    <div class="flex flex-col items-center justify-center text-center mb-6 gap-2 reveal">
-                        <span class="p-2 bg-blue-50 dark:bg-white/5 text-blue-600 rounded-full mb-1"><i data-lucide="map" class="w-5 h-5"></i></span>
-                        <h2 class="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
-                             Mạng lưới hoạt động
-                        </h2>
-                        <button onclick="window.getUserLocation()" class="mt-2 px-4 py-1.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm text-slate-600 dark:text-slate-300 text-[9px] font-bold rounded-full flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-white/10 transition uppercase tracking-widest">
-                            <i data-lucide="navigation" class="w-3 h-3 text-blue-500"></i> Cập nhật vị trí mới nhất
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">`;
-                
-                displayUnits.forEach((u, idx) => {
-                    let distBadge = '';
-                    if (userLocation && u.distance < 1000) {
-                        const distStr = u.distance < 1 
-                            ? `${Math.round(u.distance * 1000)}m` 
-                            : `${u.distance.toFixed(1)}km`;
-                        distBadge = `<span class="ml-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"><i data-lucide="ruler" class="w-3 h-3"></i> ${distStr}</span>`;
-                    }
-
-                    const mainBadge = u.isMain 
-                        ? `<span class="absolute top-3 right-3 text-[8px] font-black bg-slate-900 text-white dark:bg-white dark:text-black px-1.5 py-0.5 rounded uppercase tracking-wider z-10">C</span>` 
-                        : '';
-                    
-                    html += `
-                    <div class="spotlight-card reveal group p-4 rounded-2xl cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="window.openMapToUnit(${u.lat}, ${u.lng}, '${u.name}')">
-                        <div class="spotlight-bg"></div>
-                        ${mainBadge}
-                        <div class="relative z-10 flex items-start gap-3">
-                            <div class="shrink-0 w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                                <i data-lucide="building-2" class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-white"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-bold text-slate-900 dark:text-white text-xs md:text-sm mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center flex-wrap break-words">
-                                    ${u.name}
-                                    ${distBadge}
-                                </h4>
-                                <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed font-medium break-words">${u.addr}</p>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                html += `</div></div>`;
-            }
 
             document.getElementById('main-content').innerHTML = html;
             lucide.createIcons();
@@ -1527,6 +1589,79 @@
                 showToast("Đã gửi tin nhắn góp ý!", false);
                 document.getElementById('contact-form').reset();
             } catch (err) { showToast("Lỗi khi gửi!", true); }
+        };
+
+        // --- FAQ LOGIC ---
+        window.toggleFaq = (id) => {
+            const content = document.getElementById(`ans-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+                content.classList.remove('opacity-100');
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+                content.classList.add('opacity-100');
+            }
+        };
+
+        // --- ADMIN FAQ FUNCTIONS ---
+        function renderAdminFaqList() {
+            const list = document.getElementById('admin-faq-list');
+            if(!list) return;
+            list.innerHTML = (configData.faqs || []).map(f => `
+                <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-transparent hover:border-blue-500/30 flex justify-between items-center group transition">
+                    <div class="min-w-0 pr-2">
+                        <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate">${f.question}</p>
+                        <p class="text-[10px] text-slate-500 truncate mt-0.5">${f.answer}</p>
+                    </div>
+                    <div class="flex gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.editFaq('${f.id}')" class="p-1.5 hover:bg-white hover:shadow-sm rounded text-blue-500"><i data-lucide="edit-2" class="w-3 h-3"></i></button>
+                        <button onclick="window.deleteFaq('${f.id}')" class="p-1.5 hover:bg-white hover:shadow-sm rounded text-red-500"><i data-lucide="trash" class="w-3 h-3"></i></button>
+                    </div>
+                </div>`).join('');
+            lucide.createIcons();
+        }
+
+        window.openFaqModal = () => {
+            document.getElementById('faq-form').reset();
+            document.getElementById('faq-id').value = '';
+            document.getElementById('faq-modal-title').innerText = 'Thêm FAQ mới';
+            document.getElementById('modal-faq').classList.remove('hidden');
+        };
+
+        window.editFaq = (id) => {
+            const f = configData.faqs.find(x => x.id === id); if(!f) return;
+            document.getElementById('faq-id').value = f.id;
+            document.getElementById('faq-question').value = f.question;
+            document.getElementById('faq-answer').value = f.answer;
+            document.getElementById('faq-modal-title').innerText = 'Chỉnh sửa FAQ';
+            document.getElementById('modal-faq').classList.remove('hidden');
+        };
+
+        window.deleteFaq = async (id) => {
+            if(!confirm("Xóa câu hỏi này?")) return;
+            const newFaqs = configData.faqs.filter(x => x.id !== id);
+            await updateFirestore({ faqs: newFaqs });
+            showToast("Đã xóa FAQ.");
+        };
+
+        document.getElementById('faq-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('faq-id').value || 'faq_' + Date.now();
+            const newFaq = {
+                id,
+                question: document.getElementById('faq-question').value,
+                answer: document.getElementById('faq-answer').value
+            };
+            let newFaqs = [...(configData.faqs || [])];
+            const idx = newFaqs.findIndex(x => x.id === id);
+            if(idx >= 0) newFaqs[idx] = newFaq; else newFaqs.push(newFaq);
+            
+            await updateFirestore({ faqs: newFaqs });
+            showToast("Đã lưu FAQ!");
+            document.getElementById('modal-faq').classList.add('hidden');
         };
 
         // --- UTILS ---
