@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh bạ Điện thoại Nội bộ</title>
+    <title>Danh bạ Điện thoại - Vĩnh Trạch Đông</title>
     
     <!-- Meta Tags -->
     <meta name="description" content="Hệ thống tra cứu danh bạ điện thoại nội bộ.">
@@ -41,7 +41,7 @@
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Avatar Gradient */
-        .avatar-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .avatar-gradient { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
     </style>
 </head>
 <body class="min-h-screen pb-24">
@@ -56,11 +56,11 @@
     <header class="sticky top-0 z-[100] glass px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                <i data-lucide="phone-book" class="w-6 h-6"></i>
+                <i data-lucide="contact" class="w-6 h-6"></i>
             </div>
             <div>
                 <h1 class="text-sm font-black uppercase tracking-wider">DANH BẠ ĐIỆN THOẠI</h1>
-                <span id="role-status" class="text-[10px] font-bold text-slate-400">GUEST MODE</span>
+                <span id="role-status" class="text-[10px] font-bold text-slate-400">CHẾ ĐỘ KHÁCH</span>
             </div>
         </div>
         <div class="flex items-center gap-2">
@@ -84,13 +84,13 @@
                 <!-- Search -->
                 <div class="relative w-full md:w-80 group">
                     <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-primary transition"></i>
-                    <input type="text" id="search-input" placeholder="Tìm tên hoặc số điện thoại..." 
+                    <input type="text" id="search-input" placeholder="Tìm tên, SĐT, chức vụ..." 
                         class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl focus:ring-2 ring-primary/50 outline-none shadow-sm text-sm font-medium transition">
                 </div>
                 
                 <!-- Category Filter -->
-                <div class="relative w-full md:w-56">
-                    <i data-lucide="building-2" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                <div class="relative w-full md:w-64">
+                    <i data-lucide="building" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
                     <select id="category-filter" onchange="window.filterDocs()" class="w-full pl-11 pr-8 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl focus:ring-2 ring-primary/50 outline-none shadow-sm text-sm font-medium appearance-none cursor-pointer">
                         <option value="all">Tất cả Phòng ban</option>
                         <!-- Options generated via JS -->
@@ -102,7 +102,7 @@
             <!-- Export Button -->
             <div class="flex gap-2 shrink-0">
                 <button onclick="window.exportToExcel()" class="flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-xs uppercase shadow-sm transition">
-                    <i data-lucide="sheet" class="w-4 h-4 text-green-600"></i> <span class="hidden sm:inline">Xuất Excel</span>
+                    <i data-lucide="table-2" class="w-4 h-4 text-green-600"></i> <span class="hidden sm:inline">Xuất Excel</span>
                 </button>
             </div>
         </div>
@@ -113,8 +113,8 @@
         </div>
         
         <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-400">
-            <i data-lucide="users" class="w-16 h-16 mb-4 opacity-50"></i>
-            <p class="font-medium">Không tìm thấy liên hệ nào.</p>
+            <i data-lucide="user-x" class="w-16 h-16 mb-4 opacity-50"></i>
+            <p class="font-medium">Không tìm thấy nhân sự nào.</p>
         </div>
 
     </main>
@@ -128,7 +128,7 @@
         
         <div class="p-4 border-b dark:border-white/5">
             <button onclick="window.openUploadModal()" class="w-full py-3 bg-primary text-white rounded-xl font-bold uppercase text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-blue-600 transition">
-                <i data-lucide="user-plus" class="w-4 h-4"></i> Thêm Liên Hệ Mới
+                <i data-lucide="user-plus" class="w-4 h-4"></i> Thêm Nhân sự Mới
             </button>
         </div>
 
@@ -156,18 +156,24 @@
             <form id="upload-form" class="p-6 space-y-4">
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Họ và Tên <span class="text-red-500">*</span></label>
-                    <input type="text" id="contact-name" required placeholder="Nguyễn Văn A" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    <div class="relative">
+                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                        <input type="text" id="contact-name" required placeholder="VD: Nguyễn Văn A" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    </div>
                 </div>
                 
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Số điện thoại <span class="text-red-500">*</span></label>
-                    <input type="tel" id="contact-phone" required placeholder="09xxxxxxxxx" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    <div class="relative">
+                        <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                        <input type="tel" id="contact-phone" required placeholder="VD: 0912345678" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Chức vụ</label>
-                        <input type="text" id="contact-position" placeholder="Nhân viên" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                        <input type="text" id="contact-position" placeholder="VD: Cán bộ..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Phòng ban</label>
@@ -177,7 +183,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Lưu Liên Hệ</button>
+                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-lg uppercase text-xs hover:bg-blue-600 transition">Lưu Thông Tin</button>
             </form>
         </div>
     </div>
@@ -195,12 +201,18 @@
                 
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Họ và Tên <span class="text-red-500">*</span></label>
-                    <input type="text" id="edit-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    <div class="relative">
+                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                        <input type="text" id="edit-name" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    </div>
                 </div>
                 
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Số điện thoại <span class="text-red-500">*</span></label>
-                    <input type="tel" id="edit-phone" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    <div class="relative">
+                        <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                        <input type="tel" id="edit-phone" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-white/5 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-primary">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -234,26 +246,26 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- CẤU HÌNH FIREBASE CỦA BẠN ---
-        // Hãy thay thế bằng config từ Firebase Console của bạn
+        // --- CẤU HÌNH FIREBASE CHÍNH XÁC ---
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.firebasestorage.app",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
+            authDomain: "profile-d1214.firebaseapp.com",
+            projectId: "profile-d1214",
+            storageBucket: "profile-d1214.firebasestorage.app",
+            messagingSenderId: "914980131889",
+            appId: "1:914980131889:web:72f8da15c42dbee671b110"
         };
         
         // --- DANH SÁCH PHÒNG BAN ---
         const DEPARTMENTS = [
-            "Ban Giám Đốc",
-            "Phòng Hành chính - Nhân sự",
-            "Phòng Kế toán",
-            "Phòng Kinh doanh",
-            "Phòng Kỹ thuật",
-            "Kho vận",
-            "Bảo vệ",
+            "Ban Lãnh Đạo",
+            "Văn phòng UBND",
+            "Đảng ủy",
+            "Công chức - Địa chính",
+            "Tư pháp - Hộ tịch",
+            "Văn hóa - Xã hội",
+            "Kế toán - Ngân sách",
+            "Quân sự - Công an",
             "Khác"
         ];
 
@@ -265,7 +277,7 @@
             db = getFirestore(app);
             provider = new GoogleAuthProvider();
         } catch (e) {
-            console.error("Lỗi khởi tạo Firebase. Hãy chắc chắn bạn đã điền đúng Config.", e);
+            console.error("Firebase config error:", e);
         }
 
         let currentUser = null;
@@ -295,8 +307,7 @@
             renderAuthUI();
             
             if (user) {
-                // Kiểm tra Admin (Cần tạo collection 'settings' doc 'admins' trên Firestore nếu muốn phân quyền kỹ)
-                // Ở đây mình tạm cho tất cả ai đăng nhập đều là admin để test, bạn có thể sửa logic này
+                // CHO PHÉP TẤT CẢ USER ĐĂNG NHẬP LÀM ADMIN (Để bạn dễ test)
                 isAdmin = true; 
                 
                 if (isAdmin) {
@@ -307,7 +318,7 @@
             } else {
                 isAdmin = false;
                 document.getElementById('admin-btn').classList.add('hidden');
-                document.getElementById('role-status').innerText = "KHÁCH";
+                document.getElementById('role-status').innerText = "CHẾ ĐỘ KHÁCH";
                 document.getElementById('role-status').classList.remove('text-primary');
             }
             renderContacts();
@@ -321,19 +332,19 @@
                     <div class="flex items-center gap-2 bg-white dark:bg-slate-800 p-1 pr-3 rounded-xl border dark:border-white/10 shadow-sm cursor-pointer" onclick="window.logout()">
                         <img src="${currentUser.photoURL}" class="w-8 h-8 rounded-lg">
                         <div class="hidden sm:block">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none">Hi,</p>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none">Chào,</p>
                             <p class="text-xs font-bold leading-none truncate max-w-[100px]">${currentUser.displayName}</p>
                         </div>
                         <i data-lucide="log-out" class="w-4 h-4 text-red-500 ml-1"></i>
                     </div>
                 `;
             } else {
-                container.innerHTML = `<button onclick="window.login()" class="px-5 py-2 bg-primary text-white rounded-xl font-bold text-xs uppercase shadow-lg hover:bg-blue-600 transition">Đăng nhập Admin</button>`;
+                container.innerHTML = `<button onclick="window.login()" class="px-5 py-2 bg-primary text-white rounded-xl font-bold text-xs uppercase shadow-lg hover:bg-blue-600 transition">Đăng nhập</button>`;
             }
             lucide.createIcons();
         }
 
-        window.login = () => signInWithPopup(auth, provider);
+        window.login = () => signInWithPopup(auth, provider).catch(e => showToast("Lỗi đăng nhập: " + e.message, true));
         window.logout = () => signOut(auth).then(() => location.reload());
         window.toggleAdminSidebar = () => document.getElementById('admin-sidebar').classList.toggle('open');
         window.toggleTheme = () => {
@@ -347,22 +358,35 @@
                 contacts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 document.getElementById('stat-total').innerText = contacts.length;
                 renderContacts();
+            }, (error) => {
+                console.error("Lỗi đọc dữ liệu:", error);
+                if(error.code === 'permission-denied') {
+                   // Không show toast lỗi này để tránh làm phiền nếu chưa setup rules
+                   console.log("Cần setup Firestore Rules: allow read, write: if true;");
+                }
             });
         }
 
-        window.filterDocs = renderContacts; // Bind filter change
+        window.filterDocs = renderContacts;
 
         function getInitials(name) {
-            return name.split(' ').pop().charAt(0).toUpperCase();
+            if (!name) return "?";
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+            return parts[parts.length - 1].charAt(0).toUpperCase();
         }
 
         function renderContacts() {
             const container = document.getElementById('doc-container');
-            const search = document.getElementById('search-input').value.toLowerCase();
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
             const catFilter = document.getElementById('category-filter').value;
             
             const filtered = contacts.filter(d => {
-                const matchSearch = d.name.toLowerCase().includes(search) || d.phone.includes(search);
+                const n = d.name ? d.name.toLowerCase() : "";
+                const p = d.phone ? d.phone.toLowerCase() : "";
+                const pos = d.position ? d.position.toLowerCase() : "";
+                
+                const matchSearch = n.includes(searchVal) || p.includes(searchVal) || pos.includes(searchVal);
                 const matchCat = catFilter === 'all' || (d.department || 'Khác') === catFilter;
                 return matchSearch && matchCat;
             });
@@ -382,31 +406,36 @@
                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border dark:border-white/5 shadow-sm hover:shadow-lg transition group relative overflow-hidden">
                     <div class="flex items-start gap-4">
                         <!-- Avatar -->
-                        <div class="w-14 h-14 rounded-full avatar-gradient flex items-center justify-center text-xl font-bold shadow-inner flex-shrink-0">
+                        <div class="w-14 h-14 rounded-full avatar-gradient flex items-center justify-center text-xl font-black shadow-inner flex-shrink-0 border-2 border-white dark:border-slate-700">
                             ${initial}
                         </div>
                         
                         <!-- Info -->
-                        <div class="flex-1 min-w-0">
+                        <div class="flex-1 min-w-0 pt-0.5">
                             <h4 class="text-base font-bold text-slate-800 dark:text-slate-100 truncate">${contact.name}</h4>
-                            <p class="text-xs font-semibold text-primary mb-1 truncate">${contact.position || 'Nhân viên'}</p>
-                            <div class="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-700 w-fit px-2 py-0.5 rounded-md">
-                                <i data-lucide="building-2" class="w-3 h-3"></i> ${contact.department || 'Khác'}
+                            
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-xs font-bold text-primary truncate max-w-[120px]" title="${contact.position}">
+                                    ${contact.position || 'Nhân viên'}
+                                </span>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold truncate">
+                                    ${contact.department || 'Khác'}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 pt-4 border-t dark:border-white/5 flex items-center justify-between">
-                        <a href="tel:${contact.phone}" class="flex items-center gap-2 text-lg font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition">
-                            <i data-lucide="phone-call" class="w-5 h-5 text-primary"></i> ${contact.phone}
+                        <a href="tel:${contact.phone}" class="flex items-center gap-2 text-lg font-black text-slate-700 dark:text-slate-200 hover:text-green-600 dark:hover:text-green-500 transition">
+                            <i data-lucide="phone-call" class="w-5 h-5 text-green-500"></i> ${contact.phone}
                         </a>
                         
                         <div class="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             ${isAdmin ? `
-                            <button onclick="window.openEditModal('${contactStr}')" class="p-2 text-indigo-500 bg-indigo-50 dark:bg-slate-700 hover:bg-indigo-100 rounded-lg transition" title="Sửa"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                            <button onclick="window.deleteContact('${contact.id}', '${contact.name}')" class="p-2 text-red-500 bg-red-50 dark:bg-slate-700 hover:bg-red-100 rounded-lg transition" title="Xóa"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="window.openEditModal('${contactStr}')" class="p-2 text-indigo-500 bg-indigo-50 dark:bg-slate-700/50 hover:bg-indigo-100 dark:hover:bg-slate-700 rounded-lg transition" title="Sửa"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                            <button onclick="window.deleteContact('${contact.id}', '${contact.name}')" class="p-2 text-red-500 bg-red-50 dark:bg-slate-700/50 hover:bg-red-100 dark:hover:bg-slate-700 rounded-lg transition" title="Xóa"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                             ` : ''}
-                            <button onclick="window.copyPhone('${contact.phone}')" class="p-2 text-slate-500 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 rounded-lg transition" title="Copy"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                            <button onclick="window.copyPhone('${contact.phone}')" class="p-2 text-slate-500 bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition" title="Sao chép SĐT"><i data-lucide="copy" class="w-4 h-4"></i></button>
                         </div>
                     </div>
                 </div>`;
@@ -429,6 +458,8 @@
 
         document.getElementById('upload-form').onsubmit = async (e) => {
             e.preventDefault();
+            if(!isAdmin) { showToast("Vui lòng đăng nhập!", true); return; }
+
             const name = document.getElementById('contact-name').value;
             const phone = document.getElementById('contact-phone').value;
             const position = document.getElementById('contact-position').value;
@@ -441,7 +472,7 @@
                     timestamp: new Date().toISOString(),
                     updatedBy: currentUser.email
                 });
-                showToast("Thêm liên hệ thành công!");
+                showToast("Thêm nhân sự thành công!");
                 window.closeModal('modal-upload');
                 document.getElementById('upload-form').reset();
             } catch (error) {
@@ -457,13 +488,15 @@
             document.getElementById('edit-id').value = data.id;
             document.getElementById('edit-name').value = data.name;
             document.getElementById('edit-phone').value = data.phone;
-            document.getElementById('edit-position').value = data.position;
-            document.getElementById('edit-department').value = data.department;
+            document.getElementById('edit-position').value = data.position || '';
+            document.getElementById('edit-department').value = data.department || 'Khác';
             document.getElementById('modal-edit').classList.remove('hidden');
         };
 
         document.getElementById('edit-form').onsubmit = async (e) => {
             e.preventDefault();
+            if(!isAdmin) return;
+
             const id = document.getElementById('edit-id').value;
             const name = document.getElementById('edit-name').value;
             const phone = document.getElementById('edit-phone').value;
@@ -486,11 +519,12 @@
 
         // 3. DELETE
         window.deleteContact = async (id, name) => {
-            if(confirm(`Xóa liên hệ "${name}"? Hành động này không thể hoàn tác.`)) {
+            if(!isAdmin) return;
+            if(confirm(`Bạn có chắc chắn muốn xóa "${name}" khỏi danh bạ?`)) {
                 setLoading(true);
                 try {
                     await deleteDoc(doc(db, "contacts", id));
-                    showToast("Đã xóa liên hệ!");
+                    showToast("Đã xóa nhân sự!");
                 } catch (error) {
                     showToast("Lỗi: " + error.message, true);
                 } finally {
@@ -501,7 +535,7 @@
 
         // --- UTILITIES ---
         window.copyPhone = (phone) => {
-            navigator.clipboard.writeText(phone).then(() => showToast("Đã sao chép số điện thoại!"));
+            navigator.clipboard.writeText(phone).then(() => showToast("Đã sao chép: " + phone));
         };
 
         window.exportToExcel = () => {
@@ -516,7 +550,7 @@
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Danh bạ");
-            XLSX.writeFile(wb, `Danh_Ba_Dien_Thoai_${Date.now()}.xlsx`);
+            XLSX.writeFile(wb, `Danh_Ba_VTD_${Date.now()}.xlsx`);
             showToast("Đã xuất file Excel!");
         };
 
