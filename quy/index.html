@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome (Icons) CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <!-- Chart.js (Biểu đồ) CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,24 +27,28 @@
         /* 1.1: Biến màu & Cài đặt chung */
         :root {
             --primary-color: #3b82f6;
-            --primary-glow: rgba(59, 130, 246, 0.4);
+            --primary-color-dark: #2563eb;
             --secondary-color: #10b981;
+            --secondary-color-dark: #059669;
             --danger-color: #ef4444;
+            --danger-color-dark: #dc2626;
             --warning-color: #f59e0b;
             
-            --light-bg: #f8f9fa;
-            --light-card-bg: rgba(255, 255, 255, 0.6);
-            --light-text: #212529;
-            --light-text-secondary: #6c757d;
-            --light-border: #dee2e6;
+            --light-bg: #f3f4f6;
+            --light-card-bg: rgba(255, 255, 255, 0.7);
+            --light-text: #1f2937;
+            --light-text-secondary: #6b7280;
+            --light-border: rgba(0, 0, 0, 0.08);
             
-            --dark-bg: #1a1a1a;
-            --dark-card-bg: rgba(40, 40, 40, 0.7);
-            --dark-text: #f8f9fa;
-            --dark-text-secondary: #adb5bd;
-            --dark-border: #495057;
+            --dark-bg: #111827;
+            --dark-card-bg: rgba(31, 41, 55, 0.6);
+            --dark-text: #f9fafb;
+            --dark-text-secondary: #9ca3af;
+            --dark-border: rgba(255, 255, 255, 0.1);
 
-            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
             --border-radius: 12px;
             --transition-speed: 0.3s;
         }
@@ -75,9 +79,19 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: linear-gradient(160deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            opacity: 0.1;
+            z-index: -1;
         }
 
         /* 1.2: Cấu trúc layout chính */
@@ -93,7 +107,7 @@
             -webkit-backdrop-filter: blur(20px);
             border-right: 1px solid var(--border-color);
             padding: 2rem 1.5rem;
-            transition: transform var(--transition-speed) ease;
+            transition: transform var(--transition-speed) ease, background-color var(--transition-speed) ease;
             z-index: 1000;
             flex-shrink: 0;
         }
@@ -121,9 +135,7 @@
             font-weight: 600;
             color: var(--text-color);
         }
-        .nav-menu ul {
-            list-style-type: none;
-        }
+        .nav-menu ul { list-style-type: none; }
         .nav-menu li a {
             display: flex;
             align-items: center;
@@ -135,15 +147,17 @@
             font-weight: 500;
             transition: all var(--transition-speed) ease;
         }
-        .nav-menu li a:hover, .nav-menu li a.active {
+        .nav-menu li a:hover {
+            background-color: var(--primary-color-dark);
+            color: white;
+            transform: translateX(5px);
+        }
+        .nav-menu li a.active {
             background-color: var(--primary-color);
             color: white;
-            box-shadow: 0 4px 10px var(--primary-glow);
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
         }
-        .nav-menu li a i {
-            width: 20px;
-            text-align: center;
-        }
+        .nav-menu li a i { width: 20px; text-align: center; }
         
         .sidebar-footer {
             position: absolute;
@@ -171,9 +185,8 @@
             background-color: var(--primary-color);
             color: white;
         }
-        .sidebar-toggle {
-            display: none;
-        }
+        .sidebar-toggle { display: none; }
+
 
         /* 1.4: Main content styling */
         .header {
@@ -183,8 +196,8 @@
             margin-bottom: 2rem;
         }
         .header h2 {
-            font-size: 2rem;
-            font-weight: 600;
+            font-size: 2.25rem;
+            font-weight: 700;
         }
         .header-actions button {
             padding: 0.75rem 1.5rem;
@@ -200,26 +213,15 @@
             align-items: center;
             gap: 0.5rem;
         }
-        .btn-income {
-            background-color: var(--secondary-color);
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
-        }
-        .btn-income:hover {
-            transform: translateY(-2px);
-            background-color: #059669;
-        }
-        .btn-expense {
-            background-color: var(--danger-color);
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
-        }
-        .btn-expense:hover {
-            transform: translateY(-2px);
-            background-color: #dc2626;
-        }
+        .btn-income { background-color: var(--secondary-color); box-shadow: var(--shadow-md); }
+        .btn-income:hover { transform: translateY(-3px); background-color: var(--secondary-color-dark); box-shadow: var(--shadow-lg); }
+        .btn-expense { background-color: var(--danger-color); box-shadow: var(--shadow-md); }
+        .btn-expense:hover { transform: translateY(-3px); background-color: var(--danger-color-dark); box-shadow: var(--shadow-lg); }
 
         /* 1.5: Components - Cards, Table, Forms, etc. */
-        .page { display: none; }
+        .page { display: none; animation: fadeIn 0.5s ease; }
         .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); }}
         
         .dashboard-grid {
             display: grid;
@@ -233,13 +235,10 @@
             padding: 1.5rem;
             border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-md);
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
-        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
         .card-header {
             display: flex;
             align-items: center;
@@ -256,15 +255,13 @@
             padding: 0.75rem;
             border-radius: 50%;
             color: white;
+            box-shadow: var(--shadow-sm);
         }
         .balance-icon { background-color: var(--primary-color); }
         .income-icon { background-color: var(--secondary-color); }
         .expense-icon { background-color: var(--danger-color); }
 
-        .card-body h2 {
-            font-size: 2.25rem;
-            font-weight: 700;
-        }
+        .card-body h2 { font-size: 2.25rem; font-weight: 700; }
         
         .content-block {
             background-color: var(--card-bg-color);
@@ -273,20 +270,14 @@
             padding: 2rem;
             border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-md);
             margin-top: 2rem;
         }
 
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
         th, td {
-            padding: 1rem;
+            padding: 1rem 1.25rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             white-space: nowrap;
@@ -294,373 +285,208 @@
         th {
             font-weight: 600;
             color: var(--text-secondary-color);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
         }
-        tbody tr {
-            transition: background-color var(--transition-speed) ease;
-        }
-        tbody tr:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        [data-theme="dark"] tbody tr:hover {
-             background-color: rgba(255,255,255,0.05);
-        }
+        tbody tr { transition: background-color var(--transition-speed) ease; }
+        tbody tr:nth-child(even) { background-color: rgba(0,0,0,0.02); }
+        [data-theme="dark"] tbody tr:nth-child(even) { background-color: rgba(255,255,255,0.02); }
+        tbody tr:hover { background-color: rgba(59, 130, 246, 0.1); }
         .type-income { color: var(--secondary-color); font-weight: 600; }
         .type-expense { color: var(--danger-color); font-weight: 600; }
-        
-        .chart-container {
-            position: relative;
-            height: 400px;
+        .action-btns button {
+            background: none; border: none; font-size: 1rem; cursor: pointer;
+            margin: 0 0.5rem; transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
+        .action-btns button:hover { transform: scale(1.2); }
+        .btn-edit { color: var(--warning-color); }
+        .btn-delete { color: var(--danger-color); }
+        
+        .chart-container { position: relative; height: 400px; }
 
         .filter-controls {
             display: flex;
             gap: 1rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
         .filter-controls select {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
+            background-color: var(--card-bg-color);
             color: var(--text-color);
+            font-size: 1rem;
             transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
         .filter-controls select:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px var(--primary-glow);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
         }
 
         /* 1.6: Timeline (Lịch sử chỉnh sửa) */
-        .timeline {
-            list-style-type: none;
-            position: relative;
-        }
+        .timeline { list-style-type: none; position: relative; padding-left: 20px; }
         .timeline:before {
-            content: ' ';
-            background: var(--border-color);
-            display: inline-block;
-            position: absolute;
-            left: 15px;
-            width: 2px;
-            height: 100%;
-            z-index: 0;
+            content: ''; background: var(--border-color); display: inline-block;
+            position: absolute; left: 0; width: 2px; height: 100%; z-index: 0;
         }
-        .timeline-item {
-            margin: 20px 0;
-            padding-left: 45px;
-            position: relative;
+        .timeline-item { margin: 30px 0; padding-left: 40px; position: relative; }
+        .timeline-item .timeline-icon {
+            background: var(--bg-color); display: flex; align-items: center; justify-content: center;
+            position: absolute; border-radius: 50%; border: 3px solid;
+            left: -14px; top: 0; width: 30px; height: 30px; z-index: 1; color: white;
         }
-        .timeline-item:before {
-            content: ' ';
-            background: var(--bg-color);
-            display: inline-block;
-            position: absolute;
-            border-radius: 50%;
-            border: 3px solid var(--primary-color);
-            left: 6px;
-            width: 20px;
-            height: 20px;
-            z-index: 1;
-            box-shadow: 0 0 10px var(--primary-glow);
-        }
-        .timeline-item.add:before { border-color: var(--secondary-color); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);}
-        .timeline-item.edit:before { border-color: var(--warning-color); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);}
-        .timeline-item.delete:before { border-color: var(--danger-color); box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);}
+        .timeline-item.add .timeline-icon { border-color: var(--secondary-color); background-color: var(--secondary-color); }
+        .timeline-item.edit .timeline-icon { border-color: var(--warning-color); background-color: var(--warning-color); }
+        .timeline-item.delete .timeline-icon { border-color: var(--danger-color); background-color: var(--danger-color); }
         .timeline-content {
-            background-color: var(--bg-color);
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
+            background-color: var(--bg-color); padding: 1.25rem; border-radius: var(--border-radius);
+            border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
         }
-        .timeline-content p { margin: 0; }
-        .timeline-content span {
-            font-size: 0.8rem;
-            color: var(--text-secondary-color);
-            margin-top: 0.5rem;
-            display: inline-block;
-        }
+        .timeline-content p { margin: 0 0 0.5rem 0; font-weight: 500; }
+        .timeline-content span { font-size: 0.8rem; color: var(--text-secondary-color); }
+
 
         /* 1.7: Modal styling */
         .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1001; opacity: 0; visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .modal.active { opacity: 1; visibility: visible; }
         .modal-content {
-            background-color: var(--card-bg-color);
-            backdrop-filter: blur(15px);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 500px;
+            background-color: var(--card-bg-color); backdrop-filter: blur(20px);
+            padding: 2.5rem; border-radius: var(--border-radius);
+            width: 90%; max-width: 500px;
             transform: scale(0.95) translateY(20px);
             transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
         }
-        .modal.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
+        .modal.active .modal-content { transform: scale(1) translateY(0); }
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);
         }
-        .modal-header h3 { font-size: 1.5rem; }
+        .modal-header h3 { font-size: 1.5rem; font-weight: 600; }
         .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.75rem;
-            cursor: pointer;
-            color: var(--text-color);
-            transition: transform var(--transition-speed) ease;
+            background: none; border: none; font-size: 1.75rem; cursor: pointer;
+            color: var(--text-secondary-color); transition: color 0.3s ease, transform 0.3s ease;
         }
-        .close-modal:hover {
-            transform: rotate(90deg);
-        }
+        .close-modal:hover { color: var(--text-color); transform: rotate(90deg); }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: calc(var(--border-radius) - 4px);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: 1rem;
-            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color);
+            border-radius: calc(var(--border-radius) - 4px); background-color: var(--bg-color);
+            color: var(--text-color); font-size: 1rem; transition: all 0.3s ease;
         }
         .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px var(--primary-glow);
+            outline: none; border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
         }
-        #sub-content-container .form-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        #sub-content-container .form-group { display: flex; align-items: center; gap: 0.5rem; }
         .btn-remove-sub-content {
-            background: none;
-            border: none;
-            color: var(--danger-color);
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: color var(--transition-speed) ease;
+            background: none; border: none; color: var(--danger-color);
+            cursor: pointer; font-size: 1.2rem; transition: color 0.3s ease;
         }
-        .btn-remove-sub-content:hover {
-            color: #dc2626;
-        }
+        .btn-remove-sub-content:hover { color: var(--danger-color-dark); }
         #btn-add-sub-content {
-            background: none;
-            border: 2px dashed var(--primary-color);
-            color: var(--primary-color);
-            padding: 0.5rem;
-            width: 100%;
-            border-radius: calc(var(--border-radius) - 4px);
-            cursor: pointer;
-            margin-top: 0.5rem;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            background: none; border: 2px dashed var(--border-color); color: var(--text-secondary-color);
+            padding: 0.75rem; width: 100%; border-radius: calc(var(--border-radius) - 4px);
+            cursor: pointer; margin-top: 0.5rem; transition: all 0.3s ease;
         }
-        #btn-add-sub-content:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
+        #btn-add-sub-content:hover { border-color: var(--primary-color); color: var(--primary-color); }
         .btn-save {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: calc(var(--border-radius) - 4px);
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: background-color var(--transition-speed) ease;
+            width: 100%; padding: 0.9rem; border: none; border-radius: calc(var(--border-radius) - 4px);
+            color: white; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; margin-top: 1rem; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
         }
-        .btn-save:disabled {
-            background-color: var(--text-secondary-color);
-            cursor: not-allowed;
+        .btn-save .spinner {
+            width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.5);
+            border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite;
+            display: none;
         }
+        .btn-save.loading .spinner { display: block; }
+        .btn-save.loading .btn-text { display: none; }
+        .btn-save:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+        .btn-confirm, .btn-cancel {
+            padding: 0.6rem 1.2rem; border: none; border-radius: var(--border-radius);
+            font-weight: 500; cursor: pointer;
+        }
+        .btn-confirm { background-color: var(--danger-color); color: white; }
+        .btn-cancel { background-color: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); }
+
 
         /* 1.8: Loading & Toast Notifications */
         #loader-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); display: flex;
+            justify-content: center; align-items: center; z-index: 9999;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
         }
-        #loader-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        #loader-overlay.active { opacity: 1; visibility: visible; }
         .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary-color);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
+            border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color);
+            border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         #toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            position: fixed; top: 20px; right: 20px; z-index: 10000;
+            display: flex; flex-direction: column; gap: 10px;
         }
         .toast {
-            padding: 15px 20px;
-            border-radius: var(--border-radius);
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 0;
-            transform: translateX(100%);
-            animation: slideIn 0.5s forwards;
+            padding: 15px 20px; border-radius: var(--border-radius); color: white;
+            box-shadow: var(--shadow-lg); opacity: 0; transform: translateX(120%);
+            animation: slideIn 0.5s forwards; display: flex; align-items: center; gap: 10px;
         }
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+        @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
         .toast.success { background-color: var(--secondary-color); }
         .toast.error { background-color: var(--danger-color); }
         .toast.info { background-color: var(--primary-color); }
-        .toast.fade-out {
-            animation: fadeOut 0.5s forwards;
-        }
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateX(120%);
-            }
-        }
+        .toast.fade-out { animation: fadeOut 0.5s 0.3s forwards; }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(120%); } }
         
-        /* 1.9: Styled Scrollbar */
-        .main-content::-webkit-scrollbar {
-            width: 8px;
+        /* 1.9: Responsive Design */
+        #mobile-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 999;
+            opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease;
         }
-        .main-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .main-content::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 10px;
-        }
-        .main-content::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
+        #mobile-overlay.active { opacity: 1; visibility: visible; }
 
-        /* 1.10: Responsive Design */
         @media (max-width: 992px) {
             .sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                height: 100%;
+                position: fixed; left: 0; top: 0; height: 100%;
                 transform: translateX(-100%);
-                box-shadow: 10px 0 20px rgba(0,0,0,0.2);
             }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            .main-content {
-                padding: 1.5rem;
-            }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { padding: 1.5rem; }
             .sidebar-toggle {
-                display: block;
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                z-index: 1001;
-                background-color: var(--card-bg-color);
-                border: 1px solid var(--border-color);
-                width: 44px;
-                height: 44px;
-                border-radius: 50%;
-                cursor: pointer;
-                transition: all var(--transition-speed) ease;
-                padding: 0;
-            }
-            .sidebar-toggle .bar {
-                display: block;
-                width: 22px;
-                height: 2px;
-                margin: 4px auto;
-                background-color: var(--text-color);
-                transition: all 0.3s ease-in-out;
-            }
-            .sidebar-toggle.active .bar:nth-child(1) {
-                transform: translateY(6px) rotate(45deg);
-            }
-            .sidebar-toggle.active .bar:nth-child(2) {
-                opacity: 0;
-            }
-            .sidebar-toggle.active .bar:nth-child(3) {
-                transform: translateY(-6px) rotate(-45deg);
+                display: block; position: fixed; top: 20px; left: 20px;
+                z-index: 1001; background-color: var(--card-bg-color);
+                border: 1px solid var(--border-color); width: 45px; height: 45px;
+                border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+                box-shadow: var(--shadow-md); display: flex; align-items: center; justify-content: center;
             }
         }
-        @media (max-width: 576px) {
+        @media (max-width: 768px) {
             .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
+                flex-direction: column; align-items: flex-start; gap: 1rem;
             }
-            .header-actions {
-                width: 100%;
-                display: flex;
-            }
-            .header-actions button {
-                flex-grow: 1;
-                margin-left: 0;
-            }
+            .header-actions { width: 100%; display: flex; margin-left: 0; }
+            .header-actions button { flex-grow: 1; }
             .header-actions button:first-child { margin-right: 0.5rem; }
-            .main-content { padding: 1rem; margin-top: 70px; }
+            .main-content { padding: 1rem; margin-top: 60px; }
             .filter-controls { flex-direction: column; }
-            th, td { white-space: normal; }
         }
 
     </style>
@@ -670,9 +496,7 @@
     <!-- PHẦN 2: HTML STRUCTURE -->
 
     <!-- Loader -->
-    <div id="loader-overlay">
-        <div class="loader"></div>
-    </div>
+    <div id="loader-overlay"><div class="loader"></div></div>
     
     <!-- Toast Notifications -->
     <div id="toast-container"></div>
@@ -695,19 +519,16 @@
             </div>
             <div class="sidebar-footer">
                 <div class="theme-switcher">
-                    <i id="theme-light" class="fa-solid fa-sun active"></i>
-                    <i id="theme-dark" class="fa-solid fa-moon"></i>
+                    <i id="theme-light" class="fa-solid fa-sun active" title="Giao diện sáng"></i>
+                    <i id="theme-dark" class="fa-solid fa-moon" title="Giao diện tối"></i>
                 </div>
             </div>
         </nav>
 
         <!-- Main Content -->
         <main class="main-content">
-            <button class="sidebar-toggle">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
+            <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+            <div id="mobile-overlay"></div>
             
             <!-- Page: Dashboard -->
             <div id="dashboard-page" class="page active">
@@ -720,48 +541,24 @@
                 </div>
                 <div class="dashboard-grid">
                     <div class="stat-card">
-                        <div class="card-header">
-                            <h3>Số dư hiện tại</h3>
-                            <i class="fa-solid fa-scale-balanced balance-icon"></i>
-                        </div>
-                        <div class="card-body">
-                            <h2 id="current-balance">0 VND</h2>
-                        </div>
+                        <div class="card-header"><h3>Số dư hiện tại</h3><i class="fa-solid fa-scale-balanced balance-icon"></i></div>
+                        <div class="card-body"><h2 id="current-balance">0 VND</h2></div>
                     </div>
                     <div class="stat-card">
-                        <div class="card-header">
-                            <h3>Tổng nhập</h3>
-                            <i class="fa-solid fa-arrow-down income-icon"></i>
-                        </div>
-                        <div class="card-body">
-                            <h2 id="total-income">0 VND</h2>
-                        </div>
+                        <div class="card-header"><h3>Tổng nhập</h3><i class="fa-solid fa-arrow-down income-icon"></i></div>
+                        <div class="card-body"><h2 id="total-income">0 VND</h2></div>
                     </div>
                     <div class="stat-card">
-                        <div class="card-header">
-                            <h3>Tổng xuất</h3>
-                            <i class="fa-solid fa-arrow-up expense-icon"></i>
-                        </div>
-                        <div class="card-body">
-                            <h2 id="total-expense">0 VND</h2>
-                        </div>
+                        <div class="card-header"><h3>Tổng xuất</h3><i class="fa-solid fa-arrow-up expense-icon"></i></div>
+                        <div class="card-body"><h2 id="total-expense">0 VND</h2></div>
                     </div>
                 </div>
                 <div class="content-block">
                     <h3>Giao dịch gần đây</h3>
                     <div class="table-responsive">
                         <table id="recent-transactions-table">
-                            <thead>
-                                <tr>
-                                    <th>Loại</th>
-                                    <th>Nội dung</th>
-                                    <th>Số tiền</th>
-                                    <th>Ngày</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dữ liệu sẽ được chèn vào đây bởi JS -->
-                            </tbody>
+                            <thead><tr><th>Loại</th><th>Nội dung</th><th>Số tiền</th><th>Ngày</th></tr></thead>
+                            <tbody><!-- Data here --></tbody>
                         </table>
                     </div>
                 </div>
@@ -773,18 +570,8 @@
                 <div class="content-block">
                      <div class="table-responsive">
                         <table id="all-transactions-table">
-                            <thead>
-                                <tr>
-                                    <th>Loại</th>
-                                    <th>Nội dung</th>
-                                    <th>Người thực hiện</th>
-                                    <th>Số tiền</th>
-                                    <th>Ngày giờ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dữ liệu sẽ được chèn vào đây bởi JS -->
-                            </tbody>
+                            <thead><tr><th>Loại</th><th>Nội dung</th><th>Người thực hiện</th><th>Số tiền</th><th>Ngày giờ</th><th>Hành động</th></tr></thead>
+                            <tbody><!-- Data here --></tbody>
                         </table>
                     </div>
                 </div>
@@ -795,94 +582,72 @@
                 <div class="header"><h2>Thống kê & Biểu đồ</h2></div>
                 <div class="content-block">
                     <div class="filter-controls">
-                        <select id="stats-month-filter">
-                            <!-- Options sẽ được chèn bởi JS -->
-                        </select>
-                        <select id="stats-year-filter">
-                            <!-- Options sẽ được chèn bởi JS -->
-                        </select>
+                        <select id="stats-month-filter"><!-- Options here --></select>
+                        <select id="stats-year-filter"><!-- Options here --></select>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="stats-chart"></canvas>
-                    </div>
+                    <div class="chart-container"><canvas id="stats-chart"></canvas></div>
                 </div>
             </div>
             
             <!-- Page: Activity Logs -->
             <div id="logs-page" class="page">
-                <div class="header"><h2>Lịch sử chỉnh sửa</h2></div>
+                <div class="header"><h2>Lịch sử hoạt động</h2></div>
                 <div class="content-block">
-                    <ul class="timeline" id="logs-timeline">
-                       <!-- Dữ liệu sẽ được chèn vào đây bởi JS -->
-                    </ul>
+                    <ul class="timeline" id="logs-timeline"><!-- Data here --></ul>
                 </div>
             </div>
 
         </main>
     </div>
 
-    <!-- Modal: Nhập quỹ -->
-    <div id="add-income-modal" class="modal">
+    <!-- Modals -->
+    <div id="add-transaction-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Thêm khoản nhập quỹ</h3>
+                <h3 id="modal-title">Thêm giao dịch</h3>
                 <button class="close-modal">&times;</button>
             </div>
-            <form id="income-form">
-                <div class="form-group">
-                    <label for="income-main-content">Nội dung chính</label>
-                    <input type="text" id="income-main-content" required>
+            <form id="transaction-form">
+                <input type="hidden" id="transaction-id">
+                <input type="hidden" id="transaction-type">
+                
+                <div class="form-group" id="form-group-main-content">
+                    <label for="transaction-main-content">Nội dung chính</label>
+                    <input type="text" id="transaction-main-content" required>
                 </div>
-                <div class="form-group">
-                    <label>Nội dung phụ</label>
-                    <div id="sub-content-container">
-                        <!-- Nội dung phụ sẽ được thêm vào đây -->
-                    </div>
+                <div class="form-group" id="form-group-sub-content">
+                    <label>Nội dung phụ (tùy chọn)</label>
+                    <div id="sub-content-container"></div>
                     <button type="button" id="btn-add-sub-content"><i class="fa-solid fa-plus"></i> Thêm dòng</button>
                 </div>
                 <div class="form-group">
-                    <label for="income-amount">Số tiền (VND)</label>
-                    <input type="text" id="income-amount" inputmode="numeric" required>
+                    <label for="transaction-amount">Số tiền (VND)</label>
+                    <input type="text" id="transaction-amount" inputmode="numeric" required>
                 </div>
                 <div class="form-group">
-                    <label for="income-person">Người nhập</label>
-                    <input type="text" id="income-person" required>
+                    <label for="transaction-person">Người thực hiện</label>
+                    <input type="text" id="transaction-person" required>
                 </div>
                 <div class="form-group">
-                    <label for="income-datetime">Ngày giờ</label>
-                    <input type="datetime-local" id="income-datetime" required>
+                    <label for="transaction-datetime">Ngày giờ</label>
+                    <input type="datetime-local" id="transaction-datetime" required>
                 </div>
-                <button type="submit" class="btn-save btn-income"><i class="fa-solid fa-save"></i> Lưu khoản nhập</button>
+                <button type="submit" class="btn-save">
+                    <span class="btn-text">Lưu Giao Dịch</span>
+                    <div class="spinner"></div>
+                </button>
             </form>
         </div>
     </div>
     
-    <!-- Modal: Xuất quỹ -->
-    <div id="add-expense-modal" class="modal">
+    <div id="delete-confirm-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Thêm khoản xuất quỹ</h3>
-                <button class="close-modal">&times;</button>
+            <div class="modal-header"><h3>Xác nhận xóa</h3><button class="close-modal">&times;</button></div>
+            <p>Bạn có chắc chắn muốn xóa giao dịch này không? Hành động này không thể hoàn tác.</p>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="btn-cancel-delete">Hủy</button>
+                <button class="btn-confirm" id="btn-confirm-delete">Xóa</button>
             </div>
-            <form id="expense-form">
-                <div class="form-group">
-                    <label for="expense-content">Nội dung xuất</label>
-                    <textarea id="expense-content" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="expense-amount">Số tiền (VND)</label>
-                    <input type="text" id="expense-amount" inputmode="numeric" required>
-                </div>
-                <div class="form-group">
-                    <label for="expense-person">Người xuất</label>
-                    <input type="text" id="expense-person" required>
-                </div>
-                <div class="form-group">
-                    <label for="expense-datetime">Ngày giờ</label>
-                    <input type="datetime-local" id="expense-datetime" required>
-                </div>
-                <button type="submit" class="btn-save btn-expense"><i class="fa-solid fa-save"></i> Lưu khoản xuất</button>
-            </form>
         </div>
     </div>
 
@@ -892,503 +657,490 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        // 3.1: Cấu hình Firebase
-        /*
-        * ❗️❗️❗️ CẢNH BÁO BẢO MẬT NGHIÊM TRỌNG ❗️❗️❗️
-        * Việc để lộ thông tin cấu hình Firebase (đặc biệt là apiKey và databaseURL) 
-        * trong code phía client (JavaScript chạy trên trình duyệt) là CỰC KỲ NGUY HIỂM.
-        * Bất kỳ ai cũng có thể xem mã nguồn trang của bạn và lấy những thông tin này để
-        * đọc, ghi, hoặc xóa toàn bộ dữ liệu trong database của bạn.
-        *
-        * GIẢI PHÁP ĐÚNG:
-        * 1. Thiết lập Firebase Rules: Cấu hình quy tắc bảo mật trong Firebase Console để
-        *    chỉ cho phép người dùng đã xác thực (logged-in users) mới có quyền truy cập dữ liệu.
-        * 2. Sử dụng Backend/Cloud Functions: Tạo một lớp trung gian (backend) để giao tiếp
-        *    với Firebase. Client sẽ gửi yêu cầu đến backend của bạn, và backend sẽ thực hiện
-        *    các thao tác với Firebase. Cách này giúp che giấu hoàn toàn API key.
-        *
-        * Vì đây là một project demo, tôi sẽ giữ lại cấu hình này để nó có thể hoạt động,
-        * nhưng TUYỆT ĐỐI KHÔNG SỬ DỤNG cách này cho bất kỳ dự án thực tế nào.
-        */
+        // 3.1: Cấu hình Firebase (Lấy từ project của bạn)
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
             authDomain: "profile-d1214.firebaseapp.com",
             projectId: "profile-d1214",
-            databaseURL: "https://profile-d1214-default-rtdb.asia-southeast1.firebasedatabase.app",
             storageBucket: "profile-d1214.firebasestorage.app",
             messagingSenderId: "914980131889",
             appId: "1:914980131889:web:72f8da15c42dbee671b110",
             measurementId: "G-C587M69LZW"
         };
         
-        // Khởi tạo Firebase
-        firebase.initializeApp(firebaseConfig);
+        try {
+            firebase.initializeApp(firebaseConfig);
+        } catch (e) {
+            console.error("Firebase initialization error:", e.message);
+            alert("Lỗi cấu hình Firebase. Vui lòng kiểm tra console.");
+            return;
+        }
+        
         const database = firebase.database();
         const transactionsRef = database.ref('transactions');
         const logsRef = database.ref('logs');
 
-        // 3.2: Khai báo biến và DOM elements
-        const loader = document.getElementById('loader-overlay');
-        const toastContainer = document.getElementById('toast-container');
-        
-        // State
-        let allTransactions = [];
-        let allLogs = [];
-        let statsChart;
-
-        // DOM Elements
-        const currentBalanceEl = document.getElementById('current-balance');
-        const totalIncomeEl = document.getElementById('total-income');
-        const totalExpenseEl = document.getElementById('total-expense');
-        const recentTransactionsTableBody = document.querySelector('#recent-transactions-table tbody');
-        const allTransactionsTableBody = document.querySelector('#all-transactions-table tbody');
-        const logsTimeline = document.getElementById('logs-timeline');
-        const monthFilter = document.getElementById('stats-month-filter');
-        const yearFilter = document.getElementById('stats-year-filter');
-
-        // 3.3: Hàm tiện ích (Utility Functions)
-        const showLoader = () => loader.classList.add('active');
-        const hideLoader = () => loader.classList.remove('active');
-
-        const showToast = (message, type = 'info') => {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            toastContainer.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('fade-out');
-                toast.addEventListener('animationend', () => toast.remove());
-            }, 3000);
-        };
-
-        const formatCurrencyVND = (number) => {
-            if (isNaN(number)) return '0 VND';
-            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
-        };
-        
-        const parseVND = (vndString) => {
-            return Number(String(vndString).replace(/[^0-9]/g, ''));
-        };
-        
-        // 3.4: Logic chính - Xử lý dữ liệu
-        const processData = (transactions) => {
-            allTransactions = transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+        // State & DOM Elements
+        const App = {
+            state: {
+                allTransactions: [],
+                allLogs: [],
+                statsChart: null,
+                transactionToDelete: null,
+            },
             
-            updateDashboard();
-            renderRecentTransactions();
-            renderAllTransactions();
-            populateFilterOptions();
-            updateChart();
-        };
+            ui: {
+                loader: document.getElementById('loader-overlay'),
+                toastContainer: document.getElementById('toast-container'),
+                currentBalance: document.getElementById('current-balance'),
+                totalIncome: document.getElementById('total-income'),
+                totalExpense: document.getElementById('total-expense'),
+                recentTransactionsTableBody: document.querySelector('#recent-transactions-table tbody'),
+                allTransactionsTableBody: document.querySelector('#all-transactions-table tbody'),
+                logsTimeline: document.getElementById('logs-timeline'),
+                monthFilter: document.getElementById('stats-month-filter'),
+                yearFilter: document.getElementById('stats-year-filter'),
+                // Modals & Forms
+                transactionModal: document.getElementById('add-transaction-modal'),
+                transactionForm: document.getElementById('transaction-form'),
+                modalTitle: document.getElementById('modal-title'),
+                subContentContainer: document.getElementById('sub-content-container'),
+                formGroupSubContent: document.getElementById('form-group-sub-content'),
+                deleteConfirmModal: document.getElementById('delete-confirm-modal'),
+                // Sidebar
+                sidebar: document.querySelector('.sidebar'),
+                mobileOverlay: document.getElementById('mobile-overlay'),
+            },
 
-        const updateDashboard = () => {
-            const totalIncome = allTransactions
-                .filter(t => t.type === 'income')
-                .reduce((sum, t) => sum + t.amount, 0);
-            
-            const totalExpense = allTransactions
-                .filter(t => t.type === 'expense')
-                .reduce((sum, t) => sum + t.amount, 0);
-            
-            const currentBalance = totalIncome - totalExpense;
+            // --- Utility Functions ---
+            utils: {
+                showLoader: () => App.ui.loader.classList.add('active'),
+                hideLoader: () => App.ui.loader.classList.remove('active'),
 
-            currentBalanceEl.textContent = formatCurrencyVND(currentBalance);
-            totalIncomeEl.textContent = formatCurrencyVND(totalIncome);
-            totalExpenseEl.textContent = formatCurrencyVND(totalExpense);
-        };
-
-        const renderRecentTransactions = () => {
-            recentTransactionsTableBody.innerHTML = '';
-            const recent = allTransactions.slice(0, 5);
-            if (recent.length === 0) {
-                recentTransactionsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Chưa có giao dịch nào.</td></tr>`;
-                return;
-            }
-            recent.forEach(t => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><span class="type-${t.type}">${t.type === 'income' ? 'Nhập' : 'Xuất'}</span></td>
-                    <td>${t.content.main || t.content}</td>
-                    <td class="type-${t.type}">${formatCurrencyVND(t.amount)}</td>
-                    <td>${new Date(t.datetime).toLocaleDateString('vi-VN')}</td>
-                `;
-                recentTransactionsTableBody.appendChild(row);
-            });
-        };
-        
-        const renderAllTransactions = () => {
-            allTransactionsTableBody.innerHTML = '';
-             if (allTransactions.length === 0) {
-                allTransactionsTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Chưa có giao dịch nào.</td></tr>`;
-                return;
-            }
-            allTransactions.forEach(t => {
-                const row = document.createElement('tr');
-                const subContentList = t.type === 'income' && t.content.sub && t.content.sub.length > 0
-                    ? `<ul>${t.content.sub.map(item => `<li>${item}</li>`).join('')}</ul>`
-                    : '';
-                const contentHtml = t.type === 'income' 
-                    ? `<strong>${t.content.main}</strong>${subContentList}`
-                    : t.content;
-
-                row.innerHTML = `
-                    <td><span class="type-${t.type}">${t.type === 'income' ? 'Nhập' : 'Xuất'}</span></td>
-                    <td>${contentHtml}</td>
-                    <td>${t.person}</td>
-                    <td class="type-${t.type}">${formatCurrencyVND(t.amount)}</td>
-                    <td>${new Date(t.datetime).toLocaleString('vi-VN')}</td>
-                `;
-                allTransactionsTableBody.appendChild(row);
-            });
-        };
-        
-        const renderLogs = (logs) => {
-            allLogs = logs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            logsTimeline.innerHTML = '';
-            if(allLogs.length === 0) {
-                // Thêm trạng thái rỗng cho timeline
-                logsTimeline.innerHTML = `<li style="list-style-type: none; text-align: center; color: var(--text-secondary-color);">Chưa có hoạt động nào được ghi nhận.</li>`;
-                return;
-            }
-            allLogs.forEach(log => {
-                const item = document.createElement('li');
-                item.className = `timeline-item ${log.action}`;
-                item.innerHTML = `
-                    <div class="timeline-content">
-                        <p>${log.details}</p>
-                        <span>${new Date(log.timestamp).toLocaleString('vi-VN')}</span>
-                    </div>
-                `;
-                logsTimeline.appendChild(item);
-            });
-        };
-        
-        // 3.5: Logic Thống kê & Biểu đồ
-        let hasPopulatedFilters = false;
-        const populateFilterOptions = () => {
-            if (hasPopulatedFilters) return; // Chỉ chạy 1 lần
-
-            const years = [...new Set(allTransactions.map(t => new Date(t.datetime).getFullYear()))].sort((a, b) => b - a);
-            if (years.length === 0) years.push(new Date().getFullYear());
-            yearFilter.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
-            
-            const months = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
-            monthFilter.innerHTML = `<option value="all">Cả năm</option>` + months.map((m, i) => `<option value="${i}">${m}</option>`).join('');
-            
-            // Set default to current month/year
-            const now = new Date();
-            yearFilter.value = now.getFullYear();
-            monthFilter.value = now.getMonth();
-            hasPopulatedFilters = true;
-        };
-        
-        const initializeChart = () => {
-            const ctx = document.getElementById('stats-chart').getContext('2d');
-            const chartTextColor = getComputedStyle(document.body).getPropertyValue('--text-color');
-            statsChart = new Chart(ctx, {
-                type: 'bar', // Changed to bar for better monthly/daily comparison
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: 'Tổng nhập',
-                            data: [],
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Tổng xuất',
-                            data: [],
-                             backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                            borderColor: 'rgba(239, 68, 68, 1)',
-                            borderWidth: 1
-                        }
-                    ]
+                showToast: (message, type = 'info') => {
+                    const iconMap = { success: 'fa-check-circle', error: 'fa-times-circle', info: 'fa-info-circle' };
+                    const toast = document.createElement('div');
+                    toast.className = `toast ${type}`;
+                    toast.innerHTML = `<i class="fa-solid ${iconMap[type]}"></i> ${message}`;
+                    App.ui.toastContainer.appendChild(toast);
+                    setTimeout(() => {
+                        toast.classList.add('fade-out');
+                        toast.addEventListener('animationend', () => toast.remove());
+                    }, 3000);
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: chartTextColor,
-                                callback: value => formatCurrencyVND(value)
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: chartTextColor,
+
+                formatCurrencyVND: (number) => isNaN(number) ? '0 VND' : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number),
+                parseVND: (vndString) => Number(String(vndString).replace(/[^0-9]/g, '')),
+                getCurrentDateTimeLocal: () => {
+                    const now = new Date();
+                    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                    return now.toISOString().slice(0, 16);
+                },
+            },
+
+            // --- Data Processing ---
+            data: {
+                processTransactions: (transactions) => {
+                    App.state.allTransactions = transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+                    App.render.dashboard();
+                    App.render.recentTransactions();
+                    App.render.allTransactions();
+                    App.chart.populateFilterOptions();
+                    App.chart.update();
+                },
+                processLogs: (logs) => {
+                    App.state.allLogs = logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    App.render.logs();
+                },
+            },
+
+            // --- Rendering Functions ---
+            render: {
+                dashboard: () => {
+                    const totalIncome = App.state.allTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+                    const totalExpense = App.state.allTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+                    const currentBalance = totalIncome - totalExpense;
+                    App.ui.currentBalance.textContent = App.utils.formatCurrencyVND(currentBalance);
+                    App.ui.totalIncome.textContent = App.utils.formatCurrencyVND(totalIncome);
+                    App.ui.totalExpense.textContent = App.utils.formatCurrencyVND(totalExpense);
+                },
+
+                recentTransactions: () => {
+                    const body = App.ui.recentTransactionsTableBody;
+                    body.innerHTML = '';
+                    const recent = App.state.allTransactions.slice(0, 5);
+                    if (recent.length === 0) {
+                        body.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 2rem;">Chưa có giao dịch nào.</td></tr>`;
+                        return;
+                    }
+                    recent.forEach(t => {
+                        const row = body.insertRow();
+                        row.innerHTML = `
+                            <td><span class="type-${t.type}">${t.type === 'income' ? 'Nhập' : 'Xuất'}</span></td>
+                            <td>${t.content.main || t.content}</td>
+                            <td class="type-${t.type}">${App.utils.formatCurrencyVND(t.amount)}</td>
+                            <td>${new Date(t.datetime).toLocaleDateString('vi-VN')}</td>`;
+                    });
+                },
+
+                allTransactions: () => {
+                    const body = App.ui.allTransactionsTableBody;
+                    body.innerHTML = '';
+                    if (App.state.allTransactions.length === 0) {
+                        body.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem;">Chưa có giao dịch nào.</td></tr>`;
+                        return;
+                    }
+                    App.state.allTransactions.forEach(t => {
+                        const contentHtml = t.type === 'income'
+                            ? `<strong>${t.content.main}</strong>${t.content.sub && t.content.sub.length > 0 ? `<br><small>${t.content.sub.join('; ')}</small>` : ''}`
+                            : t.content;
+                        const row = body.insertRow();
+                        row.innerHTML = `
+                            <td><span class="type-${t.type}">${t.type === 'income' ? 'Nhập' : 'Xuất'}</span></td>
+                            <td style="white-space: normal;">${contentHtml}</td>
+                            <td>${t.person}</td>
+                            <td class="type-${t.type}">${App.utils.formatCurrencyVND(t.amount)}</td>
+                            <td>${new Date(t.datetime).toLocaleString('vi-VN')}</td>
+                            <td class="action-btns">
+                                <button class="btn-edit" data-id="${t.id}" title="Chỉnh sửa"><i class="fa-solid fa-pencil"></i></button>
+                                <button class="btn-delete" data-id="${t.id}" title="Xóa"><i class="fa-solid fa-trash-can"></i></button>
+                            </td>`;
+                    });
+                },
+
+                logs: () => {
+                    const timeline = App.ui.logsTimeline;
+                    timeline.innerHTML = '';
+                    if (App.state.allLogs.length === 0) {
+                        timeline.innerHTML = `<li style="list-style: none; padding: 2rem 0; text-align: center;">Chưa có hoạt động nào.</li>`;
+                        return;
+                    }
+                    const iconMap = { add: 'fa-plus', edit: 'fa-pencil', delete: 'fa-trash-can' };
+                    App.state.allLogs.forEach(log => {
+                        const item = document.createElement('li');
+                        item.className = `timeline-item ${log.action}`;
+                        item.innerHTML = `
+                            <div class="timeline-icon"><i class="fa-solid ${iconMap[log.action] || 'fa-history'}"></i></div>
+                            <div class="timeline-content">
+                                <p>${log.details}</p>
+                                <span>${new Date(log.timestamp).toLocaleString('vi-VN')}</span>
+                            </div>`;
+                        timeline.appendChild(item);
+                    });
+                },
+            },
+            
+            // --- Chart Logic ---
+            chart: {
+                initialize: () => {
+                    const ctx = document.getElementById('stats-chart').getContext('2d');
+                    App.state.statsChart = new Chart(ctx, {
+                        type: 'line',
+                        data: { labels: [], datasets: [
+                            { label: 'Tổng nhập', data: [], borderColor: 'rgba(16, 185, 129, 1)', backgroundColor: 'rgba(16, 185, 129, 0.2)', fill: true, tension: 0.4 },
+                            { label: 'Tổng xuất', data: [], borderColor: 'rgba(239, 68, 68, 1)', backgroundColor: 'rgba(239, 68, 68, 0.2)', fill: true, tension: 0.4 }
+                        ]},
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: true, ticks: { callback: value => App.utils.formatCurrencyVND(value) } } }
+                        }
+                    });
+                },
+                populateFilterOptions: () => {
+                    const years = [...new Set(App.state.allTransactions.map(t => new Date(t.datetime).getFullYear()))].sort((a,b) => b-a);
+                    App.ui.yearFilter.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+                    
+                    const months = Array.from({length: 12}, (e, i) => new Date(null, i + 1, null).toLocaleDateString("vi", {month: "long"}));
+                    App.ui.monthFilter.innerHTML = `<option value="all">Cả năm</option>` + months.map((m, i) => `<option value="${i}">${m}</option>`).join('');
+                    
+                    const now = new Date();
+                    App.ui.yearFilter.value = now.getFullYear();
+                    App.ui.monthFilter.value = now.getMonth();
+                },
+                update: () => {
+                    const chart = App.state.statsChart;
+                    if (!chart) return;
+                    
+                    const year = parseInt(App.ui.yearFilter.value);
+                    const month = App.ui.monthFilter.value;
+                    const transactions = App.state.allTransactions.filter(t => {
+                        const date = new Date(t.datetime);
+                        return date.getFullYear() === year && (month === 'all' || date.getMonth() === parseInt(month));
+                    });
+
+                    let labels, incomeData, expenseData;
+                    if (month === 'all') { // Yearly view
+                        labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+                        incomeData = Array(12).fill(0); expenseData = Array(12).fill(0);
+                        transactions.forEach(t => {
+                            const m = new Date(t.datetime).getMonth();
+                            t.type === 'income' ? incomeData[m] += t.amount : expenseData[m] += t.amount;
+                        });
+                    } else { // Monthly view
+                        const days = new Date(year, parseInt(month) + 1, 0).getDate();
+                        labels = Array.from({ length: days }, (_, i) => i + 1);
+                        incomeData = Array(days).fill(0); expenseData = Array(days).fill(0);
+                        transactions.forEach(t => {
+                            const day = new Date(t.datetime).getDate() - 1;
+                            t.type === 'income' ? incomeData[day] += t.amount : expenseData[day] += t.amount;
+                        });
+                    }
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].data = incomeData;
+                    chart.data.datasets[1].data = expenseData;
+                    chart.update();
+                },
+            },
+
+            // --- Modal & Form Logic ---
+            modals: {
+                open: (modal) => modal.classList.add('active'),
+                close: (modal) => modal.classList.remove('active'),
+                
+                openTransactionForm: (type, transaction = null) => {
+                    App.ui.transactionForm.reset();
+                    App.ui.subContentContainer.innerHTML = '';
+                    const isEditing = !!transaction;
+                    
+                    App.ui.transactionForm.querySelector('#transaction-id').value = isEditing ? transaction.id : '';
+                    App.ui.transactionForm.querySelector('#transaction-type').value = type;
+                    
+                    const saveBtn = App.ui.transactionForm.querySelector('.btn-save');
+                    saveBtn.className = `btn-save btn-${type}`;
+                    
+                    if (type === 'income') {
+                        App.ui.modalTitle.textContent = isEditing ? 'Sửa khoản nhập' : 'Thêm khoản nhập';
+                        App.ui.formGroupSubContent.style.display = 'block';
+                        App.ui.transactionForm.querySelector('#transaction-main-content').labels[0].textContent = "Nội dung chính";
+                        
+                        if (isEditing) {
+                            App.ui.transactionForm.querySelector('#transaction-main-content').value = transaction.content.main;
+                            if (transaction.content.sub) {
+                                transaction.content.sub.forEach(App.modals.createSubContentInput);
                             }
                         }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: chartTextColor
-                            }
+                    } else { // expense
+                        App.ui.modalTitle.textContent = isEditing ? 'Sửa khoản xuất' : 'Thêm khoản xuất';
+                        App.ui.formGroupSubContent.style.display = 'none';
+                        App.ui.transactionForm.querySelector('#transaction-main-content').labels[0].textContent = "Nội dung xuất";
+                        if (isEditing) {
+                            App.ui.transactionForm.querySelector('#transaction-main-content').value = transaction.content;
                         }
                     }
-                }
-            });
-        };
+                    
+                    document.getElementById('transaction-amount').value = isEditing ? App.utils.formatCurrencyVND(transaction.amount) : '';
+                    document.getElementById('transaction-person').value = isEditing ? transaction.person : '';
+                    document.getElementById('transaction-datetime').value = isEditing ? transaction.datetime.slice(0,16) : App.utils.getCurrentDateTimeLocal();
+                    
+                    App.modals.open(App.ui.transactionModal);
+                },
 
-        const updateChart = () => {
-            if (!statsChart) return;
-
-            const selectedYear = parseInt(yearFilter.value);
-            const selectedMonth = monthFilter.value;
-
-            const filteredTransactions = allTransactions.filter(t => {
-                const date = new Date(t.datetime);
-                const yearMatch = date.getFullYear() === selectedYear;
-                const monthMatch = selectedMonth === 'all' || date.getMonth() === parseInt(selectedMonth);
-                return yearMatch && monthMatch;
-            });
-
-            let labels, incomeData, expenseData;
-
-            if (selectedMonth === 'all') {
-                labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
-                incomeData = Array(12).fill(0);
-                expenseData = Array(12).fill(0);
-
-                filteredTransactions.forEach(t => {
-                    const month = new Date(t.datetime).getMonth();
-                    if (t.type === 'income') incomeData[month] += t.amount;
-                    else expenseData[month] += t.amount;
-                });
-            } else {
-                const daysInMonth = new Date(selectedYear, parseInt(selectedMonth) + 1, 0).getDate();
-                labels = Array.from({ length: daysInMonth }, (_, i) => `Ngày ${i + 1}`);
-                incomeData = Array(daysInMonth).fill(0);
-                expenseData = Array(daysInMonth).fill(0);
-
-                filteredTransactions.forEach(t => {
-                    const day = new Date(t.datetime).getDate() - 1;
-                    if (t.type === 'income') incomeData[day] += t.amount;
-                    else expenseData[day] += t.amount;
-                });
-            }
-
-            statsChart.data.labels = labels;
-            statsChart.data.datasets[0].data = incomeData;
-            statsChart.data.datasets[1].data = expenseData;
-            statsChart.update();
-        };
-
-        // 3.6: Logic Form & Modal
-        const incomeModal = document.getElementById('add-income-modal');
-        const expenseModal = document.getElementById('add-expense-modal');
-        const incomeForm = document.getElementById('income-form');
-        const expenseForm = document.getElementById('expense-form');
-        const subContentContainer = document.getElementById('sub-content-container');
-        
-        const openModal = (modal) => modal.classList.add('active');
-        const closeModal = (modal) => modal.classList.remove('active');
-
-        const setupModalEvents = () => {
-            document.getElementById('open-income-modal-btn').addEventListener('click', () => {
-                resetIncomeForm();
-                openModal(incomeModal);
-            });
-            document.getElementById('open-expense-modal-btn').addEventListener('click', () => {
-                resetExpenseForm();
-                openModal(expenseModal);
-            });
-            
-            document.querySelectorAll('.close-modal').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    closeModal(incomeModal);
-                    closeModal(expenseModal);
-                });
-            });
-
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        closeModal(modal);
-                    }
-                });
-            });
-
-            document.getElementById('btn-add-sub-content').addEventListener('click', () => {
-                const div = document.createElement('div');
-                div.className = 'form-group';
-                div.innerHTML = `
-                    <input type="text" class="income-sub-content" placeholder="VD: Sửa chữa thiết bị">
-                    <button type="button" class="btn-remove-sub-content"><i class="fa-solid fa-trash"></i></button>
-                `;
-                subContentContainer.appendChild(div);
-                div.querySelector('.btn-remove-sub-content').addEventListener('click', () => div.remove());
-            });
-        };
-        
-        const getCurrentDateTimeLocal = () => {
-            const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            return now.toISOString().slice(0,16);
-        }
-
-        const resetIncomeForm = () => {
-            incomeForm.reset();
-            subContentContainer.innerHTML = '';
-            document.getElementById('income-datetime').value = getCurrentDateTimeLocal();
-        };
-
-        const resetExpenseForm = () => {
-            expenseForm.reset();
-            document.getElementById('expense-datetime').value = getCurrentDateTimeLocal();
-        };
-
-        const handleFormSubmit = async (e, type) => {
-            e.preventDefault();
-            const submitButton = e.target.querySelector('button[type="submit"]');
-            submitButton.disabled = true; // Disable button on submit
-            showLoader();
-            
-            try {
-                let transaction;
-                if(type === 'income') {
-                    const amount = parseVND(document.getElementById('income-amount').value);
-                    if (!amount || amount <= 0) { throw new Error('Số tiền phải là số dương.'); }
-                    const subContents = [...document.querySelectorAll('.income-sub-content')].map(input => input.value.trim()).filter(Boolean);
-                    transaction = {
-                        type: 'income',
-                        content: { main: document.getElementById('income-main-content').value, sub: subContents },
-                        amount,
-                        person: document.getElementById('income-person').value,
-                        datetime: new Date(document.getElementById('income-datetime').value).toISOString()
-                    };
-                } else { // expense
-                    const amount = parseVND(document.getElementById('expense-amount').value);
-                    if (!amount || amount <= 0) { throw new Error('Số tiền phải là số dương.'); }
-                    transaction = {
-                        type: 'expense',
-                        content: document.getElementById('expense-content').value,
-                        amount,
-                        person: document.getElementById('expense-person').value,
-                        datetime: new Date(document.getElementById('expense-datetime').value).toISOString()
-                    };
-                }
+                createSubContentInput: (value = '') => {
+                    const div = document.createElement('div');
+                    div.className = 'form-group';
+                    div.innerHTML = `
+                        <input type="text" class="sub-content-input" placeholder="VD: 1.1 Nội dung A" value="${value}">
+                        <button type="button" class="btn-remove-sub-content" title="Xóa dòng"><i class="fa-solid fa-trash"></i></button>`;
+                    App.ui.subContentContainer.appendChild(div);
+                    div.querySelector('.btn-remove-sub-content').addEventListener('click', () => div.remove());
+                },
                 
-                await transactionsRef.push(transaction);
-                
-                const log = {
-                    action: 'add',
-                    details: `Thêm giao dịch ${type === 'income' ? 'nhập' : 'xuất'} mới: ${formatCurrencyVND(transaction.amount)} bởi ${transaction.person}.`,
-                    timestamp: new Date().toISOString()
-                };
-                await logsRef.push(log);
-                
-                showToast(`Thêm khoản ${type === 'income' ? 'nhập' : 'xuất'} thành công!`, 'success');
-                closeModal(type === 'income' ? incomeModal : expenseModal);
-
-            } catch (error) {
-                console.error("Lỗi khi thêm giao dịch:", error);
-                showToast(error.message || 'Có lỗi xảy ra, vui lòng thử lại.', 'error');
-            } finally {
-                hideLoader();
-                submitButton.disabled = false; // Re-enable button
-            }
-        };
-
-        // 3.7: Event Listeners
-        const setupEventListeners = () => {
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
+                handleFormSubmit: async (e) => {
                     e.preventDefault();
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    const pageId = link.getAttribute('data-page');
-                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                    document.getElementById(`${pageId}-page`).classList.add('active');
-                    if (window.innerWidth <= 992) {
-                        document.querySelector('.sidebar').classList.remove('active');
-                        document.querySelector('.sidebar-toggle').classList.remove('active');
+                    const form = e.target;
+                    const saveBtn = form.querySelector('.btn-save');
+                    saveBtn.disabled = true;
+                    saveBtn.classList.add('loading');
+                    
+                    const id = form.querySelector('#transaction-id').value;
+                    const type = form.querySelector('#transaction-type').value;
+                    const isEditing = !!id;
+                    
+                    try {
+                        const amount = App.utils.parseVND(document.getElementById('transaction-amount').value);
+                        if (amount <= 0) throw new Error('Số tiền phải là số dương.');
+
+                        const transactionData = {
+                            type: type,
+                            amount: amount,
+                            person: document.getElementById('transaction-person').value.trim(),
+                            datetime: new Date(document.getElementById('transaction-datetime').value).toISOString(),
+                        };
+                        
+                        if (type === 'income') {
+                            transactionData.content = {
+                                main: document.getElementById('transaction-main-content').value.trim(),
+                                sub: [...document.querySelectorAll('.sub-content-input')].map(input => input.value.trim()).filter(Boolean)
+                            };
+                        } else {
+                            transactionData.content = document.getElementById('transaction-main-content').value.trim();
+                        }
+                        
+                        if (!transactionData.person || !transactionData.content || (type === 'income' && !transactionData.content.main)) {
+                             throw new Error('Vui lòng điền đầy đủ các trường bắt buộc.');
+                        }
+
+                        const log = {
+                            action: isEditing ? 'edit' : 'add',
+                            details: `${isEditing ? 'Cập nhật' : 'Thêm'} giao dịch ${type === 'income' ? 'nhập' : 'xuất'}: ${App.utils.formatCurrencyVND(transactionData.amount)} bởi ${transactionData.person}.`,
+                            timestamp: new Date().toISOString()
+                        };
+
+                        if (isEditing) {
+                            await transactionsRef.child(id).update(transactionData);
+                        } else {
+                            await transactionsRef.push(transactionData);
+                        }
+                        
+                        await logsRef.push(log);
+                        
+                        App.utils.showToast(`Lưu giao dịch thành công!`, 'success');
+                        App.modals.close(App.ui.transactionModal);
+
+                    } catch (error) {
+                        App.utils.showToast(error.message || 'Có lỗi xảy ra, vui lòng thử lại.', 'error');
+                    } finally {
+                        saveBtn.disabled = false;
+                        saveBtn.classList.remove('loading');
                     }
+                },
+                
+                handleDelete: async () => {
+                    if (!App.state.transactionToDelete) return;
+                    App.utils.showLoader();
+                    try {
+                        const transaction = App.state.allTransactions.find(t => t.id === App.state.transactionToDelete);
+                        
+                        await transactionsRef.child(App.state.transactionToDelete).remove();
+                        const log = {
+                            action: 'delete',
+                            details: `Xóa giao dịch ${transaction.type === 'income' ? 'nhập' : 'xuất'} (${App.utils.formatCurrencyVND(transaction.amount)}) bởi ${transaction.person}.`,
+                            timestamp: new Date().toISOString()
+                        };
+                        await logsRef.push(log);
+                        App.utils.showToast('Xóa giao dịch thành công!', 'success');
+                    } catch (error) {
+                         App.utils.showToast('Lỗi khi xóa giao dịch.', 'error');
+                    } finally {
+                        App.modals.close(App.ui.deleteConfirmModal);
+                        App.state.transactionToDelete = null;
+                        App.utils.hideLoader();
+                    }
+                }
+            },
+            
+            // --- Event Listeners Setup ---
+            events: {
+                setup: () => {
+                    // Navigation
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.addEventListener('click', e => {
+                            e.preventDefault();
+                            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                            link.classList.add('active');
+                            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                            document.getElementById(`${link.dataset.page}-page`).classList.add('active');
+                            if (window.innerWidth <= 992) App.ui.sidebar.classList.remove('active');
+                            App.ui.mobileOverlay.classList.remove('active');
+                        });
+                    });
+
+                    // Theme
+                    const switchTheme = (theme) => {
+                        document.body.setAttribute('data-theme', theme);
+                        localStorage.setItem('theme', theme);
+                        document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+                        document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+                    };
+                    document.getElementById('theme-light').addEventListener('click', () => switchTheme('light'));
+                    document.getElementById('theme-dark').addEventListener('click', () => switchTheme('dark'));
+                    switchTheme(localStorage.getItem('theme') || 'light');
+
+                    // Mobile Sidebar
+                    document.querySelector('.sidebar-toggle').addEventListener('click', () => {
+                        App.ui.sidebar.classList.toggle('active');
+                        App.ui.mobileOverlay.classList.toggle('active');
+                    });
+                    App.ui.mobileOverlay.addEventListener('click', () => {
+                        App.ui.sidebar.classList.remove('active');
+                        App.ui.mobileOverlay.classList.remove('active');
+                    });
+                    
+                    // Chart Filters
+                    App.ui.monthFilter.addEventListener('change', App.chart.update);
+                    App.ui.yearFilter.addEventListener('change', App.chart.update);
+
+                    // Modal Buttons
+                    document.getElementById('open-income-modal-btn').addEventListener('click', () => App.modals.openTransactionForm('income'));
+                    document.getElementById('open-expense-modal-btn').addEventListener('click', () => App.modals.openTransactionForm('expense'));
+                    document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', () => {
+                        App.modals.close(App.ui.transactionModal);
+                        App.modals.close(App.ui.deleteConfirmModal);
+                    }));
+                    document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', (e) => {
+                        if (e.target === modal) App.modals.close(modal);
+                    }));
+                    document.getElementById('btn-add-sub-content').addEventListener('click', () => App.modals.createSubContentInput());
+
+                    // Transaction Actions (Edit/Delete) using Event Delegation
+                    App.ui.allTransactionsTableBody.addEventListener('click', e => {
+                        const btn = e.target.closest('button');
+                        if (!btn) return;
+                        const id = btn.dataset.id;
+                        
+                        if (btn.classList.contains('btn-edit')) {
+                            const transaction = App.state.allTransactions.find(t => t.id === id);
+                            App.modals.openTransactionForm(transaction.type, transaction);
+                        } else if (btn.classList.contains('btn-delete')) {
+                            App.state.transactionToDelete = id;
+                            App.modals.open(App.ui.deleteConfirmModal);
+                        }
+                    });
+                    
+                    // Delete Confirmation
+                    document.getElementById('btn-confirm-delete').addEventListener('click', App.modals.handleDelete);
+                    document.getElementById('btn-cancel-delete').addEventListener('click', () => App.modals.close(App.ui.deleteConfirmModal));
+                    
+                    // Form Submission
+                    App.ui.transactionForm.addEventListener('submit', App.modals.handleFormSubmit);
+
+                    // Currency Input Formatting
+                    document.getElementById('transaction-amount').addEventListener('input', e => {
+                        let value = App.utils.parseVND(e.target.value);
+                        e.target.value = value ? new Intl.NumberFormat('vi-VN').format(value) : '';
+                    });
+                }
+            },
+            
+            // --- App Initialization ---
+            init: () => {
+                App.utils.showLoader();
+                App.events.setup();
+                App.chart.initialize();
+
+                transactionsRef.on('value', snapshot => {
+                    const data = snapshot.val();
+                    const transactionsArray = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                    App.data.processTransactions(transactionsArray);
+                    App.utils.hideLoader();
+                }, error => {
+                    console.error(error);
+                    App.utils.showToast('Không thể kết nối CSDL giao dịch.', 'error');
+                    App.utils.hideLoader();
                 });
-            });
-
-            document.getElementById('theme-light').addEventListener('click', () => switchTheme('light'));
-            document.getElementById('theme-dark').addEventListener('click', () => switchTheme('dark'));
-
-            const sidebar = document.querySelector('.sidebar');
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                sidebarToggle.classList.toggle('active');
-            });
-            document.querySelector('.main-content').addEventListener('click', () => {
-                 if (sidebar.classList.contains('active')) {
-                    sidebar.classList.remove('active');
-                    sidebarToggle.classList.remove('active');
-                 }
-            });
-
-            monthFilter.addEventListener('change', updateChart);
-            yearFilter.addEventListener('change', updateChart);
-            
-            const formatInputAsCurrency = (e) => {
-                let value = e.target.value.replace(/[^0-9]/g, '');
-                e.target.value = value ? new Intl.NumberFormat('vi-VN').format(value) : '';
-            };
-            document.getElementById('income-amount').addEventListener('input', formatInputAsCurrency);
-            document.getElementById('expense-amount').addEventListener('input', formatInputAsCurrency);
-            
-            incomeForm.addEventListener('submit', (e) => handleFormSubmit(e, 'income'));
-            expenseForm.addEventListener('submit', (e) => handleFormSubmit(e, 'expense'));
-        };
-        
-        // 3.8: Theme Management
-        const switchTheme = (theme) => {
-            document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            document.getElementById('theme-light').classList.toggle('active', theme === 'light');
-            document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
-            
-            if (statsChart) {
-                const chartTextColor = getComputedStyle(document.body).getPropertyValue('--text-color');
-                statsChart.options.scales.y.ticks.color = chartTextColor;
-                statsChart.options.scales.x.ticks.color = chartTextColor;
-                statsChart.options.plugins.legend.labels.color = chartTextColor;
-                statsChart.update();
+                
+                logsRef.on('value', snapshot => {
+                    const data = snapshot.val();
+                    const logsArray = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                    App.data.processLogs(logsArray);
+                }, error => {
+                    console.error(error);
+                    App.utils.showToast('Không thể kết nối CSDL logs.', 'error');
+                });
             }
         };
 
-        const loadTheme = () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            switchTheme(savedTheme);
-        };
-
-        // 3.9: Khởi tạo ứng dụng
-        const initializeApp = () => {
-            showLoader();
-            loadTheme();
-            setupModalEvents();
-            setupEventListeners();
-            initializeChart();
-
-            transactionsRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                const transactionsArray = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-                processData(transactionsArray);
-                hideLoader();
-            }, (error) => {
-                console.error(error);
-                showToast('Không thể kết nối tới cơ sở dữ liệu.', 'error');
-                hideLoader();
-            });
-            
-            logsRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                const logsArray = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-                renderLogs(logsArray);
-            });
-        };
-
-        initializeApp();
+        App.init();
     });
     </script>
 
