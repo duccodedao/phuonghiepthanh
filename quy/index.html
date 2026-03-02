@@ -27,6 +27,7 @@
         /* 1.1: Biến màu & Cài đặt chung */
         :root {
             --primary-color: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.4);
             --secondary-color: #10b981;
             --danger-color: #ef4444;
             --warning-color: #f59e0b;
@@ -94,12 +95,9 @@
             padding: 2rem 1.5rem;
             transition: transform var(--transition-speed) ease;
             z-index: 1000;
+            flex-shrink: 0;
         }
         
-        .sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-
         .main-content {
             flex-grow: 1;
             padding: 2rem;
@@ -140,7 +138,7 @@
         .nav-menu li a:hover, .nav-menu li a.active {
             background-color: var(--primary-color);
             color: white;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 10px var(--primary-glow);
         }
         .nav-menu li a i {
             width: 20px;
@@ -167,6 +165,7 @@
             border-radius: calc(var(--border-radius) - 4px);
             cursor: pointer;
             color: var(--text-secondary-color);
+            transition: all var(--transition-speed) ease;
         }
         .theme-switcher i.active {
             background-color: var(--primary-color);
@@ -175,7 +174,6 @@
         .sidebar-toggle {
             display: none;
         }
-
 
         /* 1.4: Main content styling */
         .header {
@@ -198,6 +196,9 @@
             cursor: pointer;
             transition: all var(--transition-speed) ease;
             margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         .btn-income {
             background-color: var(--secondary-color);
@@ -233,10 +234,11 @@
             border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
-            transition: transform var(--transition-speed) ease;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
         }
         .card-header {
             display: flex;
@@ -287,10 +289,20 @@
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
         }
         th {
             font-weight: 600;
             color: var(--text-secondary-color);
+        }
+        tbody tr {
+            transition: background-color var(--transition-speed) ease;
+        }
+        tbody tr:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        [data-theme="dark"] tbody tr:hover {
+             background-color: rgba(255,255,255,0.05);
         }
         .type-income { color: var(--secondary-color); font-weight: 600; }
         .type-expense { color: var(--danger-color); font-weight: 600; }
@@ -311,6 +323,12 @@
             border: 1px solid var(--border-color);
             background-color: var(--bg-color);
             color: var(--text-color);
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+        .filter-controls select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--primary-glow);
         }
 
         /* 1.6: Timeline (Lịch sử chỉnh sửa) */
@@ -323,14 +341,14 @@
             background: var(--border-color);
             display: inline-block;
             position: absolute;
-            left: 29px;
+            left: 15px;
             width: 2px;
             height: 100%;
             z-index: 0;
         }
         .timeline-item {
             margin: 20px 0;
-            padding-left: 60px;
+            padding-left: 45px;
             position: relative;
         }
         .timeline-item:before {
@@ -340,25 +358,28 @@
             position: absolute;
             border-radius: 50%;
             border: 3px solid var(--primary-color);
-            left: 20px;
+            left: 6px;
             width: 20px;
             height: 20px;
             z-index: 1;
+            box-shadow: 0 0 10px var(--primary-glow);
         }
-        .timeline-item.add:before { border-color: var(--secondary-color); }
-        .timeline-item.edit:before { border-color: var(--warning-color); }
-        .timeline-item.delete:before { border-color: var(--danger-color); }
+        .timeline-item.add:before { border-color: var(--secondary-color); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);}
+        .timeline-item.edit:before { border-color: var(--warning-color); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);}
+        .timeline-item.delete:before { border-color: var(--danger-color); box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);}
         .timeline-content {
             background-color: var(--bg-color);
             padding: 1rem;
             border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
         }
         .timeline-content p { margin: 0; }
         .timeline-content span {
             font-size: 0.8rem;
             color: var(--text-secondary-color);
+            margin-top: 0.5rem;
+            display: inline-block;
         }
-
 
         /* 1.7: Modal styling */
         .modal {
@@ -387,11 +408,11 @@
             border-radius: var(--border-radius);
             width: 90%;
             max-width: 500px;
-            transform: scale(0.95);
+            transform: scale(0.95) translateY(20px);
             transition: transform 0.3s ease;
         }
         .modal.active .modal-content {
-            transform: scale(1);
+            transform: scale(1) translateY(0);
         }
         .modal-header {
             display: flex;
@@ -403,9 +424,13 @@
         .close-modal {
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             cursor: pointer;
             color: var(--text-color);
+            transition: transform var(--transition-speed) ease;
+        }
+        .close-modal:hover {
+            transform: rotate(90deg);
         }
 
         .form-group {
@@ -424,6 +449,12 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 1rem;
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--primary-glow);
         }
         #sub-content-container .form-group {
             display: flex;
@@ -436,16 +467,25 @@
             color: var(--danger-color);
             cursor: pointer;
             font-size: 1.2rem;
+            transition: color var(--transition-speed) ease;
+        }
+        .btn-remove-sub-content:hover {
+            color: #dc2626;
         }
         #btn-add-sub-content {
             background: none;
-            border: 1px dashed var(--primary-color);
+            border: 2px dashed var(--primary-color);
             color: var(--primary-color);
             padding: 0.5rem;
             width: 100%;
             border-radius: calc(var(--border-radius) - 4px);
             cursor: pointer;
             margin-top: 0.5rem;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+        #btn-add-sub-content:hover {
+            background-color: var(--primary-color);
+            color: white;
         }
         .btn-save {
             width: 100%;
@@ -458,6 +498,15 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background-color var(--transition-speed) ease;
+        }
+        .btn-save:disabled {
+            background-color: var(--text-secondary-color);
+            cursor: not-allowed;
         }
 
         /* 1.8: Loading & Toast Notifications */
@@ -530,7 +579,22 @@
             }
         }
         
-        /* 1.9: Responsive Design */
+        /* 1.9: Styled Scrollbar */
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .main-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* 1.10: Responsive Design */
         @media (max-width: 992px) {
             .sidebar {
                 position: fixed;
@@ -538,9 +602,7 @@
                 top: 0;
                 height: 100%;
                 transform: translateX(-100%);
-            }
-            .sidebar.collapsed {
-                transform: translateX(-100%);
+                box-shadow: 10px 0 20px rgba(0,0,0,0.2);
             }
             .sidebar.active {
                 transform: translateX(0);
@@ -556,11 +618,29 @@
                 z-index: 1001;
                 background-color: var(--card-bg-color);
                 border: 1px solid var(--border-color);
-                width: 40px;
-                height: 40px;
+                width: 44px;
+                height: 44px;
                 border-radius: 50%;
-                font-size: 1.2rem;
                 cursor: pointer;
+                transition: all var(--transition-speed) ease;
+                padding: 0;
+            }
+            .sidebar-toggle .bar {
+                display: block;
+                width: 22px;
+                height: 2px;
+                margin: 4px auto;
+                background-color: var(--text-color);
+                transition: all 0.3s ease-in-out;
+            }
+            .sidebar-toggle.active .bar:nth-child(1) {
+                transform: translateY(6px) rotate(45deg);
+            }
+            .sidebar-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+            .sidebar-toggle.active .bar:nth-child(3) {
+                transform: translateY(-6px) rotate(-45deg);
             }
         }
         @media (max-width: 576px) {
@@ -578,8 +658,9 @@
                 margin-left: 0;
             }
             .header-actions button:first-child { margin-right: 0.5rem; }
-            .main-content { padding: 1rem; margin-top: 60px; }
+            .main-content { padding: 1rem; margin-top: 70px; }
             .filter-controls { flex-direction: column; }
+            th, td { white-space: normal; }
         }
 
     </style>
@@ -622,7 +703,11 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+            <button class="sidebar-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
             
             <!-- Page: Dashboard -->
             <div id="dashboard-page" class="page active">
@@ -767,7 +852,7 @@
                     <label for="income-datetime">Ngày giờ</label>
                     <input type="datetime-local" id="income-datetime" required>
                 </div>
-                <button type="submit" class="btn-save btn-income">Lưu khoản nhập</button>
+                <button type="submit" class="btn-save btn-income"><i class="fa-solid fa-save"></i> Lưu khoản nhập</button>
             </form>
         </div>
     </div>
@@ -796,7 +881,7 @@
                     <label for="expense-datetime">Ngày giờ</label>
                     <input type="datetime-local" id="expense-datetime" required>
                 </div>
-                <button type="submit" class="btn-save btn-expense">Lưu khoản xuất</button>
+                <button type="submit" class="btn-save btn-expense"><i class="fa-solid fa-save"></i> Lưu khoản xuất</button>
             </form>
         </div>
     </div>
@@ -807,12 +892,29 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        // 3.1: Cấu hình Firebase (Lấy từ project của bạn)
+        // 3.1: Cấu hình Firebase
+        /*
+        * ❗️❗️❗️ CẢNH BÁO BẢO MẬT NGHIÊM TRỌNG ❗️❗️❗️
+        * Việc để lộ thông tin cấu hình Firebase (đặc biệt là apiKey và databaseURL) 
+        * trong code phía client (JavaScript chạy trên trình duyệt) là CỰC KỲ NGUY HIỂM.
+        * Bất kỳ ai cũng có thể xem mã nguồn trang của bạn và lấy những thông tin này để
+        * đọc, ghi, hoặc xóa toàn bộ dữ liệu trong database của bạn.
+        *
+        * GIẢI PHÁP ĐÚNG:
+        * 1. Thiết lập Firebase Rules: Cấu hình quy tắc bảo mật trong Firebase Console để
+        *    chỉ cho phép người dùng đã xác thực (logged-in users) mới có quyền truy cập dữ liệu.
+        * 2. Sử dụng Backend/Cloud Functions: Tạo một lớp trung gian (backend) để giao tiếp
+        *    với Firebase. Client sẽ gửi yêu cầu đến backend của bạn, và backend sẽ thực hiện
+        *    các thao tác với Firebase. Cách này giúp che giấu hoàn toàn API key.
+        *
+        * Vì đây là một project demo, tôi sẽ giữ lại cấu hình này để nó có thể hoạt động,
+        * nhưng TUYỆT ĐỐI KHÔNG SỬ DỤNG cách này cho bất kỳ dự án thực tế nào.
+        */
         const firebaseConfig = {
             apiKey: "AIzaSyCLCcgaoW9gNYhKk0c0gDWC6i5mKVTN4XE",
             authDomain: "profile-d1214.firebaseapp.com",
             projectId: "profile-d1214",
-            databaseURL: "https://profile-d1214-default-rtdb.asia-southeast1.firebasedatabase.app", // Hãy chắc chắn URL này đúng
+            databaseURL: "https://profile-d1214-default-rtdb.asia-southeast1.firebasedatabase.app",
             storageBucket: "profile-d1214.firebasestorage.app",
             messagingSenderId: "914980131889",
             appId: "1:914980131889:web:72f8da15c42dbee671b110",
@@ -845,7 +947,6 @@
         const yearFilter = document.getElementById('stats-year-filter');
 
         // 3.3: Hàm tiện ích (Utility Functions)
-
         const showLoader = () => loader.classList.add('active');
         const hideLoader = () => loader.classList.remove('active');
 
@@ -866,20 +967,10 @@
         };
         
         const parseVND = (vndString) => {
-            return Number(vndString.replace(/[^0-9]/g, ''));
-        };
-
-        const debounce = (func, delay) => {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), delay);
-            };
+            return Number(String(vndString).replace(/[^0-9]/g, ''));
         };
         
         // 3.4: Logic chính - Xử lý dữ liệu
-        
         const processData = (transactions) => {
             allTransactions = transactions.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
             
@@ -933,9 +1024,13 @@
             }
             allTransactions.forEach(t => {
                 const row = document.createElement('tr');
+                const subContentList = t.type === 'income' && t.content.sub && t.content.sub.length > 0
+                    ? `<ul>${t.content.sub.map(item => `<li>${item}</li>`).join('')}</ul>`
+                    : '';
                 const contentHtml = t.type === 'income' 
-                    ? `<strong>${t.content.main}</strong><br><small>${t.content.sub.join(', ')}</small>`
+                    ? `<strong>${t.content.main}</strong>${subContentList}`
                     : t.content;
+
                 row.innerHTML = `
                     <td><span class="type-${t.type}">${t.type === 'income' ? 'Nhập' : 'Xuất'}</span></td>
                     <td>${contentHtml}</td>
@@ -951,7 +1046,8 @@
             allLogs = logs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
             logsTimeline.innerHTML = '';
             if(allLogs.length === 0) {
-                logsTimeline.innerHTML = `<li>Chưa có hoạt động nào.</li>`;
+                // Thêm trạng thái rỗng cho timeline
+                logsTimeline.innerHTML = `<li style="list-style-type: none; text-align: center; color: var(--text-secondary-color);">Chưa có hoạt động nào được ghi nhận.</li>`;
                 return;
             }
             allLogs.forEach(log => {
@@ -968,9 +1064,12 @@
         };
         
         // 3.5: Logic Thống kê & Biểu đồ
-        
+        let hasPopulatedFilters = false;
         const populateFilterOptions = () => {
-            const years = [...new Set(allTransactions.map(t => new Date(t.datetime).getFullYear()))];
+            if (hasPopulatedFilters) return; // Chỉ chạy 1 lần
+
+            const years = [...new Set(allTransactions.map(t => new Date(t.datetime).getFullYear()))].sort((a, b) => b - a);
+            if (years.length === 0) years.push(new Date().getFullYear());
             yearFilter.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
             
             const months = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
@@ -980,30 +1079,30 @@
             const now = new Date();
             yearFilter.value = now.getFullYear();
             monthFilter.value = now.getMonth();
+            hasPopulatedFilters = true;
         };
         
         const initializeChart = () => {
             const ctx = document.getElementById('stats-chart').getContext('2d');
+            const chartTextColor = getComputedStyle(document.body).getPropertyValue('--text-color');
             statsChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar', // Changed to bar for better monthly/daily comparison
                 data: {
                     labels: [],
                     datasets: [
                         {
                             label: 'Tổng nhập',
                             data: [],
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
                             borderColor: 'rgba(16, 185, 129, 1)',
-                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                            fill: true,
-                            tension: 0.4,
+                            borderWidth: 1
                         },
                         {
                             label: 'Tổng xuất',
                             data: [],
+                             backgroundColor: 'rgba(239, 68, 68, 0.7)',
                             borderColor: 'rgba(239, 68, 68, 1)',
-                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                            fill: true,
-                            tension: 0.4,
+                            borderWidth: 1
                         }
                     ]
                 },
@@ -1014,7 +1113,20 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
+                                color: chartTextColor,
                                 callback: value => formatCurrencyVND(value)
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: chartTextColor,
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: chartTextColor
                             }
                         }
                     }
@@ -1038,7 +1150,6 @@
             let labels, incomeData, expenseData;
 
             if (selectedMonth === 'all') {
-                // Thống kê theo tháng trong năm
                 labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
                 incomeData = Array(12).fill(0);
                 expenseData = Array(12).fill(0);
@@ -1049,9 +1160,8 @@
                     else expenseData[month] += t.amount;
                 });
             } else {
-                // Thống kê theo ngày trong tháng
                 const daysInMonth = new Date(selectedYear, parseInt(selectedMonth) + 1, 0).getDate();
-                labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+                labels = Array.from({ length: daysInMonth }, (_, i) => `Ngày ${i + 1}`);
                 incomeData = Array(daysInMonth).fill(0);
                 expenseData = Array(daysInMonth).fill(0);
 
@@ -1103,12 +1213,11 @@
                 });
             });
 
-            // Thêm nội dung phụ
             document.getElementById('btn-add-sub-content').addEventListener('click', () => {
                 const div = document.createElement('div');
                 div.className = 'form-group';
                 div.innerHTML = `
-                    <input type="text" class="income-sub-content" placeholder="VD: 1.1 Nội dung A">
+                    <input type="text" class="income-sub-content" placeholder="VD: Sửa chữa thiết bị">
                     <button type="button" class="btn-remove-sub-content"><i class="fa-solid fa-trash"></i></button>
                 `;
                 subContentContainer.appendChild(div);
@@ -1135,58 +1244,33 @@
 
         const handleFormSubmit = async (e, type) => {
             e.preventDefault();
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true; // Disable button on submit
             showLoader();
             
             try {
                 let transaction;
                 if(type === 'income') {
                     const amount = parseVND(document.getElementById('income-amount').value);
-                    if (amount <= 0) {
-                        showToast('Số tiền phải là số dương.', 'error');
-                        hideLoader();
-                        return;
-                    }
-
-                    const subContents = [...document.querySelectorAll('.income-sub-content')].map(input => input.value).filter(Boolean);
-
+                    if (!amount || amount <= 0) { throw new Error('Số tiền phải là số dương.'); }
+                    const subContents = [...document.querySelectorAll('.income-sub-content')].map(input => input.value.trim()).filter(Boolean);
                     transaction = {
                         type: 'income',
-                        content: {
-                            main: document.getElementById('income-main-content').value,
-                            sub: subContents
-                        },
-                        amount: amount,
+                        content: { main: document.getElementById('income-main-content').value, sub: subContents },
+                        amount,
                         person: document.getElementById('income-person').value,
                         datetime: new Date(document.getElementById('income-datetime').value).toISOString()
                     };
                 } else { // expense
-                     const amount = parseVND(document.getElementById('expense-amount').value);
-                    if (amount <= 0) {
-                        showToast('Số tiền phải là số dương.', 'error');
-                        hideLoader();
-                        return;
-                    }
+                    const amount = parseVND(document.getElementById('expense-amount').value);
+                    if (!amount || amount <= 0) { throw new Error('Số tiền phải là số dương.'); }
                     transaction = {
                         type: 'expense',
                         content: document.getElementById('expense-content').value,
-                        amount: amount,
+                        amount,
                         person: document.getElementById('expense-person').value,
                         datetime: new Date(document.getElementById('expense-datetime').value).toISOString()
                     };
-                }
-
-                // Chống trùng dữ liệu đơn giản
-                const isDuplicate = allTransactions.some(t => 
-                    t.type === transaction.type &&
-                    t.amount === transaction.amount &&
-                    (JSON.stringify(t.content) === JSON.stringify(transaction.content)) &&
-                    (new Date().getTime() - new Date(t.datetime).getTime()) < 60000 // trong vòng 1 phút
-                );
-
-                if (isDuplicate) {
-                    showToast('Giao dịch có vẻ bị trùng lặp.', 'error');
-                    hideLoader();
-                    return;
                 }
                 
                 await transactionsRef.push(transaction);
@@ -1203,74 +1287,74 @@
 
             } catch (error) {
                 console.error("Lỗi khi thêm giao dịch:", error);
-                showToast('Có lỗi xảy ra, vui lòng thử lại.', 'error');
+                showToast(error.message || 'Có lỗi xảy ra, vui lòng thử lại.', 'error');
             } finally {
                 hideLoader();
+                submitButton.disabled = false; // Re-enable button
             }
         };
 
         // 3.7: Event Listeners
-        
         const setupEventListeners = () => {
-            // Navigation
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
-                    
                     const pageId = link.getAttribute('data-page');
                     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                     document.getElementById(`${pageId}-page`).classList.add('active');
-
-                    // close sidebar on mobile
                     if (window.innerWidth <= 992) {
                         document.querySelector('.sidebar').classList.remove('active');
+                        document.querySelector('.sidebar-toggle').classList.remove('active');
                     }
                 });
             });
 
-            // Theme switcher
-            const themeLightBtn = document.getElementById('theme-light');
-            const themeDarkBtn = document.getElementById('theme-dark');
-            themeLightBtn.addEventListener('click', () => switchTheme('light'));
-            themeDarkBtn.addEventListener('click', () => switchTheme('dark'));
+            document.getElementById('theme-light').addEventListener('click', () => switchTheme('light'));
+            document.getElementById('theme-dark').addEventListener('click', () => switchTheme('dark'));
 
-            // Sidebar toggle for mobile
             const sidebar = document.querySelector('.sidebar');
-            document.querySelector('.sidebar-toggle').addEventListener('click', () => sidebar.classList.toggle('active'));
-            document.querySelector('.main-content').addEventListener('click', () => sidebar.classList.remove('active'));
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                sidebarToggle.classList.toggle('active');
+            });
+            document.querySelector('.main-content').addEventListener('click', () => {
+                 if (sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    sidebarToggle.classList.remove('active');
+                 }
+            });
 
-
-            // Filter change
             monthFilter.addEventListener('change', updateChart);
             yearFilter.addEventListener('change', updateChart);
             
-            // Format currency on input
             const formatInputAsCurrency = (e) => {
                 let value = e.target.value.replace(/[^0-9]/g, '');
-                if (value) {
-                    e.target.value = new Intl.NumberFormat('vi-VN').format(value);
-                } else {
-                    e.target.value = '';
-                }
+                e.target.value = value ? new Intl.NumberFormat('vi-VN').format(value) : '';
             };
             document.getElementById('income-amount').addEventListener('input', formatInputAsCurrency);
             document.getElementById('expense-amount').addEventListener('input', formatInputAsCurrency);
             
-            // Form submission with debounce
-            incomeForm.addEventListener('submit', debounce((e) => handleFormSubmit(e, 'income'), 1000));
-            expenseForm.addEventListener('submit', debounce((e) => handleFormSubmit(e, 'expense'), 1000));
+            incomeForm.addEventListener('submit', (e) => handleFormSubmit(e, 'income'));
+            expenseForm.addEventListener('submit', (e) => handleFormSubmit(e, 'expense'));
         };
         
         // 3.8: Theme Management
-        
         const switchTheme = (theme) => {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
             document.getElementById('theme-light').classList.toggle('active', theme === 'light');
             document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+            
+            if (statsChart) {
+                const chartTextColor = getComputedStyle(document.body).getPropertyValue('--text-color');
+                statsChart.options.scales.y.ticks.color = chartTextColor;
+                statsChart.options.scales.x.ticks.color = chartTextColor;
+                statsChart.options.plugins.legend.labels.color = chartTextColor;
+                statsChart.update();
+            }
         };
 
         const loadTheme = () => {
@@ -1279,7 +1363,6 @@
         };
 
         // 3.9: Khởi tạo ứng dụng
-        
         const initializeApp = () => {
             showLoader();
             loadTheme();
@@ -1287,7 +1370,6 @@
             setupEventListeners();
             initializeChart();
 
-            // Lắng nghe thay đổi từ Firebase Realtime
             transactionsRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 const transactionsArray = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
@@ -1307,7 +1389,6 @@
         };
 
         initializeApp();
-
     });
     </script>
 
