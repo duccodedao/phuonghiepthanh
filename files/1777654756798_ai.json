@@ -1,0 +1,124 @@
+{
+  "ai_tools": [
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "category": "chat",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+      "description": "AI hội thoại mạnh mẽ, hỗ trợ viết nội dung, code, học tập",
+      "link": "https://chat.openai.com"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "category": "chat",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Google_Gemini_logo.svg",
+      "description": "AI của Google tích hợp tìm kiếm và hệ sinh thái Google",
+      "link": "https://gemini.google.com"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "category": "chat",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg",
+      "description": "AI mạnh về phân tích và xử lý văn bản dài",
+      "link": "https://claude.ai"
+    },
+    {
+      "id": "copilot",
+      "name": "Microsoft Copilot",
+      "category": "chat",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Microsoft_Copilot_logo.svg",
+      "description": "AI tích hợp Windows và Office",
+      "link": "https://copilot.microsoft.com"
+    },
+    {
+      "id": "midjourney",
+      "name": "Midjourney",
+      "category": "image",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Logo.png",
+      "description": "AI tạo ảnh nghệ thuật chất lượng cao",
+      "link": "https://www.midjourney.com"
+    },
+    {
+      "id": "dalle",
+      "name": "DALL·E",
+      "category": "image",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+      "description": "AI tạo ảnh từ văn bản của OpenAI",
+      "link": "https://openai.com/dall-e"
+    },
+    {
+      "id": "stable_diffusion",
+      "name": "Stable Diffusion",
+      "category": "image",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/9/97/Stable_Diffusion_logo.svg",
+      "description": "AI tạo ảnh mã nguồn mở",
+      "link": "https://stability.ai"
+    },
+    {
+      "id": "runway",
+      "name": "Runway ML",
+      "category": "video",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Runway_logo.svg",
+      "description": "AI chỉnh sửa và tạo video",
+      "link": "https://runwayml.com"
+    },
+    {
+      "id": "pika",
+      "name": "Pika Labs",
+      "category": "video",
+      "logo": "https://pika.art/favicon.ico",
+      "description": "AI tạo video từ text nhanh",
+      "link": "https://pika.art"
+    },
+    {
+      "id": "github_copilot",
+      "name": "GitHub Copilot",
+      "category": "code",
+      "logo": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+      "description": "AI hỗ trợ lập trình",
+      "link": "https://github.com/features/copilot"
+    },
+    {
+      "id": "codeium",
+      "name": "Codeium",
+      "category": "code",
+      "logo": "https://codeium.com/logo.svg",
+      "description": "AI code miễn phí",
+      "link": "https://codeium.com"
+    },
+    {
+      "id": "canva",
+      "name": "Canva AI",
+      "category": "design",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg",
+      "description": "AI thiết kế nhanh",
+      "link": "https://canva.com"
+    },
+    {
+      "id": "firefly",
+      "name": "Adobe Firefly",
+      "category": "design",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Adobe_Corporate_Logo.png",
+      "description": "AI thiết kế của Adobe",
+      "link": "https://firefly.adobe.com"
+    },
+    {
+      "id": "elevenlabs",
+      "name": "ElevenLabs",
+      "category": "audio",
+      "logo": "https://elevenlabs.io/favicon.ico",
+      "description": "AI tạo giọng nói siêu thật",
+      "link": "https://elevenlabs.io"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity AI",
+      "category": "search",
+      "logo": "https://www.perplexity.ai/favicon.ico",
+      "description": "AI tìm kiếm thông minh",
+      "link": "https://perplexity.ai"
+    }
+  ]
+}
